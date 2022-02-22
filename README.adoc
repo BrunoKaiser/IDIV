@@ -1,4 +1,19 @@
 = IDIV
+
+== Ansprechpartner
+Dr. Bruno Kaiser
+
+<b.kaiser@beckmann-partner.de>
+
+2022-02-22
+
+
+== Beschreibung
+
 interactive dynamic table of contents
+
 Interaktiv-dynamisches Inhaltsverzeichnis
+
 table des matières interactive dynamique
+
+
