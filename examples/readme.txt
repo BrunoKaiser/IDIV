@@ -6,3 +6,7 @@ Ce répertoire contiens des exemples de tables des matières interactive dynamiq
 
 This script contains the IDIV-Bibliothek (IDIV-bibliothèque).
 
+2. IDIV_bureau.lua
+
+This script contains the IDIV-Arbeitsplatz (IDIV-bureau).
+
