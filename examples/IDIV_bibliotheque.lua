@@ -351,7 +351,7 @@ end --function compare_files(file1,file2)
 --3.3.1 function for writing tree in a text file (function for printing tree)
 function printtree()
 	--open a filedialog
-	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
+	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswÃ¤hlen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
 	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg2.status=="1" or filedlg2.status=="0" then
 		local outputfile=io.output(filedlg2.value) --setting the outputfile
@@ -364,7 +364,7 @@ function printtree()
 		end --for i=0,tree.totalchildcount0 do
 		outputfile:close() --close the outputfile
 	else --no outputfile was choosen
-		iup.Message("Schließen","Keine Datei ausgewählt")
+		iup.Message("SchlieÃŸen","Keine Datei ausgewÃ¤hlt")
 		iup.NextField(maindlg)
 	end --if filedlg2.status=="1" or filedlg2.status=="0" then
 end --function printtree()
@@ -373,7 +373,7 @@ end --function printtree()
 --3.3.2 function for printing dependencies in a csv file
 function printdependencies()
 	--open a filedialog
-	filedlg3=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.csv",filterinfo="csv Files", directory="c:\\temp"}
+	filedlg3=iup.filedlg{dialogtype="SAVE",title="Ziel auswÃ¤hlen",filter="*.csv",filterinfo="csv Files", directory="c:\\temp"}
 	filedlg3:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg3.status=="1" or filedlg3.status=="0" then
 		local outputfile=io.output(filedlg3.value)--setting the outputfile
@@ -390,7 +390,7 @@ function printdependencies()
 		end --for i=0, tree.count - 1 do
 		outputfile:close()--close the outputfile
 	else --no file was choosen
-		iup.Message("Schließen","Keine Datei ausgewählt")
+		iup.Message("SchlieÃŸen","Keine Datei ausgewÃ¤hlt")
 		iup.NextField(maindlg)
 	end --if filedlg3.status=="1" or filedlg3.status=="0" then
 end --function printdependencies()
@@ -510,7 +510,7 @@ dlg_rename = iup.dialog{
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	local help=false
 	--downward search
@@ -638,7 +638,7 @@ end --for i=0, tree3.count - 1 do
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	local help=false
 	--upward search
@@ -667,7 +667,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --	function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
@@ -691,11 +691,11 @@ end --	function search_in_textfield1:flat_action()
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 			iup.hbox{search_in_textfield1,},
 
@@ -746,7 +746,7 @@ dlg_search_replace =iup.dialog{
 					iup.hbox{search_label_replace,searchtext_replace},
 					iup.hbox{replace_label_replace,replacetext_replace},
 					iup.hbox{search_replace, cancel_replace,},
-					iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+					iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 				}; 
 				title="Suchen und Ersetzen",
 				size="420x100",
@@ -864,7 +864,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -872,7 +872,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to tree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzufÃ¼gen"}
 function addbranchbottom:action()
 	tree["insertbranch" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -885,7 +885,7 @@ function addbranchbottom:action()
 end --function addbranchbottom:action()
 
 --5.1.3.2 add leaf to tree by insertleaf
-addleafbottom = iup.item {title = "Blatt darunter hinzufügen"}
+addleafbottom = iup.item {title = "Blatt darunter hinzufÃ¼gen"}
 function addleafbottom:action()
 	tree["insertleaf" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -929,7 +929,7 @@ function addleaf_fromclipboardbottom:action()
 end --function addleaf_fromclipboardbottom:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -970,19 +970,19 @@ function startastree:action()
 	if file_exists(tree['title'] .. '\\' .. thisfilename ) then
 	--g:match(".:\\[^\\]+")
 		os.execute('copy "' .. path .. '\\' .. thisfilename .. '" "' .. tree['title'] .. '\\' .. thisfilename .. '"')
-		--test with: iup.Message("Benutzeroberfläche kopiert",tree['title'] .. '\\' .. thisfilename)
+		--test with: iup.Message("BenutzeroberflÃ¤che kopiert",tree['title'] .. '\\' .. thisfilename)
 		os.execute('start "D" "' .. tree['title'] .. '\\' .. thisfilename .. '"')
 	elseif tree['title']:lower():match("\\archiv")==nil and tree['title']:match("\\[^\\%.]+$") then
 		BenutzeroberflaechenText=""
 		p=io.popen('dir "' .. tree['title']:match(".:\\[^\\]+") .. '\\' .. thisfilename .. '" /b/o/s')
 		for Ordner in p:lines() do BenutzeroberflaechenText=BenutzeroberflaechenText .. Ordner .. "\n" end
 		--tree GUI only if user want it
-		AnlegeAlarm=iup.Alarm("Benutzeroberfläche angelegen?","Es gibt folgende Benutzeroberflächen:\n" .. BenutzeroberflaechenText .. "\nWas möchten Sie für das Verzeichnis mit der neuen Benutzeroberfläche tun??","Anlegen","Nicht anlegen")
+		AnlegeAlarm=iup.Alarm("BenutzeroberflÃ¤che angelegen?","Es gibt folgende BenutzeroberflÃ¤chen:\n" .. BenutzeroberflaechenText .. "\nWas mÃ¶chten Sie fÃ¼r das Verzeichnis mit der neuen BenutzeroberflÃ¤che tun??","Anlegen","Nicht anlegen")
 		if AnlegeAlarm==1 then 
 			os.execute('copy "' .. path .. '\\' .. thisfilename .. '" "' .. tree['title'] .. '\\' .. thisfilename .. '"')
-			iup.Message("Benutzeroberfläche angelegt",tree['title'] .. '\\' .. thisfilename)
+			iup.Message("BenutzeroberflÃ¤che angelegt",tree['title'] .. '\\' .. thisfilename)
 		elseif AnlegeAlarm==2 then
-			iup.Message("Benutzeroberfläche wird nicht angelegt","Danke, nicht zu viele Benutzeroberflächen anzulegen.")
+			iup.Message("BenutzeroberflÃ¤che wird nicht angelegt","Danke, nicht zu viele BenutzeroberflÃ¤chen anzulegen.")
 		end --if AnlegeAlarm==1 then 
 	elseif tree['title']:lower():match("\\archiv") then
 		iup.Message("Kein Tree bei einem Archiv","Bei einem Archiv (" .. tree['title'] .. ") wird kein Tree angelegt.")
@@ -1048,7 +1048,7 @@ function starteditor:action() --start preview
 		p=io.popen('dir "' .. tree['title'] .. '"')
 		Verzeichnisliste=""
 		for Datei in p:lines() do
-			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("ÿ",".") .. "\n"
+			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("Ã¿",".") .. "\n"
 		end --for Datei in p:lines() do
 		textfield1.value=Verzeichnisliste
 	else --substitute line break in preview
@@ -1312,7 +1312,7 @@ function starteditor2:action()
 		p=io.popen('dir "' .. tree2.title0:match(".:\\.*") .. tree2['title'] .. '"')
 		Verzeichnisliste=""
 		for Datei in p:lines() do
-			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("ÿ",".") .. "\n"
+			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("Ã¿",".") .. "\n"
 		end --for Datei in p:lines() do
 		textfield1.value=Verzeichnisliste
 	else --substitute line break in preview
@@ -1385,7 +1385,7 @@ img_logo = iup.image{
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Dr. Bruno Kaiser\nLizenz Open Source\nb.kaiser@beckmann-partner.de")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for saving tree
@@ -1425,7 +1425,7 @@ end --function button_compare:flat_action()
 --6.6 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Dr. Bruno Kaiser\nLizenz Open Source\nb.kaiser@beckmann-partner.de")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6 buttons end
@@ -1526,7 +1526,7 @@ function tree:k_any(c)
 	end --if c == iup.K_DEL then
 end --function tree:k_any(c)
 
---7.2.2 tree2 to explore thé computer
+--7.2.2 tree2 to explore thÃ© computer
 tree_script={branchname="Ordnerinhalt von C:\\",}
 --content of directory
 p=io.popen('dir C:\\ /b ') 
@@ -1580,7 +1580,7 @@ function tree2:k_any(c)
 	end --if c == iup.K_cF then
 end --function tree2:k_any(c)
 
---7.2.3 tree3 to explore thé computer
+--7.2.3 tree3 to explore thÃ© computer
 tree_statistics={branchname="Laufwerke",}
 caracterCollection="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 --list of directories in .:\\
@@ -1788,7 +1788,7 @@ maindlg = iup.dialog{
 			},
 		iup.hbox{
 			iup.frame{title="Vorschau und Text-Dateivergleich",textfield1,},
-			iup.frame{title="Übersicht der Laufwerke als Baum",tree3,},
+			iup.frame{title="Ãœbersicht der Laufwerke als Baum",tree3,},
 			},
 
 	},
