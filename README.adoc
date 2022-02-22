@@ -16,4 +16,10 @@ Interaktiv-dynamisches Inhaltsverzeichnis
 
 table des matières interactive dynamique
 
+== Installation des IUP-Lua-Frameworks
+
+Installation von der Internetseite https://sourceforge.net/projects/iup/files/
+
+Dort auf aktuelle Version gehen, z.B. 3.30, dann Tools Executables, Lua54 und die Datei iup-3.30-Lua54_Win64_bin.zip herunterladen. Diese auf C:\Lua entpacken und die .lua-Skripte mit der C:\Lua\lua54.exe verknüpfen. Den IUP-Lua-Skripter unter C:\Lua\iupluascripter54.exe öffnen. Falls eine Meldung von Windows kommt, bitte dennoch ausführen bestätigen.
+
 
