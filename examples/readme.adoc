@@ -7,7 +7,20 @@ Dieser Ordner enthält Beispieldateien von interaktiv-dynamischen Inhaltsverzeic
 
 Ce répertoire contiens des exemples de tables des matières interactive dynamiques.
 
-== 1. IDIV_arborescence_simple_reflexive.lua
+
+== 1.1 IDIV_arborescence_simple_avec_choix_fichier.lua
+
+This script contains the IDIV-Basiskomponente mit Dateiauswahl (IDIV-arborescence avec choix de fichier).
+
+== 1.2 IDIV_arborescence_simple_navigation_web.lua
+
+This script contains the IDIV-Basiskomponente mit Browserfunktion (IDIV-arborescence avec navigation web).
+
+== 1.3 IDIV_arborescence_simple.lua
+
+This script contains the IDIV-Basiskomponente (IDIV-arborescence simple).
+
+== 1.4 IDIV_arborescence_simple_reflexive.lua
 
 This script contains the IDIV-Basiskomponente in einer Datei (IDIV-arborescence simple reflexive).
 
