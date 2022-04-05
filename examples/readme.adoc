@@ -13,17 +13,17 @@ This script contians the IDIV-Bilanzanalysewerkzeug (IDIV-outil d'analyse du bil
 
 == 2. arboresences simples
 
-=== 2.1 IDIV_arborescence_simple_avec_choix_fichier.lua
+=== 2.1 IDIV_arborescence_simple.lua
+
+This script contains the IDIV-Basiskomponente (IDIV-arborescence simple).
+
+=== 2.2 IDIV_arborescence_simple_avec_choix_fichier.lua
 
 This script contains the IDIV-Basiskomponente mit Dateiauswahl (IDIV-arborescence avec choix de fichier).
 
-=== 2.2 IDIV_arborescence_simple_navigation_web.lua
+=== 2.3 IDIV_arborescence_simple_navigation_web.lua
 
 This script contains the IDIV-Basiskomponente mit Browserfunktion (IDIV-arborescence avec navigation web).
-
-=== 2.3 IDIV_arborescence_simple.lua
-
-This script contains the IDIV-Basiskomponente (IDIV-arborescence simple).
 
 === 2.4 IDIV_arborescence_simple_reflexive.lua
 
@@ -38,10 +38,15 @@ This script contains the IDIV-Bibliothek (IDIV-bibliothèque).
 
 This script contains the IDIV-Arbeitsplatz (IDIV-bureau).
 
+== 4. calculs
 
-IDIV_calcul_interests_reflexif.lua
+=== 4.1 IDIV_calcul_interests_reflexif.lua
 
-IDIV_calcul_interets.lua
+This script contains the IDIV-Entwicklungsumgebung für Kalkulationsschemata (IDIV-outil de dévelopement de schémas de calculs).
+
+=== 4.2 IDIV_calcul_interets.lua
+
+This script contains the IDIV-Zinskalkulationsschema mit Standardquellen (IDIV-calcul des intérêts).
 
 == 4. IDIV_capture_ecran.lua
 
@@ -57,7 +62,7 @@ This script contains the IDIV-Nachrichtenverarbeitung (IDIV-catégorisation de n
 
 This script contains the IDIV-Baumansichtvergleich (IDIV-comparaison d'arbres).
 
-=== 6.2 IDIV_comparaison_texte.lua
+=== 6.2 IDIV_comparaison_textes.lua
 
 This script contains the IDIV-Textdateivergleich (IDIV-comparaison de textes).
 
