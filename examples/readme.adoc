@@ -11,6 +11,10 @@ Ce répertoire contiens des exemples de tables des matières interactive dynamiq
 
 This script contains the IDIV-Bibliothek (IDIV-bibliothèque).
 
+== 1. IDIV_arborescence_simple_reflexive.lua
+
+This script contains the IDIV-Basiskomponente in einer Datei (IDIV-arborescence simple reflexive).
+
 == 2. IDIV_bureau.lua
 
 This script contains the IDIV-Arbeitsplatz (IDIV-bureau).
@@ -19,15 +23,48 @@ This script contains the IDIV-Arbeitsplatz (IDIV-bureau).
 
 This script contains the IDIV-Bildschirmausdruck (IDIV-capture écran).
 
-== 4. IDIV_comparaison_texte.lua
-
-This script contains the IDIV-Textdateivergleich (IDIV-comparaison de textes).
-
-== 5. IDIV_comparaison_arbres.lua
+== 4. IDIV_comparaison_arbres.lua
 
 This script contains the IDIV-Baumansichtvergleich (IDIV-comparaison d'arbres).
 
-== 6. IDIV_presentation_video.lua
+== 5. IDIV_comparaison_texte.lua
+
+This script contains the IDIV-Textdateivergleich (IDIV-comparaison de textes).
+
+== 6. IDIV_images_reflexives.lua
+
+This script contains the IDIV-Graphiken-Anzeige (IDIV-images).
+
+== 7. IDIV_livre_reflexif.lua
+
+This script contains the IDIV-Textheft (IDIV-livre).
+
+== 8. IDIV_navigation_web_reflexive.lua
+
+This script contains the IDIV-Browser (IDIV-navigation web).
+
+== 9. IDIV_presentation_reflexive.lua
+
+This script contains the IDIV-Präsentation (IDIV-présentation).
+
+== 10. IDIV_presentation_video.lua
 
 This script contains the IDIV-Video-Präsentation (IDIV-présentation vidéo).
+
+== 11. IDIV_recherche_internet_reflexive.lua
+
+This script contains the IDIV-Suchergebnisse Internet (IDIC-recherche internet).
+
+== 12. IDIV_repertoire.lua
+
+This script contains the IDIV-Ordnergliederung (IDIV-répertoire).
+
+== 13. IDIV_syntax_de_Lua_reflexive.lua
+
+This script contains IDIV-Browser der Lua-Syntax (IDIV-Syntaxe de Lua).
+
+== 14. IDIV_traitement_texte_reflexif.lua
+
+This script contains the IDIV-Textverarbeitung (IDIV-traitement de textes).
+
 
