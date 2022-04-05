@@ -15,11 +15,19 @@ This script contains the IDIV-Bibliothek (IDIV-bibliothèque).
 
 This script contains the IDIV-Arbeitsplatz (IDIV-bureau).
 
-== 3. IDIV_comparaison_texte.lua
+== 3. IDIV_capture_ecran.lua
+
+This script contains the IDIV-Bildschirmausdruck (IDIV-capture écran).
+
+== 4. IDIV_comparaison_texte.lua
 
 This script contains the IDIV-Textdateivergleich (IDIV-comparaison de textes).
 
-== 4. IDIV_comparaison_arbres.lua
+== 5. IDIV_comparaison_arbres.lua
 
 This script contains the IDIV-Baumansichtvergleich (IDIV-comparaison d'arbres).
+
+== 6. IDIV_presentation_video.lua
+
+This script contains the IDIV-Video-Präsentation (IDIV-présentation vidéo).
 
