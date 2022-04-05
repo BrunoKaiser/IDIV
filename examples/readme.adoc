@@ -48,76 +48,76 @@ This script contains the IDIV-Entwicklungsumgebung für Kalkulationsschemata (ID
 
 This script contains the IDIV-Zinskalkulationsschema mit Standardquellen (IDIV-calcul des intérêts).
 
-== 4. IDIV_capture_ecran.lua
+== 5. IDIV_capture_ecran.lua
 
 This script contains the IDIV-Bildschirmausdruck (IDIV-capture écran).
 
-== 5. IDIV_categorisation_nouvelles.lua
+== 6. IDIV_categorisation_nouvelles.lua
 
 This script contains the IDIV-Nachrichtenverarbeitung (IDIV-catégorisation de nouvelles).
 
-== 6. outils de comparaison
+== 7. outils de comparaison
 
-=== 6.1 IDIV_comparaison_arbres.lua
+=== 7.1 IDIV_comparaison_arbres.lua
 
 This script contains the IDIV-Baumansichtvergleich (IDIV-comparaison d'arbres).
 
-=== 6.2 IDIV_comparaison_textes.lua
+=== 7.2 IDIV_comparaison_textes.lua
 
 This script contains the IDIV-Textdateivergleich (IDIV-comparaison de textes).
 
-== 7. IDIV_console.lua
+== 8. IDIV_console.lua
 
 This script contians the IDIV-Skripter (IDIV-console).
 
-== 8. IDIV_conversion.lua
+== 9. IDIV_conversion.lua
 
 This script contains the IDIV-Konvertierung (IDIV-conversion).
 
-== 9. outils de traitement de données entrée et sortie
+== 10. outils de traitement de données entrée et sortie
 
-=== 9.1 IDIV_entree_traitement_sortie.lua
+=== 10.1 IDIV_entree_traitement_sortie.lua
 
 This script contains the IDIV-Analysewerkzeug (IDIV-outil d'analyse).
 
-=== 9.2 IDIV_entree_traitement_sortie_MDI_graphiques.lua
+=== 10.2 IDIV_entree_traitement_sortie_MDI_graphiques.lua
 
 This script contains the IDIV-Analysewerkzeug mit Darstellung (IDIV-outil d'analyse avec représentation).
 
-== 10. IDIV_images_reflexives.lua
+== 11. IDIV_images_reflexives.lua
 
 This script contains the IDIV-Graphiken-Anzeige (IDIV-images).
 
-== 11. IDIV_livre_reflexif.lua
+== 12. IDIV_livre_reflexif.lua
 
 This script contains the IDIV-Textheft (IDIV-livre).
 
-== 12. IDIV_navigation_web_reflexive.lua
+== 13. IDIV_navigation_web_reflexive.lua
 
 This script contains the IDIV-Browser (IDIV-navigation web).
 
-== 13. presentations
-=== 13.1 IDIV_presentation_reflexive.lua
+== 14. presentations
+=== 14.1 IDIV_presentation_reflexive.lua
 
 This script contains the IDIV-Präsentation (IDIV-présentation).
 
-=== 13.2 IDIV_presentation_video.lua
+=== 14.2 IDIV_presentation_video.lua
 
 This script contains the IDIV-Video-Präsentation (IDIV-présentation vidéo).
 
-== 14. IDIV_recherche_internet_reflexive.lua
+== 15. IDIV_recherche_internet_reflexive.lua
 
 This script contains the IDIV-Suchergebnisse Internet (IDIC-recherche internet).
 
-== 15. IDIV_repertoire.lua
+== 16. IDIV_repertoire.lua
 
 This script contains the IDIV-Ordnergliederung (IDIV-répertoire).
 
-== 16. IDIV_syntax_de_Lua_reflexive.lua
+== 17. IDIV_syntax_de_Lua_reflexive.lua
 
 This script contains IDIV-Browser der Lua-Syntax (IDIV-Syntaxe de Lua).
 
-== 17. IDIV_traitement_texte_reflexif.lua
+== 18. IDIV_traitement_texte_reflexif.lua
 
 This script contains the IDIV-Textverarbeitung (IDIV-traitement de textes).
 
