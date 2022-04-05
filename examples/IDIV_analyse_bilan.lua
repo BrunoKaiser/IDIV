@@ -132,13 +132,13 @@ documentation_tree_script_ProgrammText=[[
 
 --Wertebaum auf der untersten Stufe mit Werten
 WerteTree={branchname="Bilanzausschnitt Passiva ohne Eigenkapital", 
-{branchname="Passiva Rückstellungen und Rücklagen",
-{branchname="Rückstellungen",1000,},
-{branchname="Rücklagen",32345,},
+{branchname="Passiva RÃ¼ckstellungen und RÃ¼cklagen",
+{branchname="RÃ¼ckstellungen",1000,},
+{branchname="RÃ¼cklagen",32345,},
 },
 {branchname="Passiva Kredite",
 {branchname="Kredite an Banken",600000,},
-{branchname="Kredite an private Gläubiger",1112345,},
+{branchname="Kredite an private GlÃ¤ubiger",1112345,},
 },
 }
 
@@ -153,7 +153,7 @@ RemoveRecursion(WerteTreeAnsicht)
 WerteTreeAnteile={}
 AnteilRecursion(WerteTree,WerteTree,WerteTreeAnteile)
 RemoveRecursion(WerteTreeAnteile)
-WerteTreeAnteile.branchname="Passivseitenübersicht mit Anteilen"
+WerteTreeAnteile.branchname="PassivseitenÃ¼bersicht mit Anteilen"
 
 --Fertiger Wertebaum
 tree_script={branchname="Passivseite ohne Eigenkapital" ,
@@ -188,7 +188,7 @@ WerteTree={branchname="Aktiva",
 {branchname="Fertigprodukte",1000000,},
 {branchname="Halbfertigprodukte",1232345,},
 },
-{branchname="Aktiva flüssige Mittel",
+{branchname="Aktiva flÃ¼ssige Mittel",
 {branchname="Guthaben bei Banken",100000,},
 {branchname="Kasse",2345,},
 },
@@ -205,7 +205,7 @@ RemoveRecursion(WerteTreeAnsicht)
 WerteTreeAnteile={}
 AnteilRecursion(WerteTree,WerteTree,WerteTreeAnteile)
 RemoveRecursion(WerteTreeAnteile)
-WerteTreeAnteile.branchname="Aktivseitenübersicht mit Anteilen"
+WerteTreeAnteile.branchname="AktivseitenÃ¼bersicht mit Anteilen"
 
 --Fertiger Wertebaum
 tree_statistics={branchname="Aktivseite" ,
@@ -243,7 +243,7 @@ Eigenkapitalsumme                  = Aktivseitensumme -  Passivseitensumme_ohne_
 Eigenkapitalquote                  = Eigenkapitalsumme / Aktivseitensumme
 textfield1.value="Eigenkapital: " .. Eigenkapitalsumme .. "\n" .. 
 "Eigenkapitalquote: " .. Eigenkapitalquote .. "\n" .. 
-"Weitere Bilanzkennzahlen abhängig von der Bilanzstruktur ermitteln..."
+"Weitere Bilanzkennzahlen abhÃ¤ngig von der Bilanzstruktur ermitteln..."
 
 
 
@@ -454,7 +454,7 @@ end --function compare_files(file1,file2)
 --3.3.1 function for writing tree in a text file (function for printing tree)
 function printtree()
 	--open a filedialog
-	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
+	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswÃ¤hlen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
 	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg2.status=="1" or filedlg2.status=="0" then
 		local outputfile=io.output(filedlg2.value) --setting the outputfile
@@ -467,7 +467,7 @@ function printtree()
 		end --for i=0,tree.totalchildcount0 do
 		outputfile:close() --close the outputfile
 	else --no outputfile was choosen
-		iup.Message("Schließen","Keine Datei ausgewählt")
+		iup.Message("SchlieÃŸen","Keine Datei ausgewÃ¤hlt")
 		iup.NextField(maindlg)
 	end --if filedlg2.status=="1" or filedlg2.status=="0" then
 end --function printtree()
@@ -476,7 +476,7 @@ end --function printtree()
 --3.3.2 function for printing dependencies in a csv file
 function printdependencies()
 	--open a filedialog
-	filedlg3=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.csv",filterinfo="csv Files", directory="c:\\temp"}
+	filedlg3=iup.filedlg{dialogtype="SAVE",title="Ziel auswÃ¤hlen",filter="*.csv",filterinfo="csv Files", directory="c:\\temp"}
 	filedlg3:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg3.status=="1" or filedlg3.status=="0" then
 		local outputfile=io.output(filedlg3.value)--setting the outputfile
@@ -493,7 +493,7 @@ function printdependencies()
 		end --for i=0, tree.count - 1 do
 		outputfile:close()--close the outputfile
 	else --no file was choosen
-		iup.Message("Schließen","Keine Datei ausgewählt")
+		iup.Message("SchlieÃŸen","Keine Datei ausgewÃ¤hlt")
 		iup.NextField(maindlg)
 	end --if filedlg3.status=="1" or filedlg3.status=="0" then
 end --function printdependencies()
@@ -733,11 +733,11 @@ end --	function search_in_textfield1:flat_action()
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{search_in_textfield1,},
 
 			}; 
@@ -787,7 +787,7 @@ dlg_search_replace =iup.dialog{
 					iup.hbox{search_label_replace,searchtext_replace},
 					iup.hbox{replace_label_replace,replacetext_replace},
 					iup.hbox{search_replace, cancel_replace,},
-					iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+					iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 				}; 
 				title="Suchen und Ersetzen",
 				size="420x100",
@@ -989,7 +989,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -1004,7 +1004,7 @@ function addbranch_fromclipboard:action()
 end --function addbranch_fromclipboard:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
