@@ -252,7 +252,7 @@ dlg_rename = iup.dialog{
 
 --4.2 change page dialog
 --ok_change_page button
-ok_change_page = iup.flatbutton{title = "Seite verändern",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+ok_change_page = iup.flatbutton{title = "Seite verÃ¤ndern",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function ok_change_page:flat_action()
 	webbrowser1.HTML= text1.value
 	if tonumber(textbox1.value) then
@@ -304,21 +304,21 @@ searchtext2 = iup.multiline{border="YES",expand="YES",wordwrap="YES"} --textfiel
 search_found_number = iup.text{border="YES",expand="YES",} --textfield for search found number
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	--for search for substantives in german questions
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uÄÖÜ][^%s%p]+ (.*)%?"):gsub("%? [%uÄÖÜ]+"," "):gsub("%. [%uÄÖÜ]+"," "):gsub(": [%uÄÖÜ]+"," ")
+	if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+ (.*)%?"):gsub("%? [%uÃ„Ã–Ãœ]+"," "):gsub("%. [%uÃ„Ã–Ãœ]+"," "):gsub(": [%uÃ„Ã–Ãœ]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 	local help=false
 	--downward search
 	if checkboxforcasesensitive.value=="ON"  then
@@ -367,15 +367,15 @@ function searchmark:flat_action()
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uÄÖÜ][^%s%p]+ (.*)%?"):gsub("%? [%uÄÖÜ]+"," "):gsub("%. [%uÄÖÜ]+"," "):gsub(": [%uÄÖÜ]+"," ")
+	if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+ (.*)%?"):gsub("%? [%uÃ„Ã–Ãœ]+"," "):gsub("%. [%uÃ„Ã–Ãœ]+"," "):gsub(": [%uÃ„Ã–Ãœ]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 	--unmark all nodes
 	for i=0, tree.count - 1 do
 			tree["color" .. i]="0 0 0"
@@ -441,21 +441,21 @@ function unmark:flat_action()
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	--for search for substantives in german questions
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uÄÖÜ][^%s%p]+ (.*)%?"):gsub("%? [%uÄÖÜ]+"," "):gsub("%. [%uÄÖÜ]+"," "):gsub(": [%uÄÖÜ]+"," ")
+	if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+ (.*)%?"):gsub("%? [%uÃ„Ã–Ãœ]+"," "):gsub("%. [%uÃ„Ã–Ãœ]+"," "):gsub(": [%uÃ„Ã–Ãœ]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 	local help=false
 	--upward search
 	if checkboxforcasesensitive.value=="ON" then
@@ -495,7 +495,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
@@ -504,11 +504,11 @@ search_label=iup.label{title="Suchfeld:"} --label for textfield
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,iup.vbox{searchtext,iup.label{title="Suchworte aus Fragen und Texten:"},searchtext2,}}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 			iup.hbox{search_found_number,},
 			}; 
@@ -615,7 +615,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -623,7 +623,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to tree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzufÃ¼gen"}
 function addbranchbottom:action()
 	tree["insertbranch" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -655,7 +655,7 @@ function addbranch_fromclipboardbottom:action()
 end --function addbranch_fromclipboardbottom:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -750,8 +750,8 @@ menu = iup.menu{
 		startcopy,
 		renamenode, 
 		addbranch, 
-		addbranchbottom, 
 		addbranch_fromclipboard, 
+		addbranchbottom, 
 		addbranch_fromclipboardbottom, 
 		addleaf,
 		addleaf_fromclipboard,
@@ -864,39 +864,39 @@ function button_load_tree_to_html:flat_action()
 			AusgabeTabelle[tree['TITLE' .. i]]=true
 			webbrowserText=webbrowserText .. "<ul><li>" .. "<b>" .. 
 			tostring(tree['TITLE' .. i])
+			:gsub("ÃƒÂ¤","&auml;")
 			:gsub("Ã¤","&auml;")
-			:gsub("ä","&auml;")
+			:gsub("ÃƒÂ„","&Auml;")
 			:gsub("Ã„","&Auml;")
-			:gsub("Ä","&Auml;")
+			:gsub("ÃƒÂ¶","&ouml;")
 			:gsub("Ã¶","&ouml;")
-			:gsub("ö","&ouml;")
+			:gsub("ÃƒÂ–","&Ouml;")
 			:gsub("Ã–","&Ouml;")
-			:gsub("Ö","&Ouml;")
+			:gsub("ÃƒÂ¼","&uuml;")
 			:gsub("Ã¼","&uuml;")
-			:gsub("ü","&uuml;")
+			:gsub("ÃƒÂœ","&Uuml;")
 			:gsub("Ãœ","&Uuml;")
-			:gsub("Ü","&Uuml;")
+			:gsub("ÃƒÂŸ","&szlig;")
 			:gsub("ÃŸ","&szlig;")
-			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "</b>" .. "\n"
 		elseif i>0 and tonumber(tree["DEPTH" .. i ]) > tonumber(tree["DEPTH" .. i-1 ]) and tree["KIND" .. i ] == "BRANCH" then
 			AusgabeTabelle[tree['TITLE' .. i]]=true
 			webbrowserText=webbrowserText .. "<ul><li>" .. "<b>" .. 
 			tostring(tree['TITLE' .. i])
+			:gsub("ÃƒÂ¤","&auml;")
 			:gsub("Ã¤","&auml;")
-			:gsub("ä","&auml;")
+			:gsub("ÃƒÂ„","&Auml;")
 			:gsub("Ã„","&Auml;")
-			:gsub("Ä","&Auml;")
+			:gsub("ÃƒÂ¶","&ouml;")
 			:gsub("Ã¶","&ouml;")
-			:gsub("ö","&ouml;")
+			:gsub("ÃƒÂ–","&Ouml;")
 			:gsub("Ã–","&Ouml;")
-			:gsub("Ö","&Ouml;")
+			:gsub("ÃƒÂ¼","&uuml;")
 			:gsub("Ã¼","&uuml;")
-			:gsub("ü","&uuml;")
+			:gsub("ÃƒÂœ","&Uuml;")
 			:gsub("Ãœ","&Uuml;")
-			:gsub("Ü","&Uuml;")
+			:gsub("ÃƒÂŸ","&szlig;")
 			:gsub("ÃŸ","&szlig;")
-			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "</b>" .. "\n"
 		elseif i>0 and tonumber(tree["DEPTH" .. i ]) <= tonumber(tree["DEPTH" .. i-1 ]) and tree["KIND" .. i ] == "BRANCH" then
 			if tree["KIND" .. i ] == "BRANCH" and tree["KIND" .. i-1 ] == "BRANCH" then
@@ -908,20 +908,20 @@ function button_load_tree_to_html:flat_action()
 			AusgabeTabelle[tree['TITLE' .. i]]=true
 			webbrowserText=webbrowserText .. "<ul><li>" .. "<b>" .. 
 			tostring(tree['TITLE' .. i])
+			:gsub("ÃƒÂ¤","&auml;")
 			:gsub("Ã¤","&auml;")
-			:gsub("ä","&auml;")
+			:gsub("ÃƒÂ„","&Auml;")
 			:gsub("Ã„","&Auml;")
-			:gsub("Ä","&Auml;")
+			:gsub("ÃƒÂ¶","&ouml;")
 			:gsub("Ã¶","&ouml;")
-			:gsub("ö","&ouml;")
+			:gsub("ÃƒÂ–","&Ouml;")
 			:gsub("Ã–","&Ouml;")
-			:gsub("Ö","&Ouml;")
+			:gsub("ÃƒÂ¼","&uuml;")
 			:gsub("Ã¼","&uuml;")
-			:gsub("ü","&uuml;")
+			:gsub("ÃƒÂœ","&Uuml;")
 			:gsub("Ãœ","&Uuml;")
-			:gsub("Ü","&Uuml;")
+			:gsub("ÃƒÂŸ","&szlig;")
 			:gsub("ÃŸ","&szlig;")
-			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "</b>" .. "\n"
 			--test with: print(tree['TITLE' .. i])
 		elseif i>0 and tonumber(tree["DEPTH" .. i ]) < tonumber(tree["DEPTH" .. i-1 ]) and tree["KIND" .. i ] == "LEAF" then
@@ -934,40 +934,40 @@ function button_load_tree_to_html:flat_action()
 			AusgabeTabelle[tree['TITLE' .. i]]=true
 			webbrowserText=webbrowserText .. "<ul><li>" .. 
 			tostring(tree['TITLE' .. i])
+			:gsub("ÃƒÂ¤","&auml;")
 			:gsub("Ã¤","&auml;")
-			:gsub("ä","&auml;")
+			:gsub("ÃƒÂ„","&Auml;")
 			:gsub("Ã„","&Auml;")
-			:gsub("Ä","&Auml;")
+			:gsub("ÃƒÂ¶","&ouml;")
 			:gsub("Ã¶","&ouml;")
-			:gsub("ö","&ouml;")
+			:gsub("ÃƒÂ–","&Ouml;")
 			:gsub("Ã–","&Ouml;")
-			:gsub("Ö","&Ouml;")
+			:gsub("ÃƒÂ¼","&uuml;")
 			:gsub("Ã¼","&uuml;")
-			:gsub("ü","&uuml;")
+			:gsub("ÃƒÂœ","&Uuml;")
 			:gsub("Ãœ","&Uuml;")
-			:gsub("Ü","&Uuml;")
+			:gsub("ÃƒÂŸ","&szlig;")
 			:gsub("ÃŸ","&szlig;")
-			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "\n"
 			--test with: print(tree['TITLE' .. i])
 		else
 			AusgabeTabelle[tree['TITLE' .. i]]=true
 			webbrowserText=webbrowserText .. 
 			tostring(tree['TITLE' .. i])
+			:gsub("ÃƒÂ¤","&auml;")
 			:gsub("Ã¤","&auml;")
-			:gsub("ä","&auml;")
+			:gsub("ÃƒÂ„","&Auml;")
 			:gsub("Ã„","&Auml;")
-			:gsub("Ä","&Auml;")
+			:gsub("ÃƒÂ¶","&ouml;")
 			:gsub("Ã¶","&ouml;")
-			:gsub("ö","&ouml;")
+			:gsub("ÃƒÂ–","&Ouml;")
 			:gsub("Ã–","&Ouml;")
-			:gsub("Ö","&Ouml;")
+			:gsub("ÃƒÂ¼","&uuml;")
 			:gsub("Ã¼","&uuml;")
-			:gsub("ü","&uuml;")
+			:gsub("ÃƒÂœ","&Uuml;")
 			:gsub("Ãœ","&Uuml;")
-			:gsub("Ü","&Uuml;")
+			:gsub("ÃƒÂŸ","&szlig;")
 			:gsub("ÃŸ","&szlig;")
-			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "\n"
 		end --if i>0 and tonumber(tree["DEPTH" .. i ]) > tonumber(tree["DEPTH" .. i-1 ]) then
 	end --for i=0,tree.count - 1 do --loop for all nodes
@@ -981,36 +981,36 @@ button_save_as_html=iup.flatbutton{title="Als html speichern", size="75x20", BGC
 function button_save_as_html:flat_action()
 	local outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua$",".html"),"w")
 	for k,v in pairs(TextHTMLtable) do
-		outputfile1:write(v:gsub("Ã¤","&auml;")
-				:gsub("ä","&auml;")
+		outputfile1:write(v:gsub("ÃƒÂ¤","&auml;")
+				:gsub("Ã¤","&auml;")
+				:gsub("ÃƒÂ„","&Auml;")
 				:gsub("Ã„","&Auml;")
-				:gsub("Ä","&Auml;")
+				:gsub("ÃƒÂ¶","&ouml;")
 				:gsub("Ã¶","&ouml;")
-				:gsub("ö","&ouml;")
+				:gsub("ÃƒÂ–","&Ouml;")
 				:gsub("Ã–","&Ouml;")
-				:gsub("Ö","&Ouml;")
+				:gsub("ÃƒÂ¼","&uuml;")
 				:gsub("Ã¼","&uuml;")
-				:gsub("ü","&uuml;")
+				:gsub("ÃƒÂœ","&Uuml;")
 				:gsub("Ãœ","&Uuml;")
-				:gsub("Ü","&Uuml;")
+				:gsub("ÃƒÂŸ","&szlig;")
 				:gsub("ÃŸ","&szlig;")
-				:gsub("ß","&szlig;")
 				.. "\n")
 	end --for k,v in pairs(TextHTMLtable) do
-	outputfile1:write(webbrowser1.HTML:gsub("Ã¤","&auml;")
-				:gsub("ä","&auml;")
+	outputfile1:write(webbrowser1.HTML:gsub("ÃƒÂ¤","&auml;")
+				:gsub("Ã¤","&auml;")
+				:gsub("ÃƒÂ„","&Auml;")
 				:gsub("Ã„","&Auml;")
-				:gsub("Ä","&Auml;")
+				:gsub("ÃƒÂ¶","&ouml;")
 				:gsub("Ã¶","&ouml;")
-				:gsub("ö","&ouml;")
+				:gsub("ÃƒÂ–","&Ouml;")
 				:gsub("Ã–","&Ouml;")
-				:gsub("Ö","&Ouml;")
+				:gsub("ÃƒÂ¼","&uuml;")
 				:gsub("Ã¼","&uuml;")
-				:gsub("ü","&uuml;")
+				:gsub("ÃƒÂœ","&Uuml;")
 				:gsub("Ãœ","&Uuml;")
-				:gsub("Ü","&Uuml;")
+				:gsub("ÃƒÂŸ","&szlig;")
 				:gsub("ÃŸ","&szlig;")
-				:gsub("ß","&szlig;")
 				.. "\n")
 	outputfile1:close()
 end --function button_save_as_html:flat_action()
@@ -1119,40 +1119,40 @@ function readTreetohtmlRecursive(TreeTable)
 	AusgabeTabelle[TreeTable.branchname]=true
 	webbrowserText=webbrowserText .. "<ul><li>" .. "<b>" .. 
 	tostring(TreeTable.branchname)
+	:gsub("ÃƒÂ¤","&auml;")
 	:gsub("Ã¤","&auml;")
-	:gsub("ä","&auml;")
+	:gsub("ÃƒÂ„","&Auml;")
 	:gsub("Ã„","&Auml;")
-	:gsub("Ä","&Auml;")
+	:gsub("ÃƒÂ¶","&ouml;")
 	:gsub("Ã¶","&ouml;")
-	:gsub("ö","&ouml;")
+	:gsub("ÃƒÂ–","&Ouml;")
 	:gsub("Ã–","&Ouml;")
-	:gsub("Ö","&Ouml;")
+	:gsub("ÃƒÂ¼","&uuml;")
 	:gsub("Ã¼","&uuml;")
-	:gsub("ü","&uuml;")
+	:gsub("ÃƒÂœ","&Uuml;")
 	:gsub("Ãœ","&Uuml;")
-	:gsub("Ü","&Uuml;")
+	:gsub("ÃƒÂŸ","&szlig;")
 	:gsub("ÃŸ","&szlig;")
-	:gsub("ß","&szlig;")
 	:gsub("\\n","<br>") .. "</b>" .. "\n"
 	for k,v in ipairs(TreeTable) do
 		if type(v)=="table" then
 			readTreetohtmlRecursive(v)
 		else
 			AusgabeTabelle[v]=true
-			webbrowserText=webbrowserText .. v:gsub("Ã¤","&auml;")
-							:gsub("ä","&auml;")
+			webbrowserText=webbrowserText .. v:gsub("ÃƒÂ¤","&auml;")
+							:gsub("Ã¤","&auml;")
+							:gsub("ÃƒÂ„","&Auml;")
 							:gsub("Ã„","&Auml;")
-							:gsub("Ä","&Auml;")
+							:gsub("ÃƒÂ¶","&ouml;")
 							:gsub("Ã¶","&ouml;")
-							:gsub("ö","&ouml;")
+							:gsub("ÃƒÂ–","&Ouml;")
 							:gsub("Ã–","&Ouml;")
-							:gsub("Ö","&Ouml;")
+							:gsub("ÃƒÂ¼","&uuml;")
 							:gsub("Ã¼","&uuml;")
-							:gsub("ü","&uuml;")
+							:gsub("ÃƒÂœ","&Uuml;")
 							:gsub("Ãœ","&Uuml;")
-							:gsub("Ü","&Uuml;")
+							:gsub("ÃƒÂŸ","&szlig;")
 							:gsub("ÃŸ","&szlig;")
-							:gsub("ß","&szlig;")
 							:gsub("\\n","<br>")
 							.. "\n"
 		end --if type(v)=="table" then
