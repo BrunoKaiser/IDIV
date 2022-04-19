@@ -1,5 +1,5 @@
 lua_tree_output={ branchname="example of a reflexive tree", 
-{ branchname="Ordner für Lua", 
+{ branchname="Ordner fÃ¼r Lua", 
 { branchname="C:\\Lua", 
 state="COLLAPSED",
 },
@@ -241,7 +241,7 @@ dlg_rename = iup.dialog{
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	local help=false
 	--downward search
@@ -321,7 +321,7 @@ end --for i=0, tree.count - 1 do
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	local help=false
 	--upward search
@@ -350,7 +350,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
@@ -359,11 +359,11 @@ search_label=iup.label{title="Suchfeld:"} --label for textfield
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 
 			}; 
@@ -393,7 +393,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -401,7 +401,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to tree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzufÃ¼gen"}
 function addbranchbottom:action()
 	tree["insertbranch" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -414,7 +414,7 @@ function addbranchbottom:action()
 end --function addbranchbottom:action()
 
 --5.1.3.2 add leaf to tree by insertleaf
-addleafbottom = iup.item {title = "Blatt darunter hinzufügen"}
+addleafbottom = iup.item {title = "Blatt darunter hinzufÃ¼gen"}
 function addleafbottom:action()
 	tree["insertleaf" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -458,7 +458,7 @@ function addleaf_fromclipboardbottom:action()
 end --function addleaf_fromclipboardbottom:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -528,12 +528,12 @@ menu = iup.menu{
 		startcopy,
 		renamenode, 
 		addbranch, 
-		addbranchbottom, 
 		addbranch_fromclipboard, 
+		addbranchbottom, 
 		addbranch_fromclipboardbottom, 
 		addleaf,
-		addleafbottom,
 		addleaf_fromclipboard,
+		addleafbottom,
 		addleaf_fromclipboardbottom,
 		startversion,
 		menu_start_directory_without_versions, 
@@ -617,20 +617,20 @@ function startcopy2:action() --copy node
 end --function startcopy2:action() 
 
 --5.3.2 pick file selected in the tree2
-startpickfile = iup.item {title = "Datei auswählen"}
+startpickfile = iup.item {title = "Datei auswÃ¤hlen"}
 function startpickfile:action()
 	if tree2['title']:match("%d%d.%d%d.%d%d%d%d.+%.[^ ]+") and tree2['title']:match("<DIR>")==nil then
 		pickedFileName=tree2['title']:match("%d%d.%d%d.%d%d%d%d.+%.[^ ]+"):sub(37)
-		--test with: iup.Message("Datei ausgewählt",pickedFile)
+		--test with: iup.Message("Datei ausgewÃ¤hlt",pickedFile)
 	end --if tree1['title']:match("%d%d.%d%d.%d%d%d%d.+%.[^ ]+") and tree1['title']:match("<DIR>")==nil then
 end --function startpickfile:action()
 
 --5.3.3 pick file selected in the tree2 and copy it in goal directory with versioning
-startpickfile_and_copy_to_goal = iup.item {title = "Datei mit Versionskopie in Zielordner einfügen"}
+startpickfile_and_copy_to_goal = iup.item {title = "Datei mit Versionskopie in Zielordner einfÃ¼gen"}
 function startpickfile_and_copy_to_goal:action()
 	if tree2['title']:match("%d%d.%d%d.%d%d%d%d.+%.[^ ]+") and tree2['title']:match("<DIR>")==nil then
 		pickedFileName=tree2['title']:match("%d%d.%d%d.%d%d%d%d.+%.[^ ]+"):sub(37)
-		--test with: iup.Message("Datei ausgewählt",pickedFile)
+		--test with: iup.Message("Datei ausgewÃ¤hlt",pickedFile)
 	end --if tree1['title']:match("%d%d.%d%d.%d%d%d%d.+%.[^ ]+") and tree1['title']:match("<DIR>")==nil then
 	button_version_move_copy_and_paste:flat_action()
 	button_compare:flat_action()
@@ -729,11 +729,11 @@ function button_new_directory:flat_action()
 	local directoryInformationTable={}
 	for line in p:lines() do 
 		if line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>")==nil then
-			fileTable[#fileTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			fileTable[#fileTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		elseif line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>") then
-			directoryTable[#directoryTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			directoryTable[#directoryTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		elseif line:match("%(") or line:match(":\\") then
-			directoryInformationTable[#directoryInformationTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			directoryInformationTable[#directoryInformationTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		end --if line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>")==nil then
 	end --for line in p:lines() do 
 	for k,v in pairs(directoryInformationTable) do
@@ -768,11 +768,11 @@ function button_new_directory_without_versions:flat_action()
 	local directoryInformationTable={}
 	for line in p:lines() do 
 		if line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>")==nil and line:match("_Version%d+")==nil and line:sub(37,37)~="." then
-			fileTable[#fileTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			fileTable[#fileTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		elseif line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>") then
-			directoryTable[#directoryTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			directoryTable[#directoryTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		elseif line:match("%(") or line:match(":\\") then
-			directoryInformationTable[#directoryInformationTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			directoryInformationTable[#directoryInformationTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		end --if line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>")==nil and line:match("_Version%d+")==nil and line:sub(37,37)~="." then
 	end --for line in p:lines() do 
 	for k,v in pairs(directoryInformationTable) do
@@ -806,11 +806,11 @@ function button_start_directory_without_versions:flat_action()
 	local directoryInformationTable={}
 	for line in p:lines() do 
 		if line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>")==nil and line:match("_Version%d+")==nil and line:sub(37,37)~="." then
-			fileTable[#fileTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			fileTable[#fileTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		elseif line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>") then
-			directoryTable[#directoryTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			directoryTable[#directoryTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		elseif line:match("%(") or line:match(":\\") then
-			directoryInformationTable[#directoryInformationTable+1]=line:gsub("„","ä"):gsub("ÿ"," ")
+			directoryInformationTable[#directoryInformationTable+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ")
 		end --if line:match("^%d%d.%d%d.%d%d%d%d") and line:match("<DIR>")==nil and line:match("_Version%d+")==nil and line:sub(37,37)~="." then
 	end --for line in p:lines() do 
 	for k,v in pairs(directoryInformationTable) do
@@ -833,7 +833,7 @@ function button_start_directory_without_versions:flat_action()
 end --function button_start_directory_without_versions:action()
 
 --6.5 button paste file picked
-button_version_move_copy_and_paste = iup.flatbutton{title = "Datei in Ziel-\nordner einfügen",size="70x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_version_move_copy_and_paste = iup.flatbutton{title = "Datei in Ziel-\nordner einfÃ¼gen",size="70x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_version_move_copy_and_paste:flat_action()
 	local new_directory=textbox1.value 
 	if pickedFileName and textbox2.value~=textbox1.value and textbox2.value:match("^.:\\") and textbox1.value:match("^.:\\") then
@@ -851,7 +851,7 @@ function button_version_move_copy_and_paste:flat_action()
 		os.execute('copy "' .. textbox2.value .. "\\" .. pickedFileName .. '" "' .. textbox1.value .. "\\" .. pickedFileName .. '"')
 		--test with: print('copy "' .. textbox2.value .. "\\" .. pickedFileName .. '" "' .. textbox1.value .. "\\" .. pickedFileName .. '"')
 	else
-		iup.Message("Keine Datei ausgewählt","oder Verzeichnisse gleich.")
+		iup.Message("Keine Datei ausgewÃ¤hlt","oder Verzeichnisse gleich.")
 	end --if pickedFileName then
 	textbox1.value=new_directory
 	for i=1, tree.count-1 do
@@ -863,7 +863,7 @@ function button_version_move_copy_and_paste:flat_action()
 end --function button_version_move_copy_and_paste:action()
 
 --6.6 button for copy and paste all missing files in goal directory
-button_missing_copy_and_paste = iup.flatbutton{title = "Fehlende Dateien im \nZielordner ergänzen",size="90x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_missing_copy_and_paste = iup.flatbutton{title = "Fehlende Dateien im \nZielordner ergÃ¤nzen",size="90x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_missing_copy_and_paste:flat_action()
 	local new_directory=textbox1.value 
 	local files1Table={}
@@ -997,7 +997,7 @@ end --function tree:k_any(c)
 --7.3 load tree1 from directory
 p=io.popen('dir "C:\\"')
 explorerTree={branchname="Ordnerinhalt"}
-for line in p:lines() do explorerTree[#explorerTree+1]=line:gsub("„","ä"):gsub("ÿ"," ") end
+for line in p:lines() do explorerTree[#explorerTree+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ") end
 textbox1.value="C:\\"
 --build tree for explorer
 tree1=iup.tree{
@@ -1019,7 +1019,7 @@ end --function tree:rightclick_cb(id)
 --7.4 load tree2 from directory
 p=io.popen('dir "C:\\"')
 explorerTree2={branchname="Ordnerinhalt des Ursprungsordners"}
-for line in p:lines() do explorerTree2[#explorerTree2+1]=line:gsub("„","ä"):gsub("ÿ"," ") end
+for line in p:lines() do explorerTree2[#explorerTree2+1]=line:gsub("Â„","Ã¤"):gsub("Ã¿"," ") end
 textbox2.value="C:\\"
 --build tree for explorer
 tree2=iup.tree{
