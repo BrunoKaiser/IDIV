@@ -24,12 +24,12 @@ TextHTMLtable={
 
 </li></ul>
 
-<ul><li>Herunterladen der Oberfläche
+<ul><li>Herunterladen der OberflÃ¤che
 <ul><li>ansicht_documentation_tree.lua</li></ul>
 <ul><li>simple_webbrowser.lua</li></ul>
 </li></ul>
 
-<ul><li>Verwendungen im Büroalltag
+<ul><li>Verwendungen im BÃ¼roalltag
 </li></ul>
 
 </li></ul>
@@ -38,13 +38,13 @@ TextHTMLtable={
 
 </body></html> ]====],
 [====[<!DOCTYPE html> <head></head><html> <body leftmargin="150">
-<br><h1><font size="32">Präsentation </font></h1>
+<br><h1><font size="32">PrÃ¤sentation </font></h1>
 
 <font size="25">
 
 <ul><li>Einleitung</li></ul>
 
-<ul><li>Kompatibilität mit Office-Produkten
+<ul><li>KompatibilitÃ¤t mit Office-Produkten
 <ul><li>Word</li></ul>
 <ul><li>Excel</li></ul>
 <ul><li>Powerpoint</li></ul>
@@ -70,7 +70,7 @@ TextHTMLtable={
 ["Neuer Ast"]=[====[<!DOCTYPE html> <head></head><html> <body>
 <h1>Neue Seite </h1>
 
-Diese wird jetzt verändert.
+Diese wird jetzt verÃ¤ndert.
 
 </body></html> ]====],
 }--TextHTMLtable<!--
@@ -309,7 +309,7 @@ dlg_rename = iup.dialog{
 
 --4.2 change page dialog
 --ok_change_page button
-ok_change_page = iup.flatbutton{title = "Seite verändern",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+ok_change_page = iup.flatbutton{title = "Seite verÃ¤ndern",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function ok_change_page:flat_action()
 	webbrowser1.HTML= textfield1.value
 	if tonumber(textbox1.value) then
@@ -387,21 +387,21 @@ searchtext2 = iup.multiline{border="YES",expand="YES",wordwrap="YES"} --textfiel
 search_found_number = iup.text{border="YES",expand="YES",} --textfield for search found number
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	--for search for substantives in german questions
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uÄÖÜ][^%s%p]+ (.*)%?"):gsub("%? [%uÄÖÜ]+"," "):gsub("%. [%uÄÖÜ]+"," "):gsub(": [%uÄÖÜ]+"," ")
+	if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+ (.*)%?"):gsub("%? [%uÃ„Ã–Ãœ]+"," "):gsub("%. [%uÃ„Ã–Ãœ]+"," "):gsub(": [%uÃ„Ã–Ãœ]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 	local help=false
 	--downward search
 	if checkboxforcasesensitive.value=="ON"  then
@@ -450,15 +450,15 @@ function searchmark:flat_action()
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uÄÖÜ][^%s%p]+ (.*)%?"):gsub("%? [%uÄÖÜ]+"," "):gsub("%. [%uÄÖÜ]+"," "):gsub(": [%uÄÖÜ]+"," ")
+	if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+ (.*)%?"):gsub("%? [%uÃ„Ã–Ãœ]+"," "):gsub("%. [%uÃ„Ã–Ãœ]+"," "):gsub(": [%uÃ„Ã–Ãœ]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 	--unmark all nodes
 	for i=0, tree.count - 1 do
 			tree["color" .. i]="0 0 0"
@@ -524,21 +524,21 @@ function unmark:flat_action()
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	--for search for substantives in german questions
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uÄÖÜ][^%s%p]+ (.*)%?"):gsub("%? [%uÄÖÜ]+"," "):gsub("%. [%uÄÖÜ]+"," "):gsub(": [%uÄÖÜ]+"," ")
+	if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+ (.*)%?"):gsub("%? [%uÃ„Ã–Ãœ]+"," "):gsub("%. [%uÃ„Ã–Ãœ]+"," "):gsub(": [%uÃ„Ã–Ãœ]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uÄÖÜ][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --if searchtext.value:match("[%uÃ„Ã–Ãœ][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uÄÖÜ][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%uÃ„Ã–Ãœ][^%s%p]+") do 
 	local help=false
 	--upward search
 	if checkboxforcasesensitive.value=="ON" then
@@ -578,7 +578,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
@@ -587,11 +587,11 @@ search_label=iup.label{title="Suchfeld:"} --label for textfield
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,iup.vbox{searchtext,iup.label{title="Suchworte aus Fragen und Texten:"},searchtext2,}}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 			iup.hbox{search_found_number,},
 			}; 
@@ -698,7 +698,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -706,7 +706,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to tree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzufÃ¼gen"}
 function addbranchbottom:action()
 	tree["insertbranch" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -738,7 +738,7 @@ function addbranch_fromclipboardbottom:action()
 end --function addbranch_fromclipboardbottom:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -835,8 +835,8 @@ menu = iup.menu{
 		startcopy,
 		renamenode, 
 		addbranch, 
-		addbranchbottom, 
 		addbranch_fromclipboard, 
+		addbranchbottom, 
 		addbranch_fromclipboardbottom, 
 		addleaf,
 		addleaf_fromclipboard,
@@ -926,7 +926,7 @@ function button_go_to_first_page:flat_action()
 end --function button_go_to_first_page:flat_action()
 
 --6.4 button for going one page back
-button_go_back = iup.flatbutton{title = "Eine Seite \nzurück",size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_go_back = iup.flatbutton{title = "Eine Seite \nzurÃ¼ck",size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_go_back:flat_action()
 	webbrowser1.EDITABLE="NO"
 	if aktuelleSeite>1 then aktuelleSeite=aktuelleSeite-1 end
@@ -987,18 +987,18 @@ function button_go_to_page_of_node:flat_action()
 end --function button_go_to_page_of_node:flat_action()
 
 --6.7 button for deleting the page
-button_delete = iup.flatbutton{title = "Löschen \nder Seite",size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_delete = iup.flatbutton{title = "LÃ¶schen \nder Seite",size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete:flat_action()
-	LoeschAlarm=iup.Alarm("Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelöscht werden?","Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelöscht werden?","Löschen","Nicht Löschen")
+	LoeschAlarm=iup.Alarm("Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelÃ¶scht werden?","Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelÃ¶scht werden?","LÃ¶schen","Nicht LÃ¶schen")
 	if LoeschAlarm==1 then 
 		if tonumber(textbox1.value) and tonumber(textbox1.value)<=#TextHTMLtable then
 			aktuelleSeite=math.tointeger(tonumber(textbox1.value))
 			table.move(TextHTMLtable,aktuelleSeite+1,#TextHTMLtable,aktuelleSeite)--move following elements to begin with index from aktuelleSeite
 			TextHTMLtable[#TextHTMLtable]=nil --delete last element
 			--test with: iup.Message(aktuelleSeite, tostring(math.floor(aktuelleSeite/2)*2==aktuelleSeite))
-			webbrowser1.HTML="Seite gelöscht"
+			webbrowser1.HTML="Seite gelÃ¶scht"
 		else
-			iup.Message("Keine Seite zum Löschen","Keine Seite zum Löschen")
+			iup.Message("Keine Seite zum LÃ¶schen","Keine Seite zum LÃ¶schen")
 		end --if tonumber(textbox1.value) and tonumber(textbox1.value)<=#TextHTMLtable then
 	end --if LoeschAlarm==1 then 
 end --function button_delete:flat_action()
@@ -1067,7 +1067,7 @@ function button_edit_programm:flat_action()
 end --function button_edit_programm:flat_action()
 
 --6.12.1.2 button for not editing and go back to page
-button_no_edit_and_back_to_page = iup.flatbutton{title = "Zur Seite \nzurück",size="40x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_no_edit_and_back_to_page = iup.flatbutton{title = "Zur Seite \nzurÃ¼ck",size="40x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_no_edit_and_back_to_page:flat_action()
 	button_go_to_page_of_node:flat_action()
 end --function button_no_edit_and_back_to_page:flat_action()
