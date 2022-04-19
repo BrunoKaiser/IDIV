@@ -467,7 +467,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to console.outputTree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	console.outputTree.addbranch = ""
 	console.outputTree.value=console.outputTree.value+1
@@ -475,7 +475,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to console.outputTree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzufÃ¼gen"}
 function addbranchbottom:action()
 	console.outputTree["insertbranch" .. console.outputTree.value] = ""
 	for i=console.outputTree.value+1,console.outputTree.count-1 do
@@ -488,7 +488,7 @@ function addbranchbottom:action()
 end --function addbranchbottom:action()
 
 --5.1.3.2 add leaf to console.outputTree by insertleaf
-addleafbottom = iup.item {title = "Blatt darunter hinzufügen"}
+addleafbottom = iup.item {title = "Blatt darunter hinzufÃ¼gen"}
 function addleafbottom:action()
 	console.outputTree["insertleaf" .. console.outputTree.value] = ""
 	for i=console.outputTree.value+1,console.outputTree.count-1 do
@@ -532,7 +532,7 @@ function addleaf_fromclipboardbottom:action()
 end --function addleaf_fromclipboardbottom:action()
 
 --5.1.5 add leaf of console.outputTree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	console.outputTree.addleaf = ""
 	console.outputTree.value=console.outputTree.value+1
@@ -590,7 +590,7 @@ function startnode:action()
 end --function startnode:action()
 
 --5.1.10 execute Lua script with Lua chunk of the node of console.outputTree and write result under the node
-startnode_script = iup.item {title = "Knoten ausführen"}
+startnode_script = iup.item {title = "Knoten ausfÃ¼hren"}
 function startnode_script:action()
 	if console.outputTree["KIND"]=="BRANCH" then
 		if console.outputTree['title']:match("^.:\\.*%.[^\\ ]+$") or console.outputTree['title']:match("^.:\\.*[^\\]+$") or console.outputTree['title']:match("^.:\\$") or console.outputTree['title']:match("^[^ ]*//[^ ]+$") then 
@@ -641,12 +641,12 @@ menu = iup.menu{
 		startcopy,
 		renamenode,
 		addbranch,
-		addbranchbottom,
 		addbranch_fromclipboard,
+		addbranchbottom,
 		addbranch_fromclipboardbottom,
 		addleaf,
-		addleafbottom,
 		addleaf_fromclipboard,
+		addleafbottom,
 		addleaf_fromclipboardbottom,
 		startversion,
 		startnodescripter,
