@@ -429,6 +429,7 @@ function button_loading_lua_table_1:flat_action()
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox1.value) then
+	textbox1_2.value="Anzahl Knoten: " .. tree1.totalchildcount0
 end --function button_loading_lua_table_1:flat_action()
 
 --6.3 button for loading tree 2
@@ -478,6 +479,7 @@ function button_loading_lua_table_2:flat_action()
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox2.value) then
+	textbox2_2.value="Anzahl Knoten: " .. tree2.totalchildcount0
 end --function button_loading_lua_table_2:flat_action()
 
 --6.4 button for expand and collapse
@@ -827,6 +829,8 @@ end --function button_logo:flat_action()
 --7.1 textboxes
 textbox1 = iup.multiline{value="",size="320x20",WORDWRAP="YES"}
 textbox2 = iup.multiline{value="",size="320x20",WORDWRAP="YES"}
+textbox1_2 = iup.multiline{value="",size="85x20",WORDWRAP="YES"}
+textbox2_2 = iup.multiline{value="",size="85x20",WORDWRAP="YES"}
 
 --7.2.1 display empty compare tree
 actualtree={branchname="compare"}
@@ -895,8 +899,8 @@ maindlg = iup.dialog{
 		},
 		
 		iup.hbox{
-			iup.frame{title="Erste Textdatei",iup.vbox{textbox1,tree1,},},
-			iup.frame{title="Zweite Textdatei",iup.vbox{textbox2,tree2,},},
+			iup.frame{title="Erste Textdatei",iup.vbox{iup.hbox{textbox1,textbox1_2},tree1,},},
+			iup.frame{title="Zweite Textdatei",iup.vbox{iup.hbox{textbox2,textbox2_2},tree2,},},
 			iup.frame{title="Manuelle Zuordnung als Baum",iup.vbox{iup.label{title="Legende: blau = aus dem ersten Baum, grau = aus dem zweiten Baum und rot = Titel"},tree,},},
 			},
 
