@@ -41,7 +41,11 @@ Tree={branchname="ESG-Artikel-Links",
 
 },
 
-"https://www.mazars.de/Home/ber-uns/Aktuelles/Presse-Medien/Publikationen/Studien/Archiv-2019/ESG-Risiken-im-Risikomanagement",
+{branchname="https://www.mazars.de/Home/ber-uns/Aktuelles/Presse-Medien/Publikationen/Studien/Archiv-2019/ESG-Risiken-im-Risikomanagement",
+"COSO",
+"WBCSD",
+
+},
 
 "/mnt/sdcard/Executive Summary - Studie Riskmanagement.pdf",
 
