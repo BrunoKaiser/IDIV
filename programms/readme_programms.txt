@@ -44,7 +44,8 @@ sudo apt update
 apt list --upgradable
 sudo apt upgrade
 
-After that IUP Lua can be downloaded for Linux54_64 	 Ubuntu 20.04 (x64) / Kernel 5.4 / gcc 9.3 (GTK 3.24) https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/Lua54/ 
+After that IUP Lua can be downloaded for Linux54_64 	 Ubuntu 20.04 (x64) / Kernel 5.4 / gcc 9.3 (GTK 3.24) 
+https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/Lua54/ 
 
 The compressed file C:\Users\..\Downloads\iup-3.30-Lua54_Linux54_64_bin.tar.gz is extracted in a directory for instance 
 C:\IUP_Linux, that is mounted into linux directory cd /mnt/c/IUP_Linux
@@ -52,9 +53,14 @@ C:\IUP_Linux, that is mounted into linux directory cd /mnt/c/IUP_Linux
 If programms are missing they must be installed, for instance 
 https://zoomadmin.com/HowToInstall/UbuntuPackage/libgtk-3-0 with sudo apt install libgtk-3-0
 
-It is necessary to make libraries available with export LD_LIBRARY_PATH=/mnt/c/IUP_Linux:$LD_LIBRARY_PATH 
+It is necessary to make libraries available with 
+export LD_LIBRARY_PATH=/mnt/c/IUP_Linux:$LD_LIBRARY_PATH 
 
-./lua54 should work or another Lua version, but require("iuplua") is not possible as described below:
+cd /mnt/c/IUP_Linux
+and after this
+./lua54 
+should work or another Lua version, but require("iuplua") is not possible (Unable to init server: Could not connect: Connection refused) 
+as described below:
 
 When using a IUP Lua script with graphical user interface components with require("iuplua") in a Linux system on Windows 
 a Xserver is needed to show the graphical user interfaces. Otherwise there is an error message as described in 
@@ -74,3 +80,12 @@ After this execute export DISPLAY=0:0 in the Linux terminal.
 
 and ./lua54 with require("iuplua") can now be used.
 
+
+As a summary:
+cd /mnt/c/IUP_Linux
+export LD_LIBRARY_PATH=/mnt/c/IUP_Linux:$LD_LIBRARY_PATH 
+C:\Program Files (x86)\Xming\XLaunch.exe
+export DISPLAY=0:0
+./lua54 
+./iuplua54
+./iupluascripter54
