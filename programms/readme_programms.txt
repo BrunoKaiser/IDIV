@@ -1,6 +1,6 @@
 This repository contains programms to execute IUP Lua scripts
 
-1. IUP_Lua_for_Raspberry_Pi4_executable_mylibs.zip
+1. IUP_Lua_for_Raspberry_Pi4_executable_3.30.zip
 
 The source files for IUP Lua are on https://sourceforge.net/projects/iup/files/. 
 
