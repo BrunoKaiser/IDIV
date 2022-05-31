@@ -1,0 +1,19 @@
+
+
+Name: query1
+
+SELECT * FROM table1;
+
+
+
+Name: query2
+
+SELECT * 
+FROM table1
+WHERE a>1;
+
+Name: query3
+
+SELECT * 
+FROM table2 INNER JOIN table1 ON b=c;
+
