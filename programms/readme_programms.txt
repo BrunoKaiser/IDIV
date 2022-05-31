@@ -94,3 +94,7 @@ export DISPLAY=0:0
 3. CSVtoLua
 
 This is a repository with scripts for converting CSV to Lua table.
+
+4. SQLtoCSVforLua
+
+This is a repository with scripts for converting SQL to CSV.
