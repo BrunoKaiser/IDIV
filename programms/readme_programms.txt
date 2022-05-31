@@ -89,3 +89,8 @@ export DISPLAY=0:0
 ./lua54 
 ./iuplua54
 ./iupluascripter54
+
+
+3. CSVtoLua
+
+This is a repository with scripts for converting CSV to Lua table.
