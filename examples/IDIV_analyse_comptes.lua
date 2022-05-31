@@ -357,9 +357,12 @@ textbox1=iup.text{value="limit",size="30x20"}
 dlg = iup.dialog{size="1200x300",
 iup.vbox{
 	iup.hbox{
+	button_logo,
 	button_delete_in_tree,
 	textbox1,
 	button_loading_lua_table,
+	iup.fill{},
+	button_logo2,
 	},
 	iup.hbox{mat, tree; margin="10x10"}
 },
