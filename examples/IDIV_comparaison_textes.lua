@@ -311,7 +311,7 @@ function button_loading_first_text_file:flat_action()
 		inputfile1:close()
 	else
 		--build file dialog for reading text file
-		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei öffnen",filter="*.*",filterinfo="Text Files",directory=path}
+		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei Ã¶ffnen",filter="*.*",filterinfo="Text Files",directory=path}
 		filedlg:popup(iup.ANYWHERE,iup.ANYWHERE) --show the file dialog
 		if filedlg.status=="1" then
 			iup.Message("Neue Datei",filedlg.value)
@@ -321,7 +321,7 @@ function button_loading_first_text_file:flat_action()
 			textfield1.value=inputfile1:read("*all")
 			inputfile1:close()
 		else
-			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgewählt")
+			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgewÃ¤hlt")
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox1.value) then
@@ -351,7 +351,7 @@ function button_loading_second_text_file:flat_action()
 		inputfile1:close()
 	else
 		--build file dialog for reading text file
-		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei öffnen",filter="*.*",filterinfo="Text Files",directory=path}
+		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei Ã¶ffnen",filter="*.*",filterinfo="Text Files",directory=path}
 		filedlg:popup(iup.ANYWHERE,iup.ANYWHERE) --show the file dialog
 		if filedlg.status=="1" then
 			iup.Message("Neue Datei",filedlg.value)
@@ -361,7 +361,7 @@ function button_loading_second_text_file:flat_action()
 			textfield2.value=inputfile2:read("*all")
 			inputfile2:close()
 		else
-			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgewählt")
+			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgewÃ¤hlt")
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox2.value) then
@@ -453,8 +453,46 @@ function button_expand_collapse_dialog:flat_action()
 	dlg_expand_collapse:popup(iup.ANYWHERE, iup.ANYWHERE)
 end --function button_expand_collapse_dialog:flat_action()
 
+--6.5.1 button for filtering the two texts to be compared on filtered lines
+button_filter=iup.flatbutton{title="Texte \nfiltern", size="55x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_filter:flat_action()
+	local textSubsitute=""
+	for line in (textfield1.value .. "\n"):gmatch("([^\n]*)\n") do
+		if line:match(textbox3.value) then
+			textSubsitute=textSubsitute .. line .. "\n"
+		end --if line:match(textbox3.value) then
+	end --for line in (textbox3.value .. "\n"):gmatch("([^\n]*)\n") do
+	textfield1.value=textSubsitute
+	textSubsitute=""
+	for line in (textfield2.value .. "\n"):gmatch("([^\n]*)\n") do
+		if line:match(textbox3.value) then
+			textSubsitute=textSubsitute .. line .. "\n"
+		end --if line:match(textbox3.value) then
+	end --for line in (textbox3.value .. "\n"):gmatch("([^\n]*)\n") do
+	textfield2.value=textSubsitute
+end --function button_filter:flat_action()
 
---6.5 button for comparing text file of tree and text file of tree2
+--6.5.2 button for filtering negatively the two texts to be compared on filtered lines
+button_filter_negatively=iup.flatbutton{title="Texte negativ\nfiltern", size="55x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_filter_negatively:flat_action()
+	local textSubsitute=""
+	for line in (textfield1.value .. "\n"):gmatch("([^\n]*)\n") do
+		if line:match(textbox3.value)==nil then
+			textSubsitute=textSubsitute .. line .. "\n"
+		end --if line:match(textbox3.value)==nil then
+	end --for line in (textbox3.value .. "\n"):gmatch("([^\n]*)\n") do
+	textfield1.value=textSubsitute
+	textSubsitute=""
+	for line in (textfield2.value .. "\n"):gmatch("([^\n]*)\n") do
+		if line:match(textbox3.value)==nil then
+			textSubsitute=textSubsitute .. line .. "\n"
+		end --if line:match(textbox3.value)==nil then
+	end --for line in (textbox3.value .. "\n"):gmatch("([^\n]*)\n") do
+	textfield2.value=textSubsitute
+end --function button_filter_negatively:flat_action()
+
+
+--6.6 button for comparing text file of tree and text file of tree2
 button_compare=iup.flatbutton{title="Textdateien vergleichen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_compare:flat_action()
 	tree.delnode0 = "CHILDREN"
@@ -530,7 +568,7 @@ function button_compare:flat_action()
 	iup.TreeAddNodes(tree,tree_script)
 end --function button_compare:flat_action()
 
---6.6 button with second logo
+--6.7 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
 	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
@@ -547,7 +585,7 @@ textbox3 = iup.multiline{value="",size="220x20",WORDWRAP="YES"}
 textbox4 = iup.text{value="12",size="30x20"}
 
 --7.1.1 checkboxes
-checkboxforcasesensitive = iup.toggle{title="Groß-/\nKleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/\nKleinschreibung", value="OFF"} --checkbox for casesensitiv search
 
 --7.2 display empty compare tree
 actualtree={branchname="compare"}
@@ -633,6 +671,8 @@ maindlg = iup.dialog{
 			iup.label{title="x: "},
 			textbox4,
 			iup.fill{},
+			button_filter,
+			button_filter_negatively,
 			button_compare,
 			iup.label{size="5x",},
 			button_expand_collapse_dialog,
