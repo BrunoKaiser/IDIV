@@ -7,9 +7,15 @@ Dieser Ordner enthält Beispieldateien von interaktiv-dynamischen Inhaltsverzeic
 
 Ce répertoire contiens des exemples de tables des matières interactive dynamiques.
 
-== 1. IDIV_analyse_bilan.lua
+== 1. arborescence avec des comptes
 
-This script contians the IDIV-Bilanzanalysewerkzeug (IDIV-outil d'analyse du bilan).
+=== 1.1 IDIV_analyse_bilan.lua
+
+This script contains the IDIV-Bilanzanalysewerkzeug (IDIV-outil d'analyse du bilan).
+
+=== 1.2 IDIV_analyse_comptes.lua
+
+This script contains a tool to show a list of assets and the tree of clients having these assets.
 
 == 2. arboresences simples
 
