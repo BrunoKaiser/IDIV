@@ -1,6 +1,40 @@
+--This script contains a tool to show a list of assets and the tree of clients having these assets.
+
+--1. basic data
+
+--1.1 libraries
 require( "iuplua" )
 require( "iupluacontrols" )
 --require( "iupluamatrixex" )
+
+
+--1.2 initalize clipboard
+clipboard=iup.clipboard{}
+
+--2.1 color section
+--2.1.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
+os.execute('color 71')
+
+--2.1.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
+
+--2.1.3 color definitions
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
+color_button_text="255 255 255"
+color_background_tree="246 246 246"
+
+
+--2.2 path of the graphical user interface and filename of this script
+path=arg[0]:match("(.*)\\")
+--test with: print(path)
+thisfilename=arg[0]:match("\\([^\\]+)$")
+--test with: print(arg[0])
+--test with: print(thisfilename)
+
 
 lua_tree_output={ branchname="Clients et leurs comptes",
  
@@ -133,9 +167,54 @@ showdragdrop="YES",
 }
 
 
+--6 buttons
+--6.1 logo image definition and button with logo
+img_logo = iup.image{
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,4,4,4,4,4,3,3,4,4,4,4,1,3,3,1,1,1,1,1,1,1,4,4,4,4 },
+  { 4,1,1,1,1,1,1,1,4,4,4,4,3,3,3,3,3,3,4,4,4,3,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,4,3,4,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 },
+  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 },
+  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 },
+  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },
+  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },
+  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
+}
+button_logo=iup.button{image=img_logo,title="", size="23x20"}
+function button_logo:action()
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
+end --function button_logo:flat_action()
 
---6.9 button for deleting one node leaving all other nodes but changing the order and reload tree calculations
-button_delete_in_tree=iup.flatbutton{title="Limite als Ebene herauslöschen und neu laden", size="205x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+
+
+--6.1 button for deleting one node leaving all other nodes but changing the order and reload tree calculations
+button_delete_in_tree=iup.flatbutton{title="Limite als Ebene herauslÃ¶schen und neu laden", size="205x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete_in_tree:flat_action()
 	searchText=textbox1.value -- "limit"
 	for i=tree.count-1,1,-1 do
@@ -204,7 +283,7 @@ function button_delete_in_tree:flat_action()
 end --function button_delete_in_tree:flat_action()
 
 
---6.3 button for loading tree
+--6.2 button for loading tree
 button_loading_lua_table=iup.flatbutton{title="Daten neu laden", size="115x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_loading_lua_table:flat_action()
 	tree.delnode0 = "CHILDREN"
@@ -264,6 +343,14 @@ function button_loading_lua_table:flat_action()
 	end --for i=tree.count-1,0,-1 do
 
 end --function button_loading_lua_table:flat_action()
+
+
+--6.5 button with second logo
+button_logo2=iup.button{image=img_logo,title="", size="23x20"}
+function button_logo2:action()
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
+end --function button_logo:flat_action()
+
 
 textbox1=iup.text{value="limit",size="30x20"}
 
@@ -339,7 +426,7 @@ for i=tree.count-1,0,-1 do
 	end --if tree["KIND" .. i]=="BRANCH" and tree["depth" .. i]>="1" then
 end --for i=tree.count-1,0,-1 do
 
---[[Aggregation für die erste Ebene aus den untergeordneten Knoten der zweiten Ebene
+--[[Aggregation fÃ¼r die erste Ebene aus den untergeordneten Knoten der zweiten Ebene
 for i=0, tree.count-1 do
 	if tree["KIND" .. i]=="BRANCH" and tree["depth" .. i]=="1" then
 		tree["state" .. i]="COLLAPSED"
