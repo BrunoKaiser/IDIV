@@ -1,0 +1,629 @@
+Option Compare Database
+
+
+Private Sub Befehl18_Click() 'Copy in Tree Form Tree
+    Forms!Tree.Tree = Me.Text11
+End Sub
+
+Private Sub Befehl21_Click() 'Copy in Tree Form Tree_result
+    Forms!Tree.Tree_result = Me.Text11
+End Sub
+
+Private Sub Befehl19_Click() 'Copy node
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+Debug.Print objTree.SelectedItem.Text
+Debug.Print Me.Text7
+Me.Text7 = objTree.SelectedItem.Text
+End Sub
+
+
+Private Sub Befehl24_Click() 'Calculate subtotals
+
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView2.Object
+    
+    Dim ctr As Integer
+    Dim childrenctr As Integer
+    Dim dataNumber As Double
+    Dim dataSum As Double
+    Dim dataText As String
+    
+For ctr = 0 To objTree.Nodes.Count - 1
+    '    Debug.Print objTree.Nodes.Item(objTree.Nodes.Count - ctr)
+    'Debug.Print objTree.Nodes.Item(objTree.Nodes.Count - ctr).Children
+    dataText = ""
+    If Not objTree.Nodes.Item(objTree.Nodes.Count - ctr).Children = 0 Then
+    dataSum = 0
+    dataMax = -999999999999.9
+    dataMin = 999999999999.9
+    
+    
+    Set noddy = objTree.Nodes.Item(objTree.Nodes.Count - ctr).Child
+    'Debug.Print objTree.Nodes.Item(objTree.Nodes.Count - ctr) & "->" & noddy
+    If InStr(1, noddy, ": ", vbTextCompare) = 0 Then
+        dataNumber = 0
+    Else
+        dataNumber = Mid(noddy, InStr(1, noddy, ": ", vbTextCompare) + 2)
+    End If 'If InStr(1, noddy, ": ", vbTextCompare) = 0 Then
+    'Debug.Print dataNumber
+    dataSum = dataSum + dataNumber
+    If dataNumber > dataMax Then
+        dataMax = dataNumber
+    End If 'If dataNumber > dataMax Then
+    If dataNumber < dataMin Then
+        dataMin = dataNumber
+    End If 'If dataNumber > dataMin Then
+    For childrenctr = 2 To objTree.Nodes.Item(objTree.Nodes.Count - ctr).Children
+        Set noddy = noddy.Next
+        'Debug.Print objTree.Nodes.Item(objTree.Nodes.Count - ctr) & "->" & noddy
+        If InStr(1, noddy, ": ", vbTextCompare) = 0 Then
+            dataNumber = 0
+        Else
+            dataNumber = Mid(noddy, InStr(1, noddy, ": ", vbTextCompare) + 2)
+        End If 'If InStr(1, noddy, ": ", vbTextCompare) = 0 Then
+        'Debug.Print dataNumber
+        dataSum = dataSum + dataNumber
+        If dataNumber > dataMax Then
+            dataMax = dataNumber
+        End If 'If dataNumber > dataMax Then
+        If dataNumber < dataMin Then
+            dataMin = dataNumber
+        End If 'If dataNumber > dataMin Then
+    Next
+    'bei gekappten Limitauslastungen, d.h. wenn das Limit nicht ausgelastet ist, wird die Auslastung auf 0 gekappt.
+    'If dataSum < 0 Then
+    '    dataSum = 0
+    'End If 'If dataSum < 0 Then
+    dataText = " # " & objTree.Nodes.Item(objTree.Nodes.Count - ctr).Children & " Min  " & dataMin & " Max  " & dataMax & " Durch " & Round(dataSum / objTree.Nodes.Item(objTree.Nodes.Count - ctr).Children, 2) & " S: " & dataSum
+    End If 'If Not objTree.Nodes.Item(objTree.Nodes.Count - ctr).Children = 0 Then
+    If InStr(1, objTree.Nodes.Item(objTree.Nodes.Count - ctr).Text, ": ") = 0 Then
+        'Debug.Print objTree.Nodes.Item(objTree.Nodes.Count - ctr) & dataText
+        objTree.Nodes.Item(objTree.Nodes.Count - ctr).Text = objTree.Nodes.Item(objTree.Nodes.Count - ctr) & dataText
+    End If 'If InStr(1, objTree.Nodes.Item(objTree.Nodes.Count - ctr).Text, ": ") = 0 Then
+Next
+ 
+
+End Sub
+
+'Verweise: Microsoft Windows Common Controls 6.0 (SP6)
+Private Sub Befehl2_Click() 'Tree output
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+ 'output the tree as a Lua table
+Dim x As Integer
+Dim ctr As Integer
+Dim levelOutput As Integer
+Dim oldlevelOutput As Integer
+Dim textOutput As String
+
+oldlevelOutput = -1
+levelOutput = 0
+'Debug.Print "Tree={branchname=""" & objTree.Nodes.Item(1) & """"
+textOutput = "Tree={branchname=""" & objTree.Nodes.Item(1) & """"
+'objTree.Nodes.Item(1).Expanded = True
+
+Dim minCount As Integer
+If objTree.Nodes.Count < Me.Text14 Then
+    minCount = objTree.Nodes.Count
+Else
+    minCount = Me.Text14
+End If
+
+For ctr = 2 To minCount 'if number of nodes augmented then new nodes only at the end with objTree.Nodes.Count
+    oldlevelOutput = levelOutput
+    Set noddy = objTree.Nodes.Item(ctr)
+    'objTree.Nodes.Item(ctr).Expanded = True
+    'iterates through each node (and sub-node) in the tree
+    'Debug.Print objTree.Nodes.Item(ctr).Parent & " " & noddy.Key
+    'Debug.Print objTree.Nodes.Item(ctr).FullPath
+    levelOutput = UBound(Split(objTree.Nodes.Item(ctr).FullPath, "\"))
+    'Debug.Print "--" & oldlevelOutput & " -> " & levelOutput
+    If oldlevelOutput < levelOutput Then
+        'Debug.Print ",{branchname=""" & objTree.Nodes.Item(ctr) & """"
+        textOutput = textOutput & "," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(ctr) & """"
+    ElseIf oldlevelOutput = levelOutput Then
+        'Debug.Print "},{branchname=""" & objTree.Nodes.Item(ctr) & """"
+        textOutput = textOutput & "}," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(ctr) & """"
+    ElseIf oldlevelOutput > levelOutput Then
+        For i = 1 To oldlevelOutput - levelOutput
+            'Debug.Print "},"
+            textOutput = textOutput & "}," & vbCrLf
+        Next
+        'Debug.Print "},{branchname=""" & objTree.Nodes.Item(ctr) & """"
+        textOutput = textOutput & "}," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(ctr) & """"
+    End If
+    For x = Me.Text14 + 1 To objTree.Nodes.Count
+        If objTree.Nodes.Item(ctr) = objTree.Nodes.Item(x).Parent Then
+            Debug.Print objTree.Nodes.Item(x)
+            textOutput = textOutput & "," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(x) & """}"
+        End If
+    Next
+Next
+'Debug.Print "--" & levelOutput
+For i = 1 To levelOutput
+    'Debug.Print "},"
+    textOutput = textOutput & "}," & vbCrLf
+Next
+'Debug.Print "}"
+textOutput = textOutput & "}" & vbCrLf
+Me.Text11 = textOutput
+   'new nodes have the index at the end of Item list: Debug.Print objTree.Nodes.Item(objTree.Nodes.Count)
+    Set objTree = Nothing
+
+End Sub
+
+
+Private Sub Befehl20_Click() 'Tree output with data
+
+
+'put data in dictionary
+Dim Db As DAO.Database
+Dim rs1 As DAO.Recordset
+Dim strSQL As String
+Set Db = CurrentDb
+Dim Dict As Scripting.Dictionary 'needs Microsoft Scripting Runtime
+Set Dict = New Scripting.Dictionary
+'Dict.Add Key:="x", Item:="122"
+'Debug.Print Dict("x")
+strSQL = "SELECT Matrixex_Prototyp_ExcelDB_Tree.IBAN, Matrixex_Prototyp_ExcelDB_Tree.Saldo FROM Matrixex_Prototyp_ExcelDB_Tree;"
+Set rs1 = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
+Dim IBANText As String
+Dim SaldoZahl As Variant
+Do While Not rs1.EOF
+    'Debug.Print rs1!IBAN & " " & rs1!Saldo
+    IBANText = rs1!IBAN
+    SaldoZahl = rs1!Saldo
+    Dict.Add Key:=IBANText, Item:=SaldoZahl
+    rs1.MoveNext
+Loop 'Do While Not rs.EOF
+'For Each Key In Dict.Keys
+'Debug.Print Key & " " & Dict(Key)
+'Next Key
+'Debug.Print Dict("DE1234567890123123")
+'put data in dictionary end
+
+
+
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+ 'output the tree as a Lua table
+Dim x As Integer
+Dim ctr As Integer
+Dim levelOutput As Integer
+Dim oldlevelOutput As Integer
+Dim textOutput As String
+
+oldlevelOutput = -1
+levelOutput = 0
+'Debug.Print "Tree={branchname=""" & objTree.Nodes.Item(1) & """"
+textOutput = "Tree={branchname=""" & objTree.Nodes.Item(1) & """"
+'objTree.Nodes.Item(1).Expanded = True
+
+Dim minCount As Integer
+If objTree.Nodes.Count < Me.Text14 Then
+    minCount = objTree.Nodes.Count
+Else
+    minCount = Me.Text14
+End If
+
+Dim dataText As String
+Dim searchText As String
+Dim dataSum As Double
+
+dataSum = 0
+For ctr = 2 To minCount 'if number of nodes augmented then new nodes only at the end with objTree.Nodes.Count
+    oldlevelOutput = levelOutput
+    Set noddy = objTree.Nodes.Item(ctr)
+    searchText = objTree.Nodes.Item(ctr)
+    dataText = Dict(searchText)
+    If Not dataText = "" Then
+        dataSum = dataSum + dataText
+        dataText = ": " & dataText
+    End If
+    'Debug.Print objTree.Nodes.Item(ctr) & " " & Dict(searchText)
+    'objTree.Nodes.Item(ctr).Expanded = True
+    'iterates through each node (and sub-node) in the tree
+    'Debug.Print objTree.Nodes.Item(ctr).Parent & " " & noddy.Key
+    'Debug.Print objTree.Nodes.Item(ctr).FullPath
+    levelOutput = UBound(Split(objTree.Nodes.Item(ctr).FullPath, "\"))
+    'Debug.Print "--" & oldlevelOutput & " -> " & levelOutput
+    If oldlevelOutput < levelOutput Then
+        'Debug.Print ",{branchname=""" & objTree.Nodes.Item(ctr) & """"
+        textOutput = textOutput & "," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(ctr) & dataText & """"
+    ElseIf oldlevelOutput = levelOutput Then
+        'Debug.Print "},{branchname=""" & objTree.Nodes.Item(ctr) & """"
+        textOutput = textOutput & "}," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(ctr) & dataText & """"
+    ElseIf oldlevelOutput > levelOutput Then
+        For i = 1 To oldlevelOutput - levelOutput
+            'Debug.Print "},"
+            textOutput = textOutput & "}," & vbCrLf
+        Next
+        'Debug.Print "},{branchname=""" & objTree.Nodes.Item(ctr) & """"
+        textOutput = textOutput & "}," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(ctr) & dataText & """"
+    End If
+    For x = Me.Text14 + 1 To objTree.Nodes.Count
+        If objTree.Nodes.Item(ctr) = objTree.Nodes.Item(x).Parent Then
+            Debug.Print objTree.Nodes.Item(x)
+            textOutput = textOutput & "," & vbCrLf & "{branchname=""" & objTree.Nodes.Item(x) & """}"
+        End If
+    Next
+Next
+'Debug.Print "--" & levelOutput
+For i = 1 To levelOutput
+    'Debug.Print "},"
+    textOutput = textOutput & "}," & vbCrLf
+Next
+'Debug.Print "}"
+textOutput = textOutput & "}" & vbCrLf
+Me.Text11 = textOutput
+   'new nodes have the index at the end of Item list: Debug.Print objTree.Nodes.Item(objTree.Nodes.Count)
+    Debug.Print "dataSum: " & dataSum
+
+
+'test with: textOutput = Replace(Me.Text11, "Tree={branchname=""" & objTree.Nodes.Item(1) & """", "Tree={branchname=""" & objTree.Nodes.Item(1) & ": " & dataSum & """")
+'test with: Me.Text11 = textOutput
+
+
+    Set objTree = Nothing
+
+End Sub
+
+
+
+Private Sub Befehl13_Click() 'Start Node
+   Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+    Debug.Print objTree.SelectedItem.Text
+    Dim RetVal
+         
+    If InStr(1, objTree.SelectedItem.Text, ":\", vbTextCompare) Then
+        RetVal = Shell("CMD /r start ""d"" " & objTree.SelectedItem.Text, 1)
+    Else
+        RetVal = Shell("C:\WINDOWS\NOTEPAD.EXE", 1)    ' Open Notepad.
+    End If
+    'https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/shell-function
+End Sub
+
+
+
+Private Sub Befehl25_Click() 'Collapse leafs with data
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView2.Object
+
+For ctr = 2 To objTree.Nodes.Count
+    If InStr(1, objTree.Nodes.Item(ctr), " # ") > 0 Then
+        objTree.Nodes.Item(ctr).Expanded = False
+    End If 'If InStr(1, objTree.Nodes.Item(ctr), " # ") > 0 Then
+Next
+
+End Sub
+
+Private Sub Befehl26_Click() 'Delete limit informations
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView2.Object
+    Dim numberDeletedNodes As Integer
+    Dim chosenIndex As Integer
+    
+    numberDeletedNodes = 0
+For ctr = 0 To objTree.Nodes.Count - 1
+    If ctr + numberDeletedNodes > objTree.Nodes.Count - 1 Then
+        chosenIndex = objTree.Nodes.Count - 1
+    Else
+        chosenIndex = objTree.Nodes.Count - ctr
+    End If
+    
+    If InStr(1, objTree.Nodes.Item(chosenIndex), "Limit") > 0 Then
+        objTree.Nodes.Item(chosenIndex).Text = Left(objTree.Nodes.Item(chosenIndex), InStr(1, objTree.Nodes.Item(chosenIndex), ":") - 1)
+    End If '   If InStr(1, objTree.Nodes.Item(objTree.Nodes.Count - ctr), "Limit") > 0 Then
+    If objTree.Nodes.Item(chosenIndex) = "Limit" Then
+        objTree.Nodes.Remove chosenIndex
+        numberDeletedNodes = numberDeletedNodes + 1
+    End If 'If objTree.Nodes.Item(objTree.Nodes.Count - ctr) = "Limit" Then
+Next
+
+
+End Sub
+
+
+Private Sub Befehl3_Click() 'Expand Tree
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+Dim ctr As Integer
+For ctr = 1 To objTree.Nodes.Count
+    objTree.Nodes.Item(ctr).Expanded = True
+Next
+End Sub
+
+
+Private Sub Befehl16_Click() 'Mark Node
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+    Dim ctr As Integer
+    Dim noddy As node
+
+    For ctr = 1 To objTree.Nodes.Count
+        If InStr(1, objTree.Nodes.Item(ctr), Me.Text7) Then
+            objTree.Nodes.Item(ctr).ForeColor = RGB(0, 0, 255)
+            Set noddy = objTree.Nodes.Item(ctr).Parent
+            noddy.ForeColor = RGB(255, 0, 0)
+            For i = 1 To 12
+                On Error Resume Next
+                Set noddy = noddy.Parent
+                On Error Resume Next
+                noddy.ForeColor = RGB(255, 0, 0)
+            Next
+            
+        End If
+    Next
+
+End Sub
+
+Private Sub Befehl17_Click() 'Unmark Node
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+    Dim ctr As Integer
+
+    For ctr = 1 To objTree.Nodes.Count
+            objTree.Nodes.Item(ctr).ForeColor = RGB(0, 0, 0)
+    Next
+
+End Sub
+
+Private Sub Befehl6_Click() 'Edit Node
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+Debug.Print objTree.SelectedItem.Text
+Debug.Print Me.Text7
+objTree.SelectedItem.Text = Me.Text7
+End Sub
+
+Private Sub Befehl9_Click() 'Add Node
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+Debug.Print objTree.SelectedItem.Text
+Debug.Print Me.Text7
+On Error Resume Next
+objTree.Nodes.Add Relative:=objTree.SelectedItem.Text, Relationship:=tvwChild, Key:=Me.Text7, Text:=Me.Text7
+End Sub
+
+Private Sub Befehl10_Click() 'Delete Node
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+    Dim x As Integer
+Debug.Print objTree.SelectedItem.Text
+For ctr = 1 To objTree.Nodes.Count
+    If objTree.Nodes.Item(ctr) = objTree.SelectedItem.Text Then
+        x = ctr
+    End If
+Next
+
+On Error Resume Next
+objTree.Nodes.Remove x
+End Sub
+
+
+Private Sub Befehl27_Click() 'Delete Node
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView2.Object
+    Dim x As Integer
+Debug.Print objTree.SelectedItem.Text
+For ctr = 1 To objTree.Nodes.Count
+    If objTree.Nodes.Item(ctr) = objTree.SelectedItem.Text Then
+        x = ctr
+    End If
+Next
+
+On Error Resume Next
+objTree.Nodes.Remove x
+
+End Sub
+
+
+Private Sub Befehl23_Click() 'Show Tree_result
+
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView2.Object
+   
+
+Dim Db As DAO.Database
+Dim rs As DAO.Recordset
+Dim strSQL As String
+Dim strSQL_output As String
+Dim arrayTree As Variant
+Dim x As Integer
+Dim levelNumber As Integer
+Dim isLeaf As String
+Dim arrayNode(-1 To 12) As Variant
+
+Debug.Print Forms!Tree.ID
+
+DoCmd.SetWarnings False
+Set Db = CurrentDb
+strSQL = "SELECT Tree.Tree,Tree.Tree_result FROM Tree WHERE ID = " & Forms!Tree.ID & ";"
+Set rs = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
+
+
+If Not rs!Tree_result = "" Then
+    levelNumber = 0
+    keyNumber = 0
+    isLeaf = "no"
+    Do While Not rs.EOF
+        'Debug.Print rs!Tree
+        arrayTree = Split(Replace(Replace(Replace(rs!Tree_result, Chr(13) & Chr(10), ""), """,""", """,{leaf"""), "}", """}"""), """")
+        For x = 0 To UBound(arrayTree)
+            'Debug.Print arrayTree(x)
+            If arrayTree(x) = ",{branchname=" Then
+                levelNumber = levelNumber + 1
+            ElseIf arrayTree(x) = "}" And isLeaf = "yes" Then
+                levelNumber = levelNumber - 2
+                isLeaf = "no"
+            ElseIf arrayTree(x) = "}" Then
+                levelNumber = levelNumber - 1
+                isLeaf = "no"
+            ElseIf arrayTree(x) = ",{leaf" And isLeaf = "no" Then
+                levelNumber = levelNumber + 1
+                isLeaf = "yes"
+            End If 'If arrayTree(x) = ",{branchname=" Then
+            'Debug.Print levelNumber
+            If Not arrayTree(x) = "}" And Not arrayTree(x) = "," And InStr(1, arrayTree(x), "Tree={branchname=", vbTextCompare) = 0 Then
+                arrayNode(levelNumber) = arrayTree(x)
+                'Debug.Print levelNumber & "->" & arrayNode(levelNumber)
+                If levelNumber = 0 Then
+                    On Error Resume Next
+                    objTree.Nodes.Add Key:=arrayNode(levelNumber), Text:=arrayNode(levelNumber) 'take dynamically the root node, before only "Tree"
+                End If 'If levelNumber = 0 Then
+            End If 'If Not arrayTree(x) = "}" And Not arrayTree(x) = "," And InStr(1, arrayTree(x), "Tree={branchname=", vbTextCompare) = 0 Then
+            'Debug.Print arrayNode(levelNumber - 1) & ": " & arrayNode(levelNumber)
+            On Error Resume Next
+            If Not arrayNode(levelNumber) = "" And Not Left(arrayNode(levelNumber), 1) = "," Then
+                objTree.Nodes.Add Relative:=arrayNode(levelNumber - 1), Relationship:=tvwChild, Key:=arrayNode(levelNumber), Text:=arrayNode(levelNumber)
+            End If 'If Not arrayNode(levelNumber) = "" And InStr(1, arrayNode(levelNumber), ",", vbTextCompare) = 0 Then
+        Next 'For x = 0 To UBound(arrayTree)
+        rs.MoveNext
+    Loop 'Do While Not rs.EOF
+    
+    'print number of nodes
+    Debug.Print objTree.Nodes.Count
+    Me.Text14 = objTree.Nodes.Count
+    'objTree.FullRowSelect = True
+        Dim ctr As Integer
+    For ctr = 1 To objTree.Nodes.Count
+        objTree.Nodes.Item(ctr).Expanded = True
+    Next
+End If 'If Not Tree_result = "" Then
+   
+Set objTree = Nothing
+
+End Sub
+
+
+Private Sub Form_Load() 'Load Tree
+    Dim objTree As TreeView
+    Set objTree = Me.TreeView0.Object
+   
+'objTree.Nodes.Add Key:="Bedarf", Text:="Bedarf"
+'Add node that is a child
+'objTree.Nodes.Add Relative:="Bedarf", Relationship:=tvwChild, Key:="Access VBA Formular", Text:="Access VBA Formular"
+'objTree.Nodes.Add Relative:="Bedarf", Relationship:=tvwChild, Key:="Befüllung durch Tabelle möglich", Text:="Befüllung durch Tabelle möglich"
+
+'objTree.Nodes.Add Key:="Tree", Text:="Tree"
+
+
+Dim Db As DAO.Database
+Dim rs As DAO.Recordset
+Dim strSQL As String
+Dim strSQL_output As String
+Dim arrayTree As Variant
+Dim x As Integer
+Dim levelNumber As Integer
+Dim isLeaf As String
+Dim arrayNode(-1 To 12) As Variant
+
+Debug.Print Forms!Tree.ID
+
+DoCmd.SetWarnings False
+Set Db = CurrentDb
+strSQL = "SELECT Tree.Tree FROM Tree WHERE ID = " & Forms!Tree.ID & ";"
+Set rs = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
+
+levelNumber = 0
+keyNumber = 0
+isLeaf = "no"
+Do While Not rs.EOF
+    'Debug.Print rs!Tree
+    arrayTree = Split(Replace(Replace(Replace(rs!Tree, Chr(13) & Chr(10), ""), """,""", """,{leaf"""), "}", """}"""), """")
+    For x = 0 To UBound(arrayTree)
+        If arrayTree(x) = ",{branchname=" Then
+            levelNumber = levelNumber + 1
+        ElseIf arrayTree(x) = "}" And isLeaf = "yes" Then
+            levelNumber = levelNumber - 2
+            isLeaf = "no"
+        ElseIf arrayTree(x) = "}" Then
+            levelNumber = levelNumber - 1
+            isLeaf = "no"
+        ElseIf arrayTree(x) = ",{leaf" And isLeaf = "no" Then
+            levelNumber = levelNumber + 1
+            isLeaf = "yes"
+        End If
+        'Debug.Print levelNumber
+        If Not arrayTree(x) = "}" And Not arrayTree(x) = "," And InStr(1, arrayTree(x), "Tree={branchname=", vbTextCompare) = 0 Then
+            arrayNode(levelNumber) = arrayTree(x)
+        
+            If levelNumber = 0 Then
+                objTree.Nodes.Add Key:=arrayNode(levelNumber), Text:=arrayNode(levelNumber) 'take dynamically the root node, before only "Tree"
+            End If
+        
+        
+        End If
+        'Debug.Print arrayNode(levelNumber - 1) & ": " & arrayNode(levelNumber)
+    On Error Resume Next
+    If Not arrayNode(levelNumber) = "" And Not Left(arrayNode(levelNumber), 1) = "," Then
+        objTree.Nodes.Add Relative:=arrayNode(levelNumber - 1), Relationship:=tvwChild, Key:=arrayNode(levelNumber), Text:=arrayNode(levelNumber)
+    End If
+    Next
+    rs.MoveNext
+Loop 'Do While Not rs.EOF
+
+
+'Constants used to define relationship of node when adding
+'CONSTANT / DESCRIPTION
+'tvwFirst / Add as the first node at the level of the relative.
+'tvwLast / Add as the last node at the level of the relative.
+'tvwNext / Add after immediately following a specified node.
+'tvwPrevious / Add after immediately preceding a specified node.
+'tvwChild / Add as a child to the specified node.
+
+'print number of nodes
+Debug.Print objTree.Nodes.Count
+Me.Text14 = objTree.Nodes.Count
+'objTree.FullRowSelect = True
+
+''''output the tree as a Lua table
+'''Dim ctr As Integer
+'''Dim levelOutput As Integer
+'''Dim oldlevelOutput As Integer
+'''
+'''oldlevelOutput = -1
+'''levelOutput = 0
+'''Debug.Print "Tree={branchname=""" & objTree.Nodes.Item(1) & """"
+'''objTree.Nodes.Item(1).Expanded = True
+'''For ctr = 2 To objTree.Nodes.Count
+'''    oldlevelOutput = levelOutput
+'''    Set noddy = objTree.Nodes.Item(ctr)
+'''    objTree.Nodes.Item(ctr).Expanded = True
+'''    'iterates through each node (and sub-node) in the tree
+'''    'Debug.Print objTree.Nodes.Item(ctr).Parent & " " & noddy.Key
+'''    'Debug.Print objTree.Nodes.Item(ctr).FullPath
+'''    levelOutput = UBound(Split(objTree.Nodes.Item(ctr).FullPath, "\"))
+'''    'Debug.Print levelOutput
+'''    If oldlevelOutput < levelOutput Then
+'''        Debug.Print ",{branchname=""" & objTree.Nodes.Item(ctr) & """"
+'''    ElseIf oldlevelOutput = levelOutput Then
+'''        Debug.Print "},{branchname=""" & objTree.Nodes.Item(ctr) & """"
+'''    ElseIf oldlevelOutput > levelOutput Then
+'''        For i = 1 To oldlevelOutput - levelOutput
+'''            Debug.Print "},"
+'''        Next
+'''        Debug.Print "},{branchname=""" & objTree.Nodes.Item(ctr) & """"
+'''    End If
+'''Next
+'''For i = 1 To oldlevelOutput
+'''    Debug.Print "},"
+'''Next
+'''Debug.Print "}"
+
+    Dim ctr As Integer
+For ctr = 1 To objTree.Nodes.Count
+    objTree.Nodes.Item(ctr).Expanded = True
+Next
+   
+Set objTree = Nothing
+    
+'test with: Me.TreeView2.Nodes.Add Key:="Tree_result", Text:="Tree_result"
+
+End Sub
+
+
+
+
