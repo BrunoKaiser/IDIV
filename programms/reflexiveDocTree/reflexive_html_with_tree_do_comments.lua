@@ -953,7 +953,7 @@ commentsTable["collection of tree data by applying the recursive function"]={
 }
 commentsTable["Beckmann und Partner colors"]={
 "Die spezifischen Farben werden nach der Definition festgelegt: Rot, Hellgrau, Grau und Blau.",
-"The special colors are defined definition: red, light grey, grey and blue.",
+"The special colors are defined: red, light grey, grey and blue.",
 }
 commentsTable["color section"]={
 "Die Farben werden festgelegt.",
