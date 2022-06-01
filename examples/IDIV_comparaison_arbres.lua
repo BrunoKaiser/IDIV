@@ -644,7 +644,7 @@ function button_sort_with_tree:flat_action()
 		elseif file1existsTable[tree['TITLE' .. i]] then
 			tree["color" .. i]="0 0 250"
 		else
-			tree["color" .. i]=color_grey_bpc
+			tree["color" .. i]=color_grey
 		end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
 	end --for i=tree.totalchildcount0,0,-1 do
 end --function button_sort_with_tree:flat_action()
@@ -724,7 +724,7 @@ function button_sort_in_tree:flat_action()
 			elseif file1existsTable[tree['TITLE' .. i]] then
 				tree["color" .. i]="0 0 250"
 			else
-				tree["color" .. i]=color_grey_bpc
+				tree["color" .. i]=color_grey
 			end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
 		end --for i=tree.totalchildcount0,0,-1 do
 	end --if file_exists(textbox1.value) and file_exists(textbox2.value) then
@@ -763,7 +763,7 @@ function button_tree1_not_in_tree:flat_action()
 		--mark the tree in blue for nodes from tree 1
 		for i=0,tree.totalchildcount0 do
 			if file2existsTable[tree['TITLE' .. i]] then
-				tree["color" .. i]=color_grey_bpc
+				tree["color" .. i]=color_grey
 			else
 				tree["color" .. i]="0 0 250"
 			end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
