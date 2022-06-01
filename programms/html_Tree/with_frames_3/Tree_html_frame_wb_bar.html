@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
+<html><head>
+  <title>Bar</title>
+</head><body> 
+
+  <div class="navigation">
+    <p>
+<img alt="Expand All Nodes" src="wb_img/showall.png" onclick="parent.wb_tree.showAllFolders()" onmouseover="this.src='wb_img/showall_over.png'" onmouseout="this.src='wb_img/showall.png'">
+
+<img alt="Contract All Nodes" src="wb_img/hideall.png" onclick="parent.wb_tree.hideAllFolders()" onmouseover="this.src='wb_img/hideall_over.png'" onmouseout="this.src='wb_img/hideall.png'">
+
+
+<input value="Markieren aller Fundstellen und Ausklappen" onclick="parent.wb_tree.searchInTree()" type="button">
+<input value="Markieren der ersten Fundstelle" onclick="parent.wb_tree.searchInTreeNext()" type="button"> 
+Bei Bedarf auf IDIV klicken.
+<br>
+  <form name="G">
+Suche von:<input value="" name="Q" size="54" type="text"> Ergebnis:<input value="" name="R" size="54" type="text">
+<!--test with:--><!--input value="" name="C" size="54" type="text"-->
+</form>
+
+This frame html contains a tree in the left frame. The mark functionality is limited because of the denomination of the link names. Go to link is not possible if mark functions correctly and vice versa.
+
+
+
+  </div>
+</body></html>
