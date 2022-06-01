@@ -12,8 +12,11 @@ The directories can be changed as needed.
 
 This script contains the lua table for the manual tree and the lua table for the texts corresponding to the titles in the manual tree. It is used in the GUI Tree_news_categorisation.lua.
 
-3. html_Tree_news.lua
+3.1 html_Tree_news_Linux.lua
 
-This script converts a text file with titles into a tree for news of the days and omits the known news that are known from the convertion done before.
+This script converts in Linux a text file with titles into a tree for news of the days and omits the known news that are known from the convertion done before.
 
-© 2022 GitHub, Inc.
+3.2 html_Tree_news_Windows.lua
+
+This script converts in Windows a text file with titles into a tree for news of the days and omits the known news that are known from the convertion done before.
+
