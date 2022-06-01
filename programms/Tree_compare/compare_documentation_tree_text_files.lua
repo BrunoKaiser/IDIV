@@ -56,15 +56,15 @@ end --do --sandboxing
 --1.2.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---1.2.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--1.2.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -294,11 +294,11 @@ img_logo = iup.image{
   { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraﬂe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for loading text file 1
@@ -311,7 +311,7 @@ function button_loading_first_text_file:flat_action()
 		inputfile1:close()
 	else
 		--build file dialog for reading text file
-		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei ˆffnen",filter="*.*",filterinfo="Text Files",directory=path}
+		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei √∂ffnen",filter="*.*",filterinfo="Text Files",directory=path}
 		filedlg:popup(iup.ANYWHERE,iup.ANYWHERE) --show the file dialog
 		if filedlg.status=="1" then
 			iup.Message("Neue Datei",filedlg.value)
@@ -321,7 +321,7 @@ function button_loading_first_text_file:flat_action()
 			textfield1.value=inputfile1:read("*all")
 			inputfile1:close()
 		else
-			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew‰hlt")
+			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew√§hlt")
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox1.value) then
@@ -351,7 +351,7 @@ function button_loading_second_text_file:flat_action()
 		inputfile1:close()
 	else
 		--build file dialog for reading text file
-		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei ˆffnen",filter="*.*",filterinfo="Text Files",directory=path}
+		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei √∂ffnen",filter="*.*",filterinfo="Text Files",directory=path}
 		filedlg:popup(iup.ANYWHERE,iup.ANYWHERE) --show the file dialog
 		if filedlg.status=="1" then
 			iup.Message("Neue Datei",filedlg.value)
@@ -361,7 +361,7 @@ function button_loading_second_text_file:flat_action()
 			textfield2.value=inputfile2:read("*all")
 			inputfile2:close()
 		else
-			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew‰hlt")
+			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew√§hlt")
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox2.value) then
@@ -571,7 +571,7 @@ end --function button_compare:flat_action()
 --6.7 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraﬂe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6 buttons end
@@ -585,7 +585,7 @@ textbox3 = iup.multiline{value="",size="220x20",WORDWRAP="YES"}
 textbox4 = iup.text{value="12",size="30x20"}
 
 --7.1.1 checkboxes
-checkboxforcasesensitive = iup.toggle{title="Groﬂ-/\nKleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="Gro√ü-/\nKleinschreibung", value="OFF"} --checkbox for casesensitiv search
 
 --7.2 display empty compare tree
 actualtree={branchname="compare"}
