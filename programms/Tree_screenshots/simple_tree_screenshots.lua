@@ -26,10 +26,10 @@ clipboard=iup.clipboard{}
 os.execute('color 71')
 
 --1.2.2 colors
-color_red="135 31 28"
-color_light_color_grey="196 197 199"
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
 color_grey="162 163 165"
-color_blue="18 32 86"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
 color_background=color_light_color_grey
