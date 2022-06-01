@@ -1,0 +1,12 @@
+Tree_siteText={branchname="Nachrichten pro Seite",
+{branchname="example2.de",
+{branchname="title2 for the text2",
+"This is the text2 corresponding to the title2. ",
+},
+},
+{branchname="example.de",
+{branchname="title for the text",
+"This is the text corresponding to the title. ",
+},
+},
+}
