@@ -67,7 +67,7 @@ color_blue="18 132 86"
 
 --1.2.3 color definitions
 color_background=color_light_color_grey
-color_buttons=color_blue -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
