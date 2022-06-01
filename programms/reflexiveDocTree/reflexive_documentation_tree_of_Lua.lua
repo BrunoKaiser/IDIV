@@ -472,8 +472,8 @@ This function "receives a string and returns a copy of this string with all uppe
 
 <pre>
 
-> print(string.lower("Das ist ein Text mit Maßnahmen."))
-das ist ein text mit maßnahmen.
+> print(string.lower("Das ist ein Text mit MaÃŸnahmen."))
+das ist ein text mit maÃŸnahmen.
 
 </pre>
 
@@ -1252,7 +1252,7 @@ io.write("same line.")
 <br>
 </pre>
 
-To write data that can afterwords be reused as a Lua code,  please see chapter 12.1 – Serialization for IT professionals.
+To write data that can afterwords be reused as a Lua code,  please see chapter 12.1 Â– Serialization for IT professionals.
 </body></html> ]====],
 ["_G"]=[====[<!DOCTYPE html> <head></head><html> <body>
 <h1>_G </h1>
@@ -1928,37 +1928,37 @@ For file manipulation the
 
 > os.execute('dir C:\\Temp\\test.lua')
  Le volume dans le lecteur C s'appelle Boot
- Le numéro de série du volume est 8254-5AFB
+ Le numÃ©ro de sÃ©rie du volume est 8254-5AFB
 
- Répertoire de C:\Temp
+ RÃ©pertoire de C:\Temp
 
 20/12/2021  17:46               103 test.lua
                1 fichier(s)              103 octets
-               0 Rép(s)  221 997 768 704 octets libres
+               0 RÃ©p(s)  221Â 997Â 768Â 704 octets libres
 true    exit    0
 > os.rename('C:\\Temp\\test.lua','C:\\Temp\\test_renamed.lua')
 true
 > os.execute('rename C:\\Temp\\test_renamed.lua test.lua')
 true    exit    0
 > os.execute('copy C:\\Temp\\test.lua C:\\Temp\\test_copy.lua')
-        1 fichier(s) copié(s).
+        1 fichier(s) copiÃ©(s).
 true    exit    0
 > os.execute('del C:\\Temp\\test_copy.lua')
 true    exit    0
 > os.execute('copy C:\\Temp\\test.lua C:\\Temp\\test_copy.lua')
-        1 fichier(s) copié(s).
+        1 fichier(s) copiÃ©(s).
 true    exit    0
 > os.remove('C:\\Temp\\test_copy.lua')
 true
 > os.execute('dir C:\\Temp\\test.lua')
  Le volume dans le lecteur C s'appelle Boot
- Le numéro de série du volume est 8254-5AFB
+ Le numÃ©ro de sÃ©rie du volume est 8254-5AFB
 
- Répertoire de C:\Temp
+ RÃ©pertoire de C:\Temp
 
 20/12/2021  17:46               103 test.lua
                1 fichier(s)              103 octets
-               0 Rép(s)  221 997 244 416 octets libres
+               0 RÃ©p(s)  221Â 997Â 244Â 416 octets libres
 true    exit    0
 
 </pre>
@@ -2354,37 +2354,37 @@ but it is also highly system dependent.
 
 > a,b,c=os.execute('dir c:\\Temp\\test.lua') print(a,b,c)
  Le volume dans le lecteur C s'appelle Boot
- Le numéro de série du volume est 8254-5AFB
+ Le numÃ©ro de sÃ©rie du volume est 8254-5AFB
 
- Répertoire de c:\Temp
+ RÃ©pertoire de c:\Temp
 
 20/12/2021  17:46               103 test.lua
                1 fichier(s)              103 octets
-               0 Rép(s)  222 001 283 072 octets libres
+               0 RÃ©p(s)  222Â 001Â 283Â 072 octets libres
 true    exit    0
 > a,b,c=os.execute() print(a,b,c)
 true    nil     nil
 > a,b,c=os.execute('help') print(a,b,c)
-Pour plus d'informations sur une commande spécifique, entrez HELP
+Pour plus d'informations sur une commande spÃ©cifique, entrez HELP
 suivi de la commande.
-ASSOC          Affiche ou modifie les applications associées aux extensions de
+ASSOC          Affiche ou modifie les applications associÃ©es aux extensions de
                fichiers.
 ATTRIB         Affiche ou modifie les attributs d'un fichier.
-BREAK          Active ou désactive le contrôle étendu de CTRL+C.
-BCDEDIT        Définit les propriétés dans la base de données de démarrage pour
-               le contrôle du chargement d'amorçage.
-CACLS          Affiche ou modifie les listes de contrôles d'accès aux fichiers.
-CALL           Appelle un fichier de commandes à partir d'un autre fichier de
+BREAK          Active ou dÃ©sactive le contrÃ´le Ã©tendu de CTRL+C.
+BCDEDIT        DÃ©finit les propriÃ©tÃ©s dans la base de donnÃ©es de dÃ©marrage pour
+               le contrÃ´le du chargement d'amorÃ§age.
+CACLS          Affiche ou modifie les listes de contrÃ´les d'accÃ¨s aux fichiers.
+CALL           Appelle un fichier de commandes Ã  partir d'un autre fichier de
                commandes.
-CD             Modifie le répertoire ou affiche le répertoire actif.
-CHCP           Modifie ou affiche le numéro de la page de code active.
-CHDIR          Modifie le répertoire ou affiche le nom du répertoire actif.
-CHKDSK         Vérifie un disque et affiche un rapport d'état.
-CHKNTFS        Affiche ou modifie la vérification du disque au démarrage.
-CLS            Efface l'écran.
-CMD            Exécute une nouvelle instance de l'interpréteur de commandes de
+CD             Modifie le rÃ©pertoire ou affiche le rÃ©pertoire actif.
+CHCP           Modifie ou affiche le numÃ©ro de la page de code active.
+CHDIR          Modifie le rÃ©pertoire ou affiche le nom du rÃ©pertoire actif.
+CHKDSK         VÃ©rifie un disque et affiche un rapport d'Ã©tat.
+CHKNTFS        Affiche ou modifie la vÃ©rification du disque au dÃ©marrage.
+CLS            Efface l'Ã©cran.
+CMD            ExÃ©cute une nouvelle instance de l'interprÃ©teur de commandes de
                Windows.
-COLOR          Modifie les couleurs du premier plan et de l'arrière-plan de la
+COLOR          Modifie les couleurs du premier plan et de l'arriÃ¨re-plan de la
                console.
 COMP           Compare les contenus de deux fichiers ou groupes de fichiers.
 COMPACT        Modifie ou affiche la compression des fichiers sur une
@@ -2392,108 +2392,108 @@ COMPACT        Modifie ou affiche la compression des fichiers sur une
 CONVERT        Convertit des volumes FAT en volumes NTFS. Vous ne pouvez pas
                convertir le lecteur en cours d'utilisation.
 COPY           Copie un ou plusieurs fichiers.
-DATE           Affiche ou définit la date.
+DATE           Affiche ou dÃ©finit la date.
 DEL            Supprime un ou plusieurs fichiers.
-DIR            Affiche la liste des fichiers et des sous-répertoires d'un
-               répertoire.
+DIR            Affiche la liste des fichiers et des sous-rÃ©pertoires d'un
+               rÃ©pertoire.
 DISKCOMP       Compare les contenus de deux disquettes.
 DISKCOPY       Copie le contenu d'une disquette sur une autre.
-DISKPART       Affiche ou configure les propriétés d'une partition de disque.
+DISKPART       Affiche ou configure les propriÃ©tÃ©s d'une partition de disque.
 DOSKEY         Modifie les lignes de commande, rappelle des commandes Windows,
-               et crée des macros.
-DRIVERQUERY    Affiche l'état et les propriétés du pilote de périphérique en
+               et crÃ©e des macros.
+DRIVERQUERY    Affiche l'Ã©tat et les propriÃ©tÃ©s du pilote de pÃ©riphÃ©rique en
                cours d'utilisation.
-ECHO           Affiche des messages ou active/désactive l'affichage des
+ECHO           Affiche des messages ou active/dÃ©sactive l'affichage des
                commandes.
 ENDLOCAL       Stoppe la localisation des modifications d'environnement dans
                un fichier de commandes.
 ERASE          Supprime un ou plusieurs fichiers.
-EXIT           Quitte l'interpréteur de commandes (CMD.EXE).
+EXIT           Quitte l'interprÃ©teur de commandes (CMD.EXE).
 FC             Compare deux fichiers ou groupes de fichiers et affiche
-               les différences.
-FIND           Recherche une chaîne de caractères dans un ou plusieurs
+               les diffÃ©rences.
+FIND           Recherche une chaÃ®ne de caractÃ¨res dans un ou plusieurs
                fichiers.
-FINDSTR        Cherche des chaînes dans les fichiers.
-FOR            Exécute une commande sur chaque fichier d'un ensemble de
+FINDSTR        Cherche des chaÃ®nes dans les fichiers.
+FOR            ExÃ©cute une commande sur chaque fichier d'un ensemble de
                fichiers.
-FORMAT         Formate un disque devant être utilisé avec Windows.
-FSUTIL         Affiche ou configure les propriétés du système de fichiers.
-FTYPE          Affiche ou modifie les types de fichiers utilisés dans les
+FORMAT         Formate un disque devant Ãªtre utilisÃ© avec Windows.
+FSUTIL         Affiche ou configure les propriÃ©tÃ©s du systÃ¨me de fichiers.
+FTYPE          Affiche ou modifie les types de fichiers utilisÃ©s dans les
                associations d'extensions.
-GOTO           Indique l'exécution d'un fichier de commandes pour une ligne
-               identifiée par une étiquette.
-GPRESULT       Affiche les informations de stratégie de groupe pour un
+GOTO           Indique l'exÃ©cution d'un fichier de commandes pour une ligne
+               identifiÃ©e par une Ã©tiquette.
+GPRESULT       Affiche les informations de stratÃ©gie de groupe pour un
                ordinateur ou un utilisateur.
-GRAFTABL       Permet à Windows d'afficher un jeu de caractères en
+GRAFTABL       Permet Ã  Windows d'afficher un jeu de caractÃ¨res en
                mode graphique.
 HELP           Affiche des informations sur les commandes de Windows.
 ICACLS         Afficher, modifier, sauvegarder ou restaurer les listes de
-               contrôle d'accès pour les fichiers et les répertoires.
+               contrÃ´le d'accÃ¨s pour les fichiers et les rÃ©pertoires.
 IF             Effectue un traitement conditionnel dans un fichier de
                commandes.
-LABEL          Crée, modifie ou supprime le nom de volume d'un disque.
-MD             Crée un répertoire.
-MKDIR          Crée un répertoire.
-MKLINK         Créer des liens symboliques et des liens physiques
-MODE           Configure un périphérique du système.
-MORE           Affiche la sortie écran par écran.
-MOVE           Déplace un ou plusieurs fichiers d'un répertoire
-               à un autre.
-OPENFILES      Affiche les fichiers partagés ouverts à distance par les
+LABEL          CrÃ©e, modifie ou supprime le nom de volume d'un disque.
+MD             CrÃ©e un rÃ©pertoire.
+MKDIR          CrÃ©e un rÃ©pertoire.
+MKLINK         CrÃ©er des liens symboliques et des liens physiques
+MODE           Configure un pÃ©riphÃ©rique du systÃ¨me.
+MORE           Affiche la sortie Ã©cran par Ã©cran.
+MOVE           DÃ©place un ou plusieurs fichiers d'un rÃ©pertoire
+               Ã  un autre.
+OPENFILES      Affiche les fichiers partagÃ©s ouverts Ã  distance par les
                utilisateurs.
-PATH           Affiche ou définit le chemin de recherche des fichiers
-               exécutables.
-PAUSE          Interrompt l'exécution d'un fichier de commandes et affiche un
+PATH           Affiche ou dÃ©finit le chemin de recherche des fichiers
+               exÃ©cutables.
+PAUSE          Interrompt l'exÃ©cution d'un fichier de commandes et affiche un
                message.
-POPD           Restaure la valeur précédente du répertoire actif enregistrée
+POPD           Restaure la valeur prÃ©cÃ©dente du rÃ©pertoire actif enregistrÃ©e
                par PUSHD.
 PRINT          Imprime un fichier texte.
 PROMPT         Modifie l'invite de commande de Windows.
-PUSHD          Enregistre le répertoire actif puis le modifie.
-RD             Supprime un répertoire.
-RECOVER        Récupère l'information lisible d'un disque défectueux.
-REM            Insère un commentaire dans un fichier de commandes ou
+PUSHD          Enregistre le rÃ©pertoire actif puis le modifie.
+RD             Supprime un rÃ©pertoire.
+RECOVER        RÃ©cupÃ¨re l'information lisible d'un disque dÃ©fectueux.
+REM            InsÃ¨re un commentaire dans un fichier de commandes ou
                CONFIG.SYS.
 REN            Renomme un ou plusieurs fichiers.
 RENAME         Renomme un ou plusieurs fichiers.
 REPLACE        Remplace des fichiers.
-RMDIR          Supprime un répertoire.
-ROBOCOPY       Utilitaire avancé pour copier les fichiers et les
-               arborescences de répertoires
-SET            Affiche, définit ou supprime des variables d'environnement
+RMDIR          Supprime un rÃ©pertoire.
+ROBOCOPY       Utilitaire avancÃ© pour copier les fichiers et les
+               arborescences de rÃ©pertoires
+SET            Affiche, dÃ©finit ou supprime des variables d'environnement
                Windows.
 SETLOCAL       Commence la localisation des modifications d'environnement dans
                un fichier de commandes.
-SC             Affiche ou configure les services (processus en arrière-plan).
-SCHTASKS       Planifie les commandes et les programmes à exécuter sur
+SC             Affiche ou configure les services (processus en arriÃ¨re-plan).
+SCHTASKS       Planifie les commandes et les programmes Ã  exÃ©cuter sur
                l'ordinateur.
-SHIFT          Modifie la position des paramètres remplaçables dans un fichier
+SHIFT          Modifie la position des paramÃ¨tres remplaÃ§ables dans un fichier
                de commandes.
-SHUTDOWN       Permet un arrêt local ou distant correct de l'ordinateur.
-SORT           Trie les entrées.
-START          Ouvre une fenêtre séparée pour l'exécution d'un programme ou
-               d'une commande spécifique.
-SUBST          Associe un chemin d'accès à une lettre de lecteur.
-SYSTEMINFO     Affiche les propriétés et la configuration spécifiques de
+SHUTDOWN       Permet un arrÃªt local ou distant correct de l'ordinateur.
+SORT           Trie les entrÃ©es.
+START          Ouvre une fenÃªtre sÃ©parÃ©e pour l'exÃ©cution d'un programme ou
+               d'une commande spÃ©cifique.
+SUBST          Associe un chemin d'accÃ¨s Ã  une lettre de lecteur.
+SYSTEMINFO     Affiche les propriÃ©tÃ©s et la configuration spÃ©cifiques de
                l'ordinateur.
-TASKLIST       Affiche toutes les tâches en cours d'exécution, y compris les
+TASKLIST       Affiche toutes les tÃ¢ches en cours d'exÃ©cution, y compris les
                services.
 TASKKILL       Termine ou interrompt un processus ou une application en cours
-               d'exécution.
-TIME           Affiche ou définit l'heure du système.
-TITLE          Définit le titre de la fenêtre pour une session CMD.EXE.
-TREE           Affiche le graphisme de la structure de répertoire d'un lecteur
-               ou d'un chemin d'accès.
+               d'exÃ©cution.
+TIME           Affiche ou dÃ©finit l'heure du systÃ¨me.
+TITLE          DÃ©finit le titre de la fenÃªtre pour une session CMD.EXE.
+TREE           Affiche le graphisme de la structure de rÃ©pertoire d'un lecteur
+               ou d'un chemin d'accÃ¨s.
 TYPE           Affiche le contenu d'un fichier texte.
 VER            Affiche la version de Windows.
-VERIFY         Demande à Windows de vérifier si vos fichiers sont
-               correctement écrits sur le disque.
-VOL            Affiche le nom et le numéro de série d'un volume de disque.
-XCOPY          Copie les fichiers et les arborescences de répertoires.
+VERIFY         Demande Ã  Windows de vÃ©rifier si vos fichiers sont
+               correctement Ã©crits sur le disque.
+VOL            Affiche le nom et le numÃ©ro de sÃ©rie d'un volume de disque.
+XCOPY          Copie les fichiers et les arborescences de rÃ©pertoires.
 WMIC           Affiche les informations WMI dans l'interface de commande
                interactive.
 
-Pour obtenir plus d'informations sur les outils, consultez la référence de
+Pour obtenir plus d'informations sur les outils, consultez la rÃ©fÃ©rence de
 commande en ligne dans l'aide en ligne.
 nil     exit    1
 
@@ -3814,8 +3814,8 @@ This function "receives a string and returns a copy of this string with all lowe
 
 <pre>
 
-> print(string.upper("Das ist ein Text mit Maßnahmen."))
-DAS IST EIN TEXT MIT MAßNAHMEN.
+> print(string.upper("Das ist ein Text mit MaÃŸnahmen."))
+DAS IST EIN TEXT MIT MAÃŸNAHMEN.
 
 </pre>
 
@@ -4911,14 +4911,14 @@ This is the function for the next elementn after the second argument in a Lua ta
 <pre>
 
 
-> t={123,231,23,23,123,test="sregeg","awsldökfnö"}
+> t={123,231,23,23,123,test="sregeg","awsldÃ¶kfnÃ¶"}
 > for k,v in next,t do print(k,v) end
 1       123
 2       231
 3       23
 4       23
 5       123
-6       awsldökfnö
+6       awsldÃ¶kfnÃ¶
 test    sregeg
 > print(next(t))
 1       123
@@ -4931,7 +4931,7 @@ test    sregeg
 > print(next(t,4))
 5       123
 > print(next(t,5))
-6       awsldökfnö
+6       awsldÃ¶kfnÃ¶
 > print(next(t,6))
 test    sregeg
 > print(next(t,test))
@@ -5342,7 +5342,7 @@ The <code>string.char</code> function converts the internal numeric representati
 <pre>
 
 > print(string.char(151,100,153,154,155,56,57,58,59,50,21))
-ùdÖÜø89:;2§
+Ã¹dÃ–ÃœÃ¸89:;2Â§
 
 </pre>
 
@@ -5569,15 +5569,15 @@ clipboard=iup.clipboard{}
 --1.2.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---1.2.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--1.2.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -5745,7 +5745,7 @@ dlg_rename = iup.dialog{
 
 --4.2 change page dialog
 --ok_change_page button
-ok_change_page = iup.flatbutton{title = "Seite verändern",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+ok_change_page = iup.flatbutton{title = "Seite verÃ¤ndern",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function ok_change_page:flat_action()
 	webbrowser1.HTML= text1.value
 	if tonumber(textbox1.value) then
@@ -5793,7 +5793,7 @@ dlg_change_page = iup.dialog{
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	local help=false
 	--downward search
@@ -5854,7 +5854,7 @@ end --for i=0, tree.count - 1 do
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	local help=false
 	--upward search
@@ -5883,18 +5883,18 @@ function searchup:flat_action()
 	end --if help==false then
 end --	function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
 --put above together in a search dialog
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 
 			}; 
@@ -5923,7 +5923,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -5931,7 +5931,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to tree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzufÃ¼gen"}
 function addbranchbottom:action()
 	tree["insertbranch" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -5944,7 +5944,7 @@ function addbranchbottom:action()
 end --function addbranchbottom:action()
 
 --5.1.3.2 add leaf to tree by insertleaf
-addleafbottom = iup.item {title = "Blatt darunter hinzufügen"}
+addleafbottom = iup.item {title = "Blatt darunter hinzufÃ¼gen"}
 function addleafbottom:action()
 	tree["insertleaf" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -5988,7 +5988,7 @@ function addleaf_fromclipboardbottom:action()
 end --function addleaf_fromclipboardbottom:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -6104,45 +6104,45 @@ menu = iup.menu{
 --6 buttons
 --6.1 logo image definition and button with logo
 img_logo = iup.image{
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,1,1,1,4,4,4,4,4,3,3,4,4,4,4,1,3,3,1,1,1,1,1,1,1,4,4,4,4 },
   { 4,1,1,1,1,1,1,1,4,4,4,4,3,3,3,3,3,3,4,4,4,3,1,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,4,3,4,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,1,1,1,1,1,1,4,4,4 },
-  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 }, 
-  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 }, 
-  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },  
-  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },  
-  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }  
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 },
+  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 },
+  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 },
+  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },
+  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },
+  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for saving TextHTMLtable and the programm of the graphical user interface
@@ -6168,7 +6168,7 @@ function button_go_to_first_page:flat_action()
 end --function button_go_to_first_page:action()
 
 --6.4 button for going one page back
-button_go_back = iup.flatbutton{title = "Eine Seite zurück",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_go_back = iup.flatbutton{title = "Eine Seite zurÃ¼ck",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_go_back:flat_action()
 	if aktuelleSeite>1 then aktuelleSeite=aktuelleSeite-1 end
 	webbrowser1.HTML=TextHTMLtable[aktuelleSeite]
@@ -6204,18 +6204,18 @@ function button_go_to_page:flat_action()
 end --function button_go_to_page:action()
 
 --6.7 button for deleting the page
-button_delete = iup.flatbutton{title = "Löschen der Seite",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_delete = iup.flatbutton{title = "LÃ¶schen der Seite",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete:flat_action()
-	LoeschAlarm=iup.Alarm("Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelöscht werden?","Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelöscht werden?","Löschen","Nicht Löschen")
+	LoeschAlarm=iup.Alarm("Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelÃ¶scht werden?","Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelÃ¶scht werden?","LÃ¶schen","Nicht LÃ¶schen")
 	if LoeschAlarm==1 then 
 		if tonumber(textbox1.value) and tonumber(textbox1.value)<=#TextHTMLtable then
 			aktuelleSeite=math.tointeger(tonumber(textbox1.value))
 			table.move(TextHTMLtable,aktuelleSeite+1,#TextHTMLtable,aktuelleSeite)--move following elements to begin with index from aktuelleSeite
 			TextHTMLtable[#TextHTMLtable]=nil --delete last element
 			--test with: iup.Message(aktuelleSeite, tostring(math.floor(aktuelleSeite/2)*2==aktuelleSeite))
-			webbrowser1.HTML="Seite gelöscht"
+			webbrowser1.HTML="Seite gelÃ¶scht"
 		else
-			iup.Message("Keine Seite zum Löschen","Keine Seite zum Löschen")
+			iup.Message("Keine Seite zum LÃ¶schen","Keine Seite zum LÃ¶schen")
 		end --if tonumber(textbox1.value) and tonumber(textbox1.value)<=#TextHTMLtable then
 	end --if LoeschAlarm==1 then 
 end --function button_delete:flat_action()
@@ -6287,7 +6287,7 @@ end --function button_new_page:action()
 --6.12 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --7 Main Dialog
