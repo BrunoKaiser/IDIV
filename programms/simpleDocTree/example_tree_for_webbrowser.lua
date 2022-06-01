@@ -1,0 +1,10 @@
+tree_from_csv={branchname="Baum erstellt am: Thu Oct 21 20:08:36 2021",
+"C:\\Tree\\simpleDocTree\\example_HTML_table_for_webbrowser.lua",
+"C:\\Tree\\simpleDocTree\\example_tree_for_webbrowser.lua",
+{branchname="Erklärungen",
+"1",
+},
+{branchname="Weiteres Kapitel",
+"2",
+},
+}
