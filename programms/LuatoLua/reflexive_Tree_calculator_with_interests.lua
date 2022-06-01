@@ -1421,7 +1421,7 @@ img_functionarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
    
   -- Sets "X" image colors
-  ; colors = { color_background_tree, color_red_bpc}
+  ; colors = { color_background_tree, color_red}
 }
 img_inputarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }, 
@@ -1442,7 +1442,7 @@ img_inputarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
    
   -- Sets "X" image colors
-  ; colors = { color_background_tree, color_red_bpc}
+  ; colors = { color_background_tree, color_red}
 }
 img_rightarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }, 
@@ -1463,7 +1463,7 @@ img_rightarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
    
   -- Sets "X" image colors
-  ; colors = { color_background_tree, color_red_bpc}
+  ; colors = { color_background_tree, color_red}
 }
 
 --7.2 build tree
