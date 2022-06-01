@@ -34,6 +34,12 @@ This skript converts a Lua tree in a html page with tree. This is especially hel
 
 Start of the Lua script with the right informations for path of input and output data.
 
+6.4 html_build_Linux.lua
+
+This skript converts a Lua tree in a html page with tree. This is especially helpful on mobile devices.
+
+Start of the Lua script with the right informations for path of input and output data.
+
 7.1 html_build_node_content.lua
 
 This script produces a tree in html with the nodes having the content of their children nodes in parenthesis.
@@ -41,3 +47,9 @@ This script produces a tree in html with the nodes having the content of their c
 7.2 Tree_Baum_node_content.lua
 
 Example tree for the script html_build_node_content.lua.
+
+
+8. html_Tree_relative.lua
+
+This skript converts a Lua tree in a html page with tree with relative paths. This is especially helpful on mobile devices as the iPhone where such apps as Touch Lua cannot save directly on the target path. The result is stored in a file with extension .lua which can be transfered by copy and paste in a html file on the target path.
+
