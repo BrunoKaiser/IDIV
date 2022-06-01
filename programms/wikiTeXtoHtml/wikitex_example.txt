@@ -1,0 +1,30 @@
+
+
+First document. This is a simple example, with no 
+extra parameters or packages included.
+
+== Title ==
+== Subtitle ==
+=== Subsubtitle ===
+==== Subsubsubtitle ====
+===== Subsubsubsubtitle =====
+This is a formula:
+
+:<math>\it{a}=r_{i}-z^{g}</math>.
+
+
+wirh these variables <math>a, g, i, r, z</math> used in the formula.
+
+This is a table:
+
+{| class="wikitable"
+|-
+! Title 1 !! Title 2 !! Title 3 !! Title 4 !! Title 5
+|-
+| '''Text''' || 1 || 2 || 3 || 4
+|}
+
+
+
+\end{document}
+
