@@ -56,15 +56,15 @@ end --do --sandboxing
 --1.2.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---1.2.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--1.2.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -375,11 +375,11 @@ img_logo = iup.image{
   { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraﬂe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for loading tree 1
@@ -404,7 +404,7 @@ function button_loading_lua_table_1:flat_action()
 		iup.TreeAddNodes(tree1,actualtree)
 	else
 		--build file dialog for reading Lua file
-		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei ˆffnen",filter="*.lua",filterinfo="Lua Files",directory=path}
+		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei √∂ffnen",filter="*.lua",filterinfo="Lua Files",directory=path}
 		filedlg:popup(iup.ANYWHERE,iup.ANYWHERE) --show the file dialog
 		if filedlg.status=="1" then
 			iup.Message("Neue Datei",filedlg.value)
@@ -425,7 +425,7 @@ function button_loading_lua_table_1:flat_action()
 			end --if _VERSION=='Lua 5.1' then
 			iup.TreeAddNodes(tree1,actualtree)
 		else
-			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew‰hlt")
+			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew√§hlt")
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox1.value) then
@@ -454,7 +454,7 @@ function button_loading_lua_table_2:flat_action()
 		iup.TreeAddNodes(tree2,actualtree)
 	else
 		--build file dialog for reading Lua file
-		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei ˆffnen",filter="*.lua",filterinfo="Lua Files",directory=path}
+		local filedlg=iup.filedlg{dialogtype="OPEN",title="Datei √∂ffnen",filter="*.lua",filterinfo="Lua Files",directory=path}
 		filedlg:popup(iup.ANYWHERE,iup.ANYWHERE) --show the file dialog
 		if filedlg.status=="1" then
 			iup.Message("Neue Datei",filedlg.value)
@@ -475,7 +475,7 @@ function button_loading_lua_table_2:flat_action()
 			end --if _VERSION=='Lua 5.1' then
 			iup.TreeAddNodes(tree2,actualtree)
 		else
-			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew‰hlt")
+			iup.Message("Die Baumansicht wird nicht aktualisiert","Es wurde keine Datei ausgew√§hlt")
 			iup.NextField(maindlg)
 		end --if filedlg.status=="1" then
 	end --if file_exists(textbox2.value) then
@@ -650,7 +650,7 @@ function button_sort_with_tree:flat_action()
 end --function button_sort_with_tree:flat_action()
 
 --6.7 button for sorting text file of tree in text file of tree2 to tree deleting not needed nodes
-button_sort_in_tree=iup.flatbutton{title="‹bereinstimmungen \nfinden", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_sort_in_tree=iup.flatbutton{title="√úbereinstimmungen \nfinden", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_sort_in_tree:flat_action()
 	if file_exists(textbox1.value) and file_exists(textbox2.value) then
 		tree.delnode0 = "CHILDREN"
@@ -689,9 +689,9 @@ function button_sort_in_tree:flat_action()
 		end --for i=0,tree1.totalchildcount0 do
 		--go through tree 1 to search for missing lines in tree 2
 		local titleTable={}
-		local tree_script={branchname="rest",{branchname="‹bereinstimmungen von " .. tostring(textbox1.value) .. " in " .. tostring(textbox2.value)}}
+		local tree_script={branchname="rest",{branchname="√úbereinstimmungen von " .. tostring(textbox1.value) .. " in " .. tostring(textbox2.value)}}
 		titleTable["nur in erster Datei"]=true
-		titleTable["‹bereinstimmungen von " .. tostring(textbox1.value) .. " in " .. tostring(textbox2.value)]=true
+		titleTable["√úbereinstimmungen von " .. tostring(textbox1.value) .. " in " .. tostring(textbox2.value)]=true
 		local line1Number=0
 		for i=0,tree1.totalchildcount0 do
 			local line=tree1['TITLE' .. i]
@@ -731,7 +731,7 @@ function button_sort_in_tree:flat_action()
 end --function button_sort_in_tree:flat_action()
 
 --6.8 button for building tree with text file of tree1 deleting nodes being in tree2
-button_tree1_not_in_tree=iup.flatbutton{title="Neueintr‰ge \nfinden", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_tree1_not_in_tree=iup.flatbutton{title="Neueintr√§ge \nfinden", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_tree1_not_in_tree:flat_action()
 	if file_exists(textbox1.value) then
 		tree.delnode0 = "CHILDREN"
@@ -772,7 +772,7 @@ function button_tree1_not_in_tree:flat_action()
 end --function button_tree1_not_in_tree:flat_action()
 
 --6.9 button for deleting one node leaving all other nodes but changing the order
-button_delete_in_tree=iup.flatbutton{title="Ebene herauslˆschen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_delete_in_tree=iup.flatbutton{title="Ebene herausl√∂schen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete_in_tree:flat_action()
 	if tree.totalchildcount=="0" then
 		tree.delnode = "SELECTED"
@@ -806,12 +806,12 @@ end --function button_delete_in_tree:flat_action()
 button_save_lua_table=iup.flatbutton{title="Baum als Lua-Tabelle speichern", size="125x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_lua_table:flat_action()
 	--open a filedialog
-	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel ausw‰hlen",filter="*.lua",filterinfo="Lua Files", directory=path}
+	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel ausw√§hlen",filter="*.lua",filterinfo="Lua Files", directory=path}
 	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg2.status=="1" or filedlg2.status=="0" then
 			save_tree_to_lua(tree, filedlg2.value)
 	else --no outputfile was choosen
-		iup.Message("Schlieﬂen","Keine Datei ausgew‰hlt")
+		iup.Message("Schlie√üen","Keine Datei ausgew√§hlt")
 		iup.NextField(maindlg)
 	end --if filedlg2.status=="1" or filedlg2.status=="0" then
 end --function button_save_lua_table:flat_action()
@@ -819,7 +819,7 @@ end --function button_save_lua_table:flat_action()
 --6.11 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraﬂe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6 buttons end
