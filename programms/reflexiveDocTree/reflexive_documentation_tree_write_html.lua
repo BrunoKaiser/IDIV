@@ -49,15 +49,15 @@ end --for (line .. "\n") in TextHTMLTabelle[1]:gmatch("([^\n]*)\n") do
 --2.1.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---2.1.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--2.1.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --2.1.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -286,7 +286,7 @@ dlg_rename = iup.dialog{
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	local help=false
 	--downward search
@@ -345,7 +345,7 @@ end --for i=0, tree.count - 1 do
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	local help=false
 	--upward search
@@ -374,7 +374,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --	function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
 --search searchtext.value in textfield1
@@ -395,12 +395,12 @@ end --function search_in_textbox1:flat_action()
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,
 			}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 
 			iup.hbox{searchdown, searchup, 
 
@@ -530,7 +530,7 @@ dlg_search_replace =iup.dialog{
 					iup.hbox{search_label_replace,searchtext_replace},
 					iup.hbox{replace_label_replace,replacetext_replace},
 					iup.hbox{search_replace, cancel_replace,},
-					iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+					iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 				}; 
 				title="Suchen und Ersetzen",
 				size="420x100",
@@ -551,7 +551,7 @@ function startcopy:action() --copy node
 end --function startcopy:action()
 
 --5.1.2 copy of all leafs of a node
-copy_leafs_of_node = iup.item {title = "Alle Blätter darunter kopieren"}
+copy_leafs_of_node = iup.item {title = "Alle BlÃ¤tter darunter kopieren"}
 function copy_leafs_of_node:action()
 	local startNodeNumber=tree.value
 	local endNodeNumber=tree.value+tree.totalchildcount
@@ -622,45 +622,45 @@ menu = iup.menu{
 --6. buttons
 --6.1 logo image definition and button with logo
 img_logo = iup.image{
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,1,1,1,4,4,4,4,4,3,3,4,4,4,4,1,3,3,1,1,1,1,1,1,1,4,4,4,4 },
   { 4,1,1,1,1,1,1,1,4,4,4,4,3,3,3,3,3,3,4,4,4,3,1,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,4,3,4,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,1,1,1,1,1,1,4,4,4 },
-  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 }, 
-  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 }, 
-  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },  
-  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },  
-  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }  
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 },
+  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 },
+  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 },
+  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },
+  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },
+  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for loading tree
@@ -684,12 +684,12 @@ end --function button_save_text:flat_action()
 button_save_lua_table=iup.flatbutton{title="Baum als Lua-Tabelle speichern \n(Strg+L)", size="125x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_lua_table:flat_action()
 	--open a filedialog
-	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.lua",filterinfo="Lua Files", directory=path}
+	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswÃ¤hlen",filter="*.lua",filterinfo="Lua Files", directory=path}
 	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg2.status=="1" or filedlg2.status=="0" then
 			save_tree_to_lua(tree, filedlg2.value)
 	else --no outputfile was choosen
-		iup.Message("Schließen","Keine Datei ausgewählt")
+		iup.Message("SchlieÃŸen","Keine Datei ausgewÃ¤hlt")
 		iup.NextField(maindlg)
 	end --if filedlg2.status=="1" or filedlg2.status=="0" then
 end --function button_save_lua_table:flat_action()
@@ -744,7 +744,7 @@ end --function button_expand_collapse_dialog:flat_action()
 --6.6 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6. buttons end
