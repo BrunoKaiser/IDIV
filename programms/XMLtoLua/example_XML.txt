@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Kunden>
+    <!-- Dies ist ein Kommentar und wird nicht interpretiert -->
+    <Kunde> ... Daten eines ersten Kunden ... </Kunde>
+    <Kunde>
+        <!-- Dies ist ein Kommentar und wird 
+        nicht interpretiert -->
+        <Name>Lieschen Müller</Name>
+        <Geburtsdatum>25.06.1960</Geburtsdatum>
+        <E-Mail-Adresse/>
+        <Anschriften>
+            <!-- Dies ist ein Kommentar und wird nicht interpretiert -->
+            <Anschrift>
+                <Strasse>Haupstr. 123</Strasse>
+                <PLZ>40233</PLZ>
+                <Wohnort>Düsseldorf</Wohnort>
+            </Anschrift>
+        </Anschriften>
+    </Kunde>
+    <Kunde> ... Daten eines dritten Kunden ... </Kunde>
+</Kunden>
