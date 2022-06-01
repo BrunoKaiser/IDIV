@@ -23,3 +23,15 @@ Installation von der Internetseite https://sourceforge.net/projects/iup/files/
 Dort auf aktuelle Version gehen, z.B. 3.30, dann Tools Executables, Lua54 und die Datei iup-3.30-Lua54_Win64_bin.zip herunterladen. Diese auf C:\Lua entpacken und die .lua-Skripte mit der C:\Lua\lua54.exe verknüpfen. Den IUP-Lua-Skripter unter C:\Lua\iupluascripter54.exe öffnen. Falls eine Meldung von Windows kommt, bitte dennoch ausführen bestätigen.
 
 
+== IUP-Lua is taken from https://webserver2.tecgraf.puc-rio.br/iup/ with the licence:
+
+Copyright © 1994-2020 Tecgraf/PUC-Rio.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
