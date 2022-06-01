@@ -1,0 +1,37 @@
+Private Sub IDIV_Arbeitsplatz()
+
+Dim docNew As Word.Document
+Dim cDatei As String
+Dim DateiText As String
+Dim textReplace As Long
+Dim CPfad As String
+CPfad = "C:\TreeLink"
+cDatei = Dir$(CPfad & "\*.*")
+
+'search for all files in CPfad
+numberOfParagraph = ActiveDocument.Paragraphs.Count
+While Not Len(Trim$(cDatei)) = 0
+cDatei = CPfad & "\" & cDatei
+textReplace = 0
+
+'if cDatei found in text then do not append
+For Each para In ActiveDocument.Paragraphs
+textReplace = textReplace + InStr(para.Range.Text, cDatei)
+'Debug.Print para.Range.Text
+'    For Each wrd In para.Range.Words
+'        Debug.Print wrd
+'    Next wrd
+Next para
+If textReplace = 0 Then
+numberOfParagraph = numberOfParagraph + 1
+Debug.Print cDatei
+ActiveDocument.Paragraphs.Add
+ActiveDocument.Paragraphs(numberOfParagraph).Style = -4
+ActiveDocument.Paragraphs(numberOfParagraph).Range.Text = cDatei
+End If
+
+cDatei = Dir$
+Wend
+
+End Sub
+
