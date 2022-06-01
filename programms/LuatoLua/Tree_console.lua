@@ -51,15 +51,15 @@ end --do --sandboxing
 --1.2.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---1.2.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--1.2.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue-- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -467,7 +467,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to console.outputTree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	console.outputTree.addbranch = ""
 	console.outputTree.value=console.outputTree.value+1
@@ -475,7 +475,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to console.outputTree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzufÃ¼gen"}
 function addbranchbottom:action()
 	console.outputTree["insertbranch" .. console.outputTree.value] = ""
 	for i=console.outputTree.value+1,console.outputTree.count-1 do
@@ -488,7 +488,7 @@ function addbranchbottom:action()
 end --function addbranchbottom:action()
 
 --5.1.3.2 add leaf to console.outputTree by insertleaf
-addleafbottom = iup.item {title = "Blatt darunter hinzufügen"}
+addleafbottom = iup.item {title = "Blatt darunter hinzufÃ¼gen"}
 function addleafbottom:action()
 	console.outputTree["insertleaf" .. console.outputTree.value] = ""
 	for i=console.outputTree.value+1,console.outputTree.count-1 do
@@ -532,7 +532,7 @@ function addleaf_fromclipboardbottom:action()
 end --function addleaf_fromclipboardbottom:action()
 
 --5.1.5 add leaf of console.outputTree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	console.outputTree.addleaf = ""
 	console.outputTree.value=console.outputTree.value+1
@@ -590,7 +590,7 @@ function startnode:action()
 end --function startnode:action()
 
 --5.1.10 execute Lua script with Lua chunk of the node of console.outputTree and write result under the node
-startnode_script = iup.item {title = "Knoten ausführen"}
+startnode_script = iup.item {title = "Knoten ausfÃ¼hren"}
 function startnode_script:action()
 	if console.outputTree["KIND"]=="BRANCH" then
 		if console.outputTree['title']:match("^.:\\.*%.[^\\ ]+$") or console.outputTree['title']:match("^.:\\.*[^\\]+$") or console.outputTree['title']:match("^.:\\$") or console.outputTree['title']:match("^[^ ]*//[^ ]+$") then 
@@ -695,11 +695,11 @@ img_logo = iup.image{
   { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for saving tree
