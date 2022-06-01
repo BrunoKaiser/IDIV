@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,  maximum-scale=1,  minimum-scale=1, user-scalable=no">
+    <title>Fengari</title>
+
+    <link rel="stylesheet" type="text/css" href="fengari.css?v=1">
+    <link rel="stylesheet" type="text/css" href="github.css?v=1">
+    <link rel="stylesheet" type="text/css" href="lua-web-cli.css?v=1">
+	
+	
+<script src="fengari-web.js" type="text/javascript"></script>
+
+<script type="application/lua">
+local js = require "js"
+local window = js.global
+local document = window.document
+
+Tree={branchname="Knoten 1: Änderungen im Programm sind öffentlich",
+"Leaf1",
+"Leaf2",
+"Leaf3a",
+{branchname="Knoten 2 ","Leaf3",{branchname="Knoten 2 ","Leaf3"}},
+{branchname="Knoten 2 ","Leaf3",{branchname="Knoten 2 ","Leaf3"}}
+}
+
+
+local textText="https://fengari.io/ https://github.com/fengari-lua/fengari.io" 
+--for k,v in pairs(Tree) do textText=textText .. v end
+--window:alert(document.title)
+--window:alert("Hello from Fengari!" .. textText)
+
+document.F.I.value=os.date()
+document.F.output.value=os.date()
+document:getElementById("textHTML1").innerHTML = "Manueller Baum" .. "<br>\n"
+document:getElementById("textArea1").value = ""
+
+function readTreetohtmlRecursive(TreeTable,levelStart)
+level = levelStart or 0
+AusgabeTabelle[TreeTable.branchname]=true
+----[[
+document:getElementById("textHTML1").innerHTML = document:getElementById("textHTML1").innerHTML .. string.rep("&nbsp;",level*12) ..
+tostring(TreeTable.branchname)
+:gsub("ä","&auml;")
+:gsub("Ä","&Auml;")
+:gsub("ö","&ouml;")
+:gsub("Ö","&Ouml;")
+:gsub("ü","&uuml;")
+:gsub("Ü","&Uuml;")
+:gsub("ß","&szlig;")
+.. "<br>\n"
+document:getElementById("textArea1").value = document:getElementById("textArea1").value .. string.rep(" ",level*4) .. tostring(TreeTable.branchname) .. "\n"
+for k,v in ipairs(TreeTable) do
+if type(v)=="table" then
+level = level +1
+readTreetohtmlRecursive(v,level)
+else
+AusgabeTabelle[v]=true
+document:getElementById("textHTML1").innerHTML = document:getElementById("textHTML1").innerHTML .. string.rep("&nbsp;",(level+1)*12) .. v
+:gsub("ä","&auml;")
+:gsub("Ä","&Auml;")
+:gsub("ö","&ouml;")
+:gsub("Ö","&Ouml;")
+:gsub("ü","&uuml;")
+:gsub("Ü","&Uuml;")
+:gsub("ß","&szlig;")
+.. "<br>\n"
+document:getElementById("textArea1").value = document:getElementById("textArea1").value .. string.rep(" ",(level+1)*4) .. v .. "\n"
+end --if type(v)=="table" then
+end --for k, v in ipairs(TreeTable) do
+level = level - 1
+end --readTreetohtmlRecursive(TreeTable)
+  
+
+
+
+--apply the recursive function
+AusgabeTabelle={}
+readTreetohtmlRecursive(Tree)
+
+
+
+
+</script>
+<script src="/my-script.lua" type="application/lua" async></script>
+
+
+
+
+<script type="application/lua">
+local js = require "js"
+local global = js.global
+local document = global.document
+
+
+-- Save references to Lua baselib functions used
+local _G = _G
+local load = load
+local pack, unpack, tinsert, tremove = table.pack, table.unpack, table.insert, table.remove
+local tostring = tostring
+local traceback = debug.traceback
+local xpcall = xpcall
+
+
+local hljs = js.global.hljs
+
+
+
+_G.print = function(...)
+    local toprint = pack(...)
+
+    local line = document:createElement("pre")
+    line.style["white-space"] = "pre-wrap"
+    output:appendChild(line)
+
+    for i = 1, toprint.n do
+        if i ~= 1 then
+            line:appendChild(document:createTextNode("\t"))
+        end
+        line:appendChild(document:createTextNode(tostring(toprint[i])))
+    end
+
+    output.scrollTop = output.scrollHeight
+end
+
+
+
+
+local printToDOM = function(element, ...)
+    local toprint = table.pack(...)
+
+    local line = document:createElement("pre")
+    line.style["white-space"] = "pre-wrap"
+    element:appendChild(line)
+
+    for i = 1, toprint.n do
+        if i ~= 1 then
+            line:appendChild(document:createTextNode("\t"))
+        end
+        line:appendChild(document:createTextNode(tostring(toprint[i])))
+    end
+end
+
+local closest = global.Element.prototype.closest
+if not closest then
+    -- Element.closest shim
+    -- https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+    local matches = global.Element.prototype.matches
+    if not matches then
+        matches = global.Element.prototype.msMatchesSelector or global.Element.prototype.webkitMatchesSelector
+    end
+    closest = function(el, s)
+        if not document.documentElement:contains(el) then
+            return js.null
+        end
+        repeat
+            if matches(el, s) then
+                return el
+            end
+            el = el.parentElement or el.parentNode
+        until el == js.null
+        return js.null;
+    end
+end
+
+-- IE/Edge<=16 doesn't support NodeList.forEach or NodeList[Symbol.iterator]
+local list = document:querySelectorAll(".snippet__actions__action[data-action='run']")
+for i=0, list.length-1 do
+    list[i]:addEventListener("click", function (_, event)
+        local target = event.currentTarget
+        local source = target:querySelector(".snippet__source")
+        local output = closest(target, ".snippet"):querySelector(".snippet__output")
+
+        local oldPrint = _G.print
+
+        _G.print = function(...)
+            printToDOM(output, ...)
+            if (not output.classList:contains("snippet__output--visible")) then
+                output.className = output.className .. " snippet__output--visible"
+            end
+        end
+
+        output.innerHTML = ""
+
+        if source.dataset and source.dataset.lang == "lua" then
+            local success, msg = pcall(load(source.textContent))
+
+            if not success then
+                global.console:warn(msg or "An error occured while running snippet: \n" .. source.textContent)
+            end
+        else
+            global:eval(source.textContent)
+        end
+
+        _G.print = oldPrint -- restore regular print
+    end)
+end
+
+</script>
+<script src="/snippets.lua" type="application/lua" async></script>
+
+	
+	
+</head>
+<body>
+
+<form name="F">
+</li></ul>
+
+<ul><li>
+<input value="" size="34" name="I" type="text">
+<input value="" size="34" name="output" type="text">
+<input value="Seite neu laden" onclick="location.href='html_fengari_tree.html'" type="button">
+<input value="Input löschen" onclick="this.form.elements['I'].value=''" type="button">
+<input value="Seite drucken" onclick="print()" type="button">
+
+</form>
+<textarea name="textArea1" id="textArea1" rows="14" cols="70"></textarea>  
+<div name="textHTML1" id="textHTML1" ></div>  
+
+    <div class="content">
+
+    <section class="header">
+        <div class="section__content">
+            <img src="logo.png" width="30" height="30">
+            <h1>Fengari</h1>
+            <h3>🐺 φεγγάρι - Lua for the Browser</h3>
+            <a href="https://github.com/fengari-lua/fengari">github Fengari </a>
+        </div>
+    </section>
+
+    <section>
+        <div class="section__content">
+            <h2>What is it?</h2>
+
+            <p>
+                Fengari (<i>Moon</i> in greek) is the Lua VM written in JavaScript.
+                It uses JavaScript's garbage collector so that interoperability with the DOM is non-leaky.
+            </p>
+
+            <p>
+                It comes with a <a href="https://github.com/fengari-lua/fengari-interop">simple module</a>,
+                that renders any interaction with JavaScript and the DOM transparent:
+            </p>
+
+            <div class="center">
+
+                <div class="snippets-row">
+                    <div class="snippet">
+                        <code class="snippet__code lua hljs">
+<pre><span class="hljs-keyword">local</span> js = <span class="hljs-built_in">require</span> <span class="hljs-string">"js"</span>
+<span class="hljs-keyword">local</span> window = js.global
+
+</pre>
+                        </code>
+                        <div class="snippet__output"></div>
+                        <div class="snippet__actions">
+                            Try it:
+                            <div class="snippet__actions__action" data-action="run">
+                                ▶
+                                <div class="snippet__source" data-lang="lua">
+                                    local js = require "js"
+                                    local window = js.global
+
+                                    window:alert("Hello from Fengari 2!")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="snippet">
+                        <code class="snippet__code lua hljs">
+<pre><span class="hljs-keyword">local</span> js = <span class="hljs-built_in">require</span> <span class="hljs-string">"js"</span>
+<span class="hljs-keyword">local</span> window = js.global
+<span class="hljs-keyword">local</span> document = window.document
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"Document's title: "</span> .. document.title)</pre>
+                        </code>
+                        <div class="snippet__output"></div>
+                        <div class="snippet__actions">
+                            Try it:
+                            <div class="snippet__actions__action" data-action="run">
+                                ▶
+                                <div class="snippet__source" data-lang="lua">
+                                    local js = require "js"
+                                    local window = js.global
+                                    local document = window.document
+
+                                    print("Document's title: " .. document.title)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </section>
+
+
+    <section>
+        <div class="section__content">
+            <h2>Getting started</h2>
+            <p>
+                The easiest way to get started with Fengari in the browser is to use <a href="https://github.com/fengari-lua/fengari-web">fengari-web</a>.
+                This module will watch the DOM for any <span class="quoted">&lt;script type=&quot;application/lua&quot; src=&quot;...&quot;&gt;</span> and run them with Fengari.
+            </p>
+            <ol>
+                <li>
+                    <p>Download fengari-web:</p>
+                    <div class="snippet snippet--noaction">
+                        <code class="snippet__code bash hljs">
+                            <pre>$ curl -L -O https://github.com/fengari-lua/fengari-web/releases/download/v0.1.4/fengari-web.js</pre>
+                        </code>
+                    </div>
+                </li>
+
+                <li>
+                    <p>Include it in your webpage:</p>
+                    <div class="snippet snippet--noaction">
+                        <code class="snippet__code html hljs xml">
+                            <pre><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"fengari-web.js"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></pre>
+                        </code>
+                    </div>
+                </li>
+
+                <li>
+                    <p>Now any script of type <span class="quoted">application/lua</span> will be run by fengari:</p>
+                    <div class="snippet snippet--noaction">
+                        <code class="snippet__code html hljs xml">
+                            <pre><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"application/lua"</span>&gt;</span><span class="javascript">
+print(<span class="hljs-string">"hello world!"</span>)
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/my-script.lua"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"application/lua"</span> <span class="hljs-attr">async</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></pre>
+                        </code>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <section>
+        <div class="section__content">
+            <h2>Structure</h2>
+            <p>Fengari is spread across several repositories:</p>
+            <ul>
+                <li><a href="https://github.com/fengari-lua/fengari">fengari</a>: the core, largely a port of the PUC-Rio C implementation of Lua</li>
+                <li><a href="https://github.com/fengari-lua/fengari-web">fengari-web</a>: to use Fengari in the browser as easily as you might use JavaScript</li>
+                <li><a href="https://github.com/fengari-lua/fengari-interop">fengari-interop</a>: a lua library that makes interoperating with JavaScript objects simple, it is already included in fengari-web</li>
+                <li><a href="https://github.com/fengari-lua/fengari-node-cli">fengari-node-cli</a>: Lua CLI but running on top of Node.js</li>
+                <li><a href="https://github.com/fengari-lua/fengari-loader">fengari-loader</a>: to bundle lua code as part of a <a href="https://webpack.js.org/">webpack</a> build process</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="footer">
+        <div class="section__content">
+            <h2>References</h2>
+            <ul>
+                <li>Github: <a href="https://github.com/fengari-lua">fengari-lua</a></li>
+                <li><a href="https://hackernoon.com/why-we-rewrote-lua-in-js-a66529a8278d">Why we rewrote Lua in JS</a></li>
+                <li>Daurnimator's talk at Lua Workshop 2017: <a href="https://www.youtube.com/watch?v=xrLIgmd8xik">video</a>, <a href="https://www.lua.org/wshop17/fengari.html">slides</a></li>
+            </ul>
+
+            <h2>Contact/Help</h2>
+            <ul>
+                <li>Mail: <a href="mailto:team@fengari.io">team@fengari.io</a></li>
+                <li>Chat: <a href="ircs://irc.libera.chat:6697/fengari">#fengari on libera.chat</a> or <a href="https://web.libera.chat/?channels=#fengari">(Web Chat)</a></li>
+             </ul>
+        </div>
+    </section>
+
+</div>
+
+<textarea name="textArea1" id="textArea1" rows="14" cols="90">
+
+MIT License
+
+Copyright &#169; 2017 Benoit Giannangeli
+Copyright &#169;  2017-2018 Daurnimator
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</textarea>  
+</body>
+</html>
