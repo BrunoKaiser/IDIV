@@ -1,0 +1,786 @@
+<html><!--- http://html-php.de/index.php?seite=j_index---><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"><title>Berechnung des Schaltjahres</title>
+<script type="text/javascript"><!--
+function Schaltjahr () {var Jahr = document.Formular1.Eingabe3.value;var Tage = 28 ;if(Jahr%4==0) Tage++;if(Jahr%100==0) Tage--;if(Jahr%400==0) Tage++;
+<!--if(Tage==28)  alert( Jahr + " ist kein Schaltjahr");if(Tage==29)  alert( Jahr + " ist ein Schaltjahr");-->
+if(Tage==28)  document.Formular1.ErgebnisSchaltjahr.value = Jahr + " ist kein Schaltjahr" ;if(Tage==29)  document.Formular1.ErgebnisSchaltjahr.value =Jahr + " ist ein Schaltjahr" ;
+}//function Schaltjahr() { Ende
+function Rechner() {var Ergebnis = eval(document.Formular.Eingabe.value.replace('×','*').replace('÷','/').replace(',','.').replace('×','*').replace('÷','/').replace(',','.').replace('×','*').replace('÷','/').replace(',','.'));
+document.Formular.Ergebnis.value =  Ergebnis;
+}//function Rechner() { Ende
+//Zinsrechner
+function JahreManuellSetzen() {
+document.FormularZins.Jahre.value = document.FormularZins.JahreManuelleEingabe.value ;
+document.FormularZins.Methode.value = "manuell";
+}//function JahreManuellSetzen() { Ende
+function TitelErgaenzen() {
+document.FormularZins.Titel.value = document.FormularZins.Titel.value+";"+"\"" +"Methode_"+document.FormularZins.Methode.value+"\"" +";"+"\"" +"Ergebnis_"+document.FormularZins.Methode.value+"\"" ;
+}//function TitelErgaenzen() { Ende
+function Zinsen() {var Ergebnis = document.FormularZins.Kapital.value * document.FormularZins.Zinssatz.value * document.FormularZins.Jahre.value;
+Ergebnis = ""+Math.round(Ergebnis*100)/100 ;
+document.FormularZins.Zins.value = document.FormularZins.Zins.value+";"+"\"" +document.FormularZins.Methode.value+"\"" +";"+"\"" +Ergebnis.replace('.',',')+"\"" ;
+}//function Zinsen() { Ende
+function Zinseszinsen() {var Ergebnis = document.FormularZins.Kapital.value*(Math.pow(-(-1-document.FormularZins.Zinssatz.value), document.FormularZins.Jahre.value)-1);
+Ergebnis = ""+Math.round(Ergebnis*100)/100 ;
+document.FormularZins.Zinszins.value = document.FormularZins.Zinszins.value+";"+"\"" +document.FormularZins.Methode.value+"\"" +";"+"\"" +Ergebnis.replace('.',',')+"\"" ;
+}//function Zinseszinsen() { Ende
+function Zinsenstetig() {var Ergebnis = document.FormularZins.Kapital.value*(Math.exp(-(-document.FormularZins.Zinssatz.value)* document.FormularZins.Jahre.value)-1);
+Ergebnis = ""+Math.round(Ergebnis*100)/100 ;
+document.FormularZins.Zinsstetig.value = document.FormularZins.Zinsstetig.value+";"+"\"" +document.FormularZins.Methode.value+"\"" +";"+"\"" +Ergebnis.replace('.',',')+"\"" ;
+}//function Zinsenstetig() { Ende
+function ZinsenTitelAlle() {
+TitelErgaenzen();
+Zinsen();
+Zinseszinsen();
+Zinsenstetig();
+}//function ZinsenTitelAlle() { Ende
+function ZinsErgebnisAlleZeilenAusgabe() {
+document.getElementById('ZinsErgebnisAlleZeilen').value= document.FormularZins.Titel.value +"\r\n"+ document.FormularZins.Zins.value +"\r\n"+ document.FormularZins.Zinszins.value +"\r\n"+ document.FormularZins.Zinsstetig.value +"\r\n" ;
+}//function ZinsErgebnisAlleZeilenAusgabe() { Ende
+function KapitalZinssatzSchreiben() {var Startdatum= new Date(2016,1,1);Endedatum = new Date(2018,1,1);
+Startdatum.setFullYear(document.FormularZins.Startjahr.value);Startdatum.setMonth(document.FormularZins.Startmonat.value -1);Startdatum.setDate(document.FormularZins.Starttag.value);
+Endedatum.setFullYear(document.FormularZins.Endejahr.value);Endedatum.setMonth(document.FormularZins.Endemonat.value -1);Endedatum.setDate(document.FormularZins.Endetag.value);
+Start=Startdatum.getMonth()+1;Ende=Endedatum.getMonth()+1;
+Start=Startdatum.getDate()+"."+Start+"."+Startdatum.getFullYear();Ende=Endedatum.getDate()+"."+Ende+"."+Endedatum.getFullYear();
+document.FormularZins.Titel.value = "\"" +"Zinsart"+"\"" +";"+"\"" +"Kapital"+"\"" +";"+"\"" +"Zinssatz"+"\"" +";"+"\"" +"Startdatumsangabe"+"\"" +";"+"\"" +"Endedatumsangabe"+"\"";
+document.FormularZins.Zins.value = "\"" +"Zins"+"\"" +";"+"\"" +document.FormularZins.Kapital.value.replace('.',',')+"\"" +";"+"\"" +document.FormularZins.Zinssatz.value.replace('.',',')+"\"" +";"+"\"" +Start.replace('.','/').replace('.','/')+"\"" +";"+"\"" +Ende.replace('.','/').replace('.','/')+"\"" ;
+document.FormularZins.Zinszins.value = "\"" +"ZinsZinseszins"+"\"" +";"+"\"" +document.FormularZins.Kapital.value.replace('.',',')+"\"" +";"+"\"" +document.FormularZins.Zinssatz.value.replace('.',',')+"\"" +";"+"\"" +Start.replace('.','/').replace('.','/')+"\"" +";"+"\"" +Ende.replace('.','/').replace('.','/')+"\"" ;
+document.FormularZins.Zinsstetig.value ="\"" + "Zinsstetig"+"\"" +";"+"\"" +document.FormularZins.Kapital.value.replace('.',',')+"\"" +";"+"\"" +document.FormularZins.Zinssatz.value.replace('.',',')+"\"" +";"+"\"" +Start.replace('.','/').replace('.','/')+"\"" +";"+"\"" +Ende.replace('.','/').replace('.','/')+"\"" ;
+}//function KapitalZinssatzSchreiben() { Ende
+//
+function KapitalZinssatzZuruecksetzen() {
+document.FormularZins.Titel.value="";
+document.FormularZins.Zins.value="";
+document.FormularZins.Zinszins.value="";
+document.FormularZins.Zinsstetig.value="";
+}//function KapitalZinssatzZuruecksetzen() {} Ende
+//
+
+//
+//actual Methode
+function Anzahltagezaehler() {var Startdatum= new Date(2016,1,1);Endedatum = new Date(2018,1,1);
+Startdatum.setFullYear(document.FormularZins.Startjahr.value);Startdatum.setMonth(document.FormularZins.Startmonat.value -1);Startdatum.setDate(document.FormularZins.Starttag.value);
+Endedatum.setFullYear(document.FormularZins.Endejahr.value);Endedatum.setMonth(document.FormularZins.Endemonat.value -1);Endedatum.setDate(document.FormularZins.Endetag.value);
+var Ergebnis = Math.round((Endedatum - Startdatum)/1000/60/60/24);
+//alert("Der Zähler ist Anzahl Tage actual = " + Ergebnis);
+document.FormularZins.AnzahlTageZaehler.value = Ergebnis - document.FormularZins.AnzahltageNoLeap.value;
+document.FormularZins.Anzahltageactual.value = Ergebnis;
+}//function Anzahltagezaehler() { Ende
+//
+function Nenneractual36525() {
+Anzahltagezaehler();
+document.FormularZins.Nenner36525.value = 365.25;
+document.FormularZins.Methode.value = "act365Komma25bzw1durch1";
+document.FormularZins.Jahre.value =  document.FormularZins.AnzahlTageZaehler.value / 365.25;
+document.FormularZins.AnzahlTageNenner.value = 365.25;
+}//function Nenneractual36525() { Ende
+//
+function Nenneractual366() {
+Anzahltagezaehler();
+document.FormularZins.Nenner366.value = 366;
+document.FormularZins.Methode.value = "act366";
+document.FormularZins.Jahre.value =  document.FormularZins.AnzahlTageZaehler.value / 366;
+document.FormularZins.AnzahlTageNenner.value = 366;
+}//function Nenneractual366() { Ende
+//
+function Nenneractual365() {
+Anzahltagezaehler();
+document.FormularZins.Nenner365.value = 365;
+document.FormularZins.Methode.value = "act365";
+document.FormularZins.Jahre.value =  document.FormularZins.AnzahlTageZaehler.value / 365;
+document.FormularZins.AnzahlTageNenner.value = 365;
+}//function Nenneractual365() { Ende
+//
+function Nenneractual364() {
+Anzahltagezaehler();
+document.FormularZins.Nenner364.value = 364;
+document.FormularZins.Methode.value = "act364";
+document.FormularZins.Jahre.value =  document.FormularZins.AnzahlTageZaehler.value / 364;
+document.FormularZins.AnzahlTageNenner.value = 364;
+}//function Nenneractual364() { Ende
+//
+function Nenneractual360() {
+Anzahltagezaehler();
+document.FormularZins.Nenner360.value = 360;
+document.FormularZins.Methode.value = "act360";
+document.FormularZins.Jahre.value =  document.FormularZins.AnzahlTageZaehler.value / 360;
+document.FormularZins.AnzahlTageNenner.value = 360;
+}//function Nenneractual360() { Ende
+//
+
+//
+//360 Methode
+function Anzahltage30zaehler() {
+//30/360 Bond Basis This convention is exactly as 30U/360 below, except for the first two rules. Note that the order of calculations is important:
+ var D1 = -(-document.FormularZins.Starttag.value);
+var D2 = -(-document.FormularZins.Endetag.value);
+var M1 = -(-document.FormularZins.Startmonat.value);
+var M2 = -(-document.FormularZins.Endemonat.value);
+var Y1 = -(-document.FormularZins.Startjahr.value);
+var Y2 = -(-document.FormularZins.Endejahr.value);
+if (D1>30){D1 = 30;}//Regel 1: D1 = MIN (D1, 30).
+if (D1==30){if (D2>30){D2 = 30;}}//Regel 2: If D1 = 30 Then D2 = MIN (D2,30)
+var Ergebnis = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1);
+document.FormularZins.Anzahltage30.value = Ergebnis;
+document.FormularZins.AnzahlTageZaehler.value = Ergebnis;
+document.FormularZins.Methode.value = "M30";
+document.FormularZins.Jahre.value =  Ergebnis / 360;
+document.FormularZins.AnzahlTageNenner.value = 360;
+}//function Anzahltage30zaehler() { Ende
+//
+function Anzahltage30ISDAzaehler() {
+//30/360 ISDA:
+ var D1 = -(-document.FormularZins.Starttag.value);
+var D2 = -(-document.FormularZins.Endetag.value);
+var M1 = -(-document.FormularZins.Startmonat.value);
+var M2 = -(-document.FormularZins.Endemonat.value);
+var Y1 = -(-document.FormularZins.Startjahr.value);
+var Y2 = -(-document.FormularZins.Endejahr.value);
+var applied30="Regel1 not applied mit 30";
+if (D1==31){D1 = 30;applied30="Regel 1 applied mit 30";}//Regel 1: if D1 = 30 then change D1 to 30.
+if (applied30=="Regel 1 applied mit 30"){if (D2==31){D2 = 30;}}//Regel 2: If D1 = 30 after applying Regel 1 Then D2 = 30
+var Ergebnis = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1);
+document.FormularZins.Anzahltage30ISDA.value = Ergebnis + " " + applied30;
+document.FormularZins.AnzahlTageZaehler.value = Ergebnis;
+document.FormularZins.Methode.value = "M30ISDA";
+document.FormularZins.Jahre.value =  Ergebnis / 360;
+document.FormularZins.AnzahlTageNenner.value = 360;
+}//function Anzahltage30ISDAzaehler() { Ende
+//
+function Anzahltage30Ezaehler() {
+//30E/360 Date adjustment rules:
+var D1 = -(-document.FormularZins.Starttag.value);
+var D2 = -(-document.FormularZins.Endetag.value);
+var M1 = -(-document.FormularZins.Startmonat.value);
+var M2 = -(-document.FormularZins.Endemonat.value);
+var Y1 = -(-document.FormularZins.Startjahr.value);
+var Y2 = -(-document.FormularZins.Endejahr.value);
+if (D1==31){D1 = 30;}//Regel 1: If D1 is 31, then change D1 to 30.
+if (D2==31){D2 = 30;}//Regel 2: If D2 is 31, then change D2 to 30.
+var Ergebnis = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1);
+document.FormularZins.Anzahltage30E.value = Ergebnis;
+document.FormularZins.AnzahlTageZaehler.value = Ergebnis;
+document.FormularZins.Methode.value = "M30E";
+document.FormularZins.Jahre.value =  Ergebnis / 360;
+document.FormularZins.AnzahlTageNenner.value = 360;
+}//function Anzahltage30Ezaehler() { Ende
+//
+function Anzahltage30EPluszaehler() {
+//30E+/360 Date adjustment rules:
+var D1 = -(-document.FormularZins.Starttag.value);
+var D2 = -(-document.FormularZins.Endetag.value);
+var D2Plus = -(-document.FormularZins.EndetagPlus.value);
+var M1 = -(-document.FormularZins.Startmonat.value);
+var M2 = -(-document.FormularZins.Endemonat.value);
+var M2Plus = -(-document.FormularZins.EndemonatPlus.value);
+var Y1 = -(-document.FormularZins.Startjahr.value);
+var Y2 = -(-document.FormularZins.Endejahr.value);
+var Y2Plus = -(-document.FormularZins.EndejahrPlus.value);
+var veraendert = "unverändert: ";
+if (D1==31){D1 = 30;}//Regel 1: If D1 is 31, then change D1 to 30.
+if (D2==31){D2 = D2Plus; M2 = M2Plus; Y2 = Y2Plus; veraendert = "verändert: ";}//Regel 2: If D2 is 31, then set D2.M2.Y2 to 1st day of the next month.
+//Die Umrechnung in den ersten des nächsten Monats entspricht der Beibehaltung des 31. des Endemonats in der Formel. Es wird eh nur ein Tag hinzugerechnet.
+var Ergebnis = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1);
+document.FormularZins.Anzahltage30EPlus.value = Ergebnis + " Endedatum " + veraendert + D2 + "." + M2 + "." + Y2;
+document.FormularZins.AnzahlTageZaehler.value = Ergebnis;
+document.FormularZins.Methode.value = "M30E+";
+document.FormularZins.Jahre.value =  Ergebnis / 360;
+document.FormularZins.AnzahlTageNenner.value = 360;
+}//function Anzahltage30PlusEzaehler() { Ende
+//
+function Anzahltage30Germanzaehler() {
+//30German/360 Date adjustment rules:
+var D1 = -(-document.FormularZins.Starttag.value);
+var D2 = -(-document.FormularZins.Endetag.value);
+var M1 = -(-document.FormularZins.Startmonat.value);
+var M2 = -(-document.FormularZins.Endemonat.value);
+var Y1 = -(-document.FormularZins.Startjahr.value);
+var Y2 = -(-document.FormularZins.Endejahr.value);
+var D1LetzterFebruar ="";
+var D2LetzterFebruar ="";
+if (D1==31){D1 = 30;}//Regel 1: If D1 is 31, then change D1 to 30.
+if (D2==31){D2 = 30;}//Regel 1: If D2 is 31, then change D2 to 30.
+//nämlich Regel 1: If D1 and/or D2 is 31, then change D1 to 30 and/or D2 to. 
+if (document.FormularZins.ManuellLastDayFebruary1.value=="ja"){D1=30;D1LetzterFebruar=" Startdatum letzter vom Februar ";}
+if (document.FormularZins.ManuellLastDayFebruary2.value=="ja"){D2=30;D2LetzterFebruar=" Endedatum letzter vom Februar ";}
+// Regel 2 If D1.M1.Y1 and/or D2.M2.Y2 = last day of february =1.3.-1 Tag then change D1 to 30 and/or D2 to 30. 
+var Ergebnis = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1);
+document.FormularZins.Anzahltage30German.value = Ergebnis + "" + D1LetzterFebruar + D2LetzterFebruar;
+document.FormularZins.AnzahlTageZaehler.value = Ergebnis;
+document.FormularZins.Methode.value = "M30German";
+document.FormularZins.Jahre.value =  Ergebnis / 360;
+document.FormularZins.AnzahlTageNenner.value = 360;
+}//function Anzahltage30Germanzaehler() { Ende
+
+
+
+
+
+function Anzahltage30USzaehler() {
+//30German/360 Date adjustment rules:
+var D1 = -(-document.FormularZins.Starttag.value);
+var D2 = -(-document.FormularZins.Endetag.value);
+var M1 = -(-document.FormularZins.Startmonat.value);
+var M2 = -(-document.FormularZins.Endemonat.value);
+var Y1 = -(-document.FormularZins.Startjahr.value);
+var Y2 = -(-document.FormularZins.Endejahr.value);
+var Regel1 = "";
+var Regel2 = "";
+if (document.FormularZins.ManuellLastDayFebruary1.value=="ja" && document.FormularZins.ManuellLastDayFebruary2.value=="ja"){D2=30;Regel1="Regel1 beide letzte vom Februar";} //Regel 1: If D2.M2.Y2 ist the last day of February (28 ohne Schaltjahr und 29 im Schaltjahr) and D1.M1.Y1 ist the last day of February then D2 = 30
+if (document.FormularZins.ManuellLastDayFebruary1.value=="ja"){D1=30;Regel2=" Regel2 Startdatum letzter vom Februar";} //Regel 2: If D1.M1.Y1 ist the last day of February (28 ohne Schaltjahr und 29 im Schaltjahr) then D1 = 30
+if (D2==31 && D1==30){D2 = 30;}//Regel 3: If D2 is 31 and D1=30 or D1=31, then change D2 to 30.
+if (D2==31 && D1==31){D2 = 30;}
+if (D1==31){D1 = 30;}//Regel 4: If D1 is 31, then change D1 to 30.
+var Ergebnis = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1);
+document.FormularZins.Anzahltage30US.value = Ergebnis + " " + Regel1 + Regel2 ;
+document.FormularZins.AnzahlTageZaehler.value = Ergebnis;
+document.FormularZins.Methode.value = "M30US"
+document.FormularZins.Jahre.value =  Ergebnis / 360;
+document.FormularZins.AnzahlTageNenner.value = 360;
+}//function Anzahltage30USzaehler() { Ende
+
+
+
+
+
+//Zinsrechner Ende
+//--></script><!--- type="text/javascript9" Schaltjahr() Rechner()Ende-->
+</head><!--- Berechnung des Schaltjahres Ende --->
+<body><!--- Funktionen sind Anweisungsblöcke, die erst dann ausgeführt, wenn diese im body-Bereich direkt, oder durch anklicken von ((a href...)) bzw. eines Buttons ((input...)) aufgerufen wird.--->
+
+<h4>1. Allgemeiner Rechner</h4>
+<ul><li>
+Geben Sie eine Rechenaufgabe ein (z.B. 5+7):
+<br><!---var Ergebnis = eval(document.Formular.Eingabe.value);--->
+<!---document.---><form name="Formular"><!---.---><input value="10000*0.03" name="Eingabe" type="text"><!---.---><br><ul><li>
+<input value="Berechnen" onclick="Rechner()" type="button"><ul><li>
+  <input value="" name="Ergebnis" size="34" type="text">
+
+</li></ul>
+</li></ul>
+</li></ul>
+
+</form><!--- name="Formular" Ende-->
+<br>
+
+
+<h4>2. Schaltjahrberechnung</h4>
+<ul><li>
+Geben Sie ein Jahr zwischen 1900 und 2999 ein:
+<br>
+<!--- s.o. im Head: var Jahr = document.Formular1.Eingabe3.value;--->
+<!---document.---><form name="Formular1" action=""><!---.---><input value="2015" name="Eingabe3" size="14" type="text"><!---.---><!--- value="2015" als Default möglich ---><br>
+<ul><li>
+<input value="Ausgabe" onclick="Schaltjahr()" type="button">
+<ul><li>
+<input value="" name="ErgebnisSchaltjahr" size="34" type="text">
+</ul></li>
+</ul></li>
+</ul></li>
+
+</form>
+
+
+
+<!-- http://www.programmieren-optimieren.de/java/potenzieren-in-java/ e-Funktion http://walterzorn.de/grapher/grapher.htm -->
+<h4>3. Zinsberechnung</h4>
+<ul><li>
+
+Geben Sie Kapital und Zinssatz ein:
+<br><!---var Ergebnis = eval(document.Formular.Eingabe.value);--->
+<!---document.---><form name="FormularZins"><!---.---><input value="134557" name="Kapital" type="double"><!---.---><input value="0.0156" name="Zinssatz" type="double"><!---.--->
+<br>
+<ul><li>
+Startdatum: <input value="2012" name="Startjahr" type="text" size="5"> <input value="2" name="Startmonat" type="text" size="5"> <input value="1" name="Starttag" type="text" size="5"> 
+<ul><li>
+Startdatum ist Last of day February <input value="nein" name="ManuellLastDayFebruary1" type="text" size="5">
+</li></ul>
+</li></ul>
+
+<br>
+<ul><li>
+Endedatum: <input value="2013" name="Endejahr" type="text" size="5"> <input value="5" name="Endemonat" type="text" size="5"> <input value="31" name="Endetag" type="text" size="5"> 
+<ul><li>
+Endedatum ist Last day of February<input value="nein" name="ManuellLastDayFebruary2" type="text" size="5">
+</li></ul>
+</li></ul>
+
+<br>
+<br>
+
+<ul><li>
+Anzahl Tage im Zähler bestimmen und soweit schon möglich im Nenner, sonst weitere Knoten verwenden
+<br>
+<ul><li>
+<b>Tageskonventionen für <input value="360" name="Nenner360" type="text" size="5"> Tage mit der Formel</b>
+<br><i>Tage = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1)</i>
+<br>   <input value="Anzahl Tage Zähler 30 und Nenner 360" onclick="Anzahltage30zaehler()" type="button">
+ 30/360 Bond Basis, 30A/360: 
+ This convention is exactly as 30U/360 below, except for the first two rules. Note that the order of calculations is important:
+ D1 = MIN (D1, 30).If D1 = 30 Then D2 = MIN (D2,30)
+ Sources: ISDA 2006 Section 4.16(f), though the first two rules are not included. "ISDA Definitions, Section 4.16". 2006. Retrieved2014-09-18.
+<br>
+<ul><li>
+<input value="" name="Anzahltage30" type="text"> 
+</li></ul>
+
+<br>   <input value="Anzahl Tage Zähler 30ISDA und Nenner 360" onclick="Anzahltage30ISDAzaehler()" type="button">
+ 30/360 ISDA: 
+ Regel 1: If D1 is 31, then change D1 to 30. 
+ Regel 2 If D1 = 30 after applying Regel 1 and D2 =31 then change D2 to 30. 
+ Sources: alternate names of day conventions.
+<br>
+<ul><li>
+<input value="" name="Anzahltage30ISDA" type="text" size="100">
+</li></ul>
+
+<br>   <input value="Anzahl Tage Zähler 30E und Nenner 360" onclick="Anzahltage30Ezaehler()" type="button">
+ 30E/360, 30/360 ICMA, 30S/360, Eurobond basis (ISDA 2006), Special German (spezielle deutsche Zinsmethode): 
+ Regel 1: If D1 is 31, then change D1 to 30. 
+ Regel 2 If D2 is 31, then change D2 to 30. 
+ Sources: "ICMA Rule Book, Rule 251". Retrieved 2014-09-18. ICMA Rule 251.1(ii), 251.2. "ISDA Definitions, Section 4.16". 2006. Retrieved 2014-09-18. ISDA 2006 Section 4.16(g).
+<br>
+<ul><li>
+<input value="" name="Anzahltage30E" type="text">
+</li></ul>
+
+<br>   <input value="Anzahl Tage Zähler 30E+ und Nenner 360" onclick="Anzahltage30EPluszaehler()" type="button">
+ 30E+/360: 
+ Regel 1: If D1 is 31, then change D1 to 30. 
+ Regel 2 If D2 is 31, set D2.M2.Y2 to 1st day of the next month. 
+ Sources: alternate names of day conventions.
+<br>
+<ul><li>
+<input value="" name="Anzahltage30EPlus" type="text" size="50">
+</li></ul>
+
+<ul><li>
+Zum Endedatum 1. des Folgemonats für Regel 30E+: <input value="2013" name="EndejahrPlus" type="text" size="5"> <input value="5" name="EndemonatPlus" type="text" size="5"> <input value="31" name="EndetagPlus" type="text" size="5">
+</li></ul>
+
+
+<br>   <input value="Anzahl Tage Zähler 30German und Nenner 360" onclick="Anzahltage30Germanzaehler()" type="button">
+ 30/360 German (spezielle deutsche Zinsmethode siehe oben): 
+ Regel 1: If D1 and/or D2 is 31, then change D1 to 30 and/or D2 to 30. 
+ Regel 2 If D1.M1.Y1 and/or D2.M2.Y2 = last day of february =1.3.-1 Tag then change D1 to 30 and/or D2 to 30. 
+ Sources: alternate names of day conventions.
+<br>
+<ul><li>
+<input value="" name="Anzahltage30German" type="text" size="100">
+</li></ul>
+ 
+ 
+<br>   <input value="Anzahl Tage Zähler 30US und Nenner 360" onclick="Anzahltage30USzaehler()" type="button">
+ 30/360 US: 
+ Regel 1: If D2.M2.Y2 ist the last day of February (28 ohne Schaltjahr und 29 im Schaltjahr) and D1.M1.Y1 ist the last day of February then D2 = 30
+ Regel 2: If D1.M1.Y1 ist the last day of February (28 ohne Schaltjahr und 29 im Schaltjahr) then D1 = 30
+ Regel 3: If D2 is 31 and D1=30 or D1=31, then change D2 to 30.
+ Regel 4: If D1 is 31, then change D1 to 30.
+ Sources: alternate names of day conventions.
+<br>
+<ul><li>
+<input value="" name="Anzahltage30US" type="text" size="100">
+</li></ul>
+
+</li></ul>
+ 
+<br>
+<ul><li>
+<b>Tageskonventionen actual mit der exakten Anzahl Tage im Zähler und Nenner für actual im Weiteren Knoten bestimmen</b>
+<br>
+<input value="Anzahl Tage Zähler actual und Nenner für actual im Weiteren Knoten bestimmen" onclick="Anzahltagezaehler()" type="button">
+<ul><li>
+<input value="" name="Anzahltageactual" type="text">  
+</li></ul>   
+</li></ul>   
+
+<br>
+<ul><li>
+<b>Für die no leap year abgezogene Tage im Zähler bei der Methode NL/365 </b>
+<ul><li>
+<input value="0" name="AnzahltageNoLeap" type="text">  
+</li></ul>   
+</li></ul>   
+
+
+<br>
+ 
+<ul><li>
+<b>Für die Rechnung benutzte Tage im Zähler</b>
+<ul><li>
+<input value="" name="AnzahlTageZaehler" type="text"> 
+</li></ul>   
+
+<br>
+<br>
+ 
+<ul><li>
+<b>Nenner bestimmen für Tageskonventionen actual mit der exakten Anzahl Tage</b>
+<br>
+
+<br><input value="Nenner actual 365.25 1/1" onclick="Nenneractual36525()" type="button">
+This is used for inflation instruments and divides the overall 4 year period distributing the additional day across all 4 years i.e. giving 365.25 days to each year.
+<br>
+Sources: "ISDA Definitions, Section 4.16". 2006. Retrieved2014-09-18. ISDA 2006 Section 4.16(a). "FBF Master Agreement for Financial Transactions, Supplement to the Derivatives Annex, Edition 2004". 2004. Retrieved 2014-09-18. FBF Master Agreement for Financial Transactions, Supplement to the Derivatives Annex, Edition 2004, section 7a.
+<ul><li>
+<input value="365.25" name="Nenner36525" type="text">
+</li></ul> 
+
+
+
+
+<br><input value="Nenner actual 366" onclick="Nenneractual366()" type="button">
+Für Schaltjahre oder Act/365A für gesamte Periode, falls Schalttag vorhanden oder Act/365L falls Endedatum im Schaltjahr.
+<ul><li>
+<input value="366" name="Nenner366" type="text">
+</li></ul> 
+
+<br><input value="Nenner actual 365" onclick="Nenneractual365()" type="button">
+Each month is treated normally and the year is assumed to be 365 days. For example, in a period from February 1, 2005 to April 1, 2005, the Factor is considered to be 59 days divided by 365.
+The CouponFactor uses the same formula, replacing Date2 by Date3. In general, coupon payments will vary from period to period, due to the differing number of days in the periods. The formula applies to both regular and irregular coupon periods. 
+<br>
+Other names: Act/365 FixedAct/365 FixedAct/365FEnglish 
+<br>
+Sources: "ISDA Definitions, Section 4.16". 2006. Retrieved2014-09-18. ISDA 2006 Section 4.16(d).
+<ul><li>
+<input value="365" name="Nenner365" type="text">
+</li></ul> 
+
+<br><input value="Nenner actual 364" onclick="Nenneractual364()" type="button">
+Each month is treated normally and the year is assumed to be 364 days. For example, in a period from February 1, 2005 to April 1, 2005, the Factor is considered to be 59 days divided by 364.
+ The CouponFactor uses the same formula, replacing Date2 by Date3. In general, coupon payments will vary from period to period, due to the differing number of days in the periods. The formula applies to both regular and irregular coupon periods.
+<ul><li>
+<input value="364" name="Nenner364" type="text">
+</li></ul> 
+  
+<br><input value="Nenner actual 360" onclick="Nenneractual360()" type="button">
+This convention is used in money markets for short-term lending of currencies, including the US dollar and Euro, and is applied in ESCBmonetary policy operations. It is the convention used withRepurchase agreements. Each month is treated normally and the year is assumed to be 360 days. For example, in a period from February 1, 2005 to April 1, 2005, the Factor is 59 days divided by 360 days.
+ The CouponFactor uses the same formula, replacing Date2 by Date3. In general, coupon payments will vary from period to period, due to the differing number of days in the periods. The formula applies to both regular and irregular coupon periods.
+<br>
+Other names: Act/360, A/360, French (französische Methode)
+<br>
+Sources: "ICMA Rule Book, Rule 251". Retrieved 2014-09-18. ICMA Rule 251.1(i) (not sterling). "ISDA Definitions, Section 4.16". 2006. Retrieved2014-09-18. ISDA 2006 Section 4.16(e). (Mayle 1993)
+<ul><li>
+<input value="360" name="Nenner360" type="text">
+</li></ul> 
+
+<br>
+<ul><li>
+<b>Für die Rechnung benutzte Tage im Nenner</b>
+<ul><li>
+<input value="" name="AnzahlTageNenner" type="text">
+</li></ul> 
+<br>
+<br>  
+
+
+
+<ul><li>
+
+<b>Für die Rechnung benutzte Jahre mit Nachkommastellen</b>
+
+<input value="1" name="Jahre" type="text"><!---.--->
+
+<ul><li>
+
+<!--.-->Option manuelles Überschreiben der Jahre.
+<ul><li>
+
+<!--.-->Geben Sie die Anzahl Jahre mit Nachkommastellen manuell ein:
+<br><input value="1" name="JahreManuelleEingabe" type="text"><!---.--->
+<br><input value="Jahre manuell setzen" onclick="JahreManuellSetzen()" type="button">    
+
+</li></ul>
+</li></ul>
+
+<br>
+<br>
+
+<ul><li>
+Methode: <input value="manuell" name="Methode" type="text">
+<br>
+<br>  
+
+  
+<ul><li>
+<br>Zinsberechnung
+<br><input value="Kapital und Zinssatz eintragen" onclick="KapitalZinssatzSchreiben()" type="button"> 
+<input value="Zurücksetzen" onclick="KapitalZinssatzZuruecksetzen()" type="button">
+<ul><li>
+<input value="Alle Zinsen mit Titel ausgeben" onclick="ZinsenTitelAlle()" type="button">
+</li></ul>
+<br><input value="Titel" onclick="TitelErgaenzen()" type="button">    
+<br><input value="" name="Titel" type="text" size="90">  
+<br><input value="Zinsen linear" onclick="Zinsen()" type="button">    
+<br><input value="" name="Zins" type="text" size="90">  
+<br><input value="Zinsen mit Zinseszinsen" onclick="Zinseszinsen()" type="button">
+   
+<br><input value="" name="Zinszins" type="text" size="90">  
+<br><input value="Zinsen stetig verzinst" onclick="Zinsenstetig()" type="button">
+   
+<br><input value="" name="Zinsstetig" type="text" size="90">  
+<br>
+<br>
+
+
+<ul><li>
+<input value="Alle Zinsen mit Titel ausgeben" onclick="ZinsErgebnisAlleZeilenAusgabe()" type="button">
+<ul><li>
+<br>
+<textarea name="ZinsErgebnisAlleZeilen" id="ZinsErgebnisAlleZeilen" rows="4" cols="70">
+</textarea>  
+
+
+</li></ul>
+</li></ul>
+
+</li></ul>
+
+</li></ul>
+</li></ul>
+</li></ul>
+
+
+</li></ul>
+</li></ul>
+
+
+</li></ul>
+  
+</form><!--- name="FormularZins" Ende-->
+
+
+
+<h4>4. Zeitstempel</h4>
+
+<br>
+<form name="uhrZeitstempelHeute">
+<ul><li>
+<input value="Heute ist der 21.01.2015" size="34" name="digitalZeitstempelHeute" type="text">
+</form>
+<script type="text/javascript">
+function zeitZeitstempelHeute() {
+var heute = new Date();
+var jahr = heute.getFullYear();
+var monat = heute.getMonth()+1;
+if(monat<10){monatstext="0"+monat;}else{monatstext=""+monat;}
+var tag = heute.getDate();
+if(tag<10){tagestext="0"+tag;}else{tagestext=""+tag;}
+var uhrzeit = new Date();
+var stunde = uhrzeit.getHours();
+if(stunde<10){Stundentext="0"+stunde;}else{Stundentext=""+stunde;}
+var minute = uhrzeit.getMinutes();
+if(minute<10){Minutentext="0"+minute;}else{Minutentext=""+minute;}
+var sekunde = uhrzeit.getSeconds();
+if(sekunde<10){Sekundentext="0"+sekunde;}else{Sekundentext=""+sekunde;}
+document.uhrZeitstempelHeute.digitalZeitstempelHeute.value= "Heute ist der "+tagestext+"."+monatstext+"."+jahr;
+setTimeout("zeitZeitstempelHeute()",10000);
+}
+zeitZeitstempelHeute();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+</li></ul>
+
+<ul><li>
+<form name="uhr">
+<input value="21.01.2015 13:11:42" size="14" name="digital" type="text">
+</form>
+<script type="text/javascript">
+function zeit() {
+var heute = new Date();
+var jahr = heute.getFullYear();
+var monat = heute.getMonth()+1;
+if(monat<10){monatstext="0"+monat;}else{monatstext=""+monat;}
+var tag = heute.getDate();
+if(tag<10){tagestext="0"+tag;}else{tagestext=""+tag;}
+var uhrzeit = new Date();
+var stunde = uhrzeit.getHours();
+if(stunde<10){Stundentext="0"+stunde;}else{Stundentext=""+stunde;}
+var minute = uhrzeit.getMinutes();
+if(minute<10){Minutentext="0"+minute;}else{Minutentext=""+minute;}
+var sekunde = uhrzeit.getSeconds();
+if(sekunde<10){Sekundentext="0"+sekunde;}else{Sekundentext=""+sekunde;}
+document.uhr.digital.value= ""+tagestext+"."+monatstext+"."+jahr +" " +Stundentext + ":" + Minutentext + ":" + Sekundentext;
+setTimeout("zeit()",1000);
+}
+zeit();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+<form name="uhrZeitstempel">
+</li></ul>
+
+<ul><li>
+<input value="_Zeitstempel 20150121 13_11_42" size="34" name="digitalZeitstempel" type="text">
+</form>
+<script type="text/javascript">
+function zeitZeitstempel() {
+var heute = new Date();
+var jahr = heute.getFullYear();
+var monat = heute.getMonth()+1;
+if(monat<10){monatstext="0"+monat;}else{monatstext=""+monat;}
+var tag = heute.getDate();
+if(tag<10){tagestext="0"+tag;}else{tagestext=""+tag;}
+var uhrzeit = new Date();
+var stunde = uhrzeit.getHours();
+if(stunde<10){Stundentext="0"+stunde;}else{Stundentext=""+stunde;}
+var minute = uhrzeit.getMinutes();
+if(minute<10){Minutentext="0"+minute;}else{Minutentext=""+minute;}
+var sekunde = uhrzeit.getSeconds();
+if(sekunde<10){Sekundentext="0"+sekunde;}else{Sekundentext=""+sekunde;}
+document.uhrZeitstempel.digitalZeitstempel.value= "_Zeitstempel "+jahr+""+monatstext+""+tagestext +" " +Stundentext + "_" + Minutentext + "_" + Sekundentext;
+setTimeout("zeitZeitstempel()",1000);
+}
+zeitZeitstempel();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+<form name="uhrZeitstempeli">
+</li></ul>
+
+<ul><li>
+<input value="_Uhrzeitstempel 20150121_13" size="34" name="digitalZeitstempeli" type="text">
+</form>
+<script type="text/javascript">
+function zeitZeitstempeli() {
+var heute = new Date();
+var jahr = heute.getFullYear();
+var monat = heute.getMonth()+1;
+if(monat<10){monatstext="0"+monat;}else{monatstext=""+monat;}
+var tag = heute.getDate();
+if(tag<10){tagestext="0"+tag;}else{tagestext=""+tag;}
+var uhrzeit = new Date();
+var stunde = uhrzeit.getHours();
+if(stunde<10){Stundentext="0"+stunde;}else{Stundentext=""+stunde;}
+var minute = uhrzeit.getMinutes();
+if(minute<10){Minutentext="0"+minute;}else{Minutentext=""+minute;}
+var sekunde = uhrzeit.getSeconds();
+if(sekunde<10){Sekundentext="0"+sekunde;}else{Sekundentext=""+sekunde;}
+document.uhrZeitstempeli.digitalZeitstempeli.value= "_Uhrzeitstempel "+jahr+""+monatstext+""+tagestext +"_" +Stundentext ;
+setTimeout("zeitZeitstempeli()",10000);
+}
+zeitZeitstempeli();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+<form name="uhrZeitstempelii">
+</li></ul>
+
+<ul><li>
+<input value="_Tageszeitstempel 20150121" size="34" name="digitalZeitstempelii" type="text">
+</form>
+<script type="text/javascript">
+function zeitZeitstempelii() {
+var heute = new Date();
+var jahr = heute.getFullYear();
+var monat = heute.getMonth()+1;
+if(monat<10){monatstext="0"+monat;}else{monatstext=""+monat;}
+var tag = heute.getDate();
+if(tag<10){tagestext="0"+tag;}else{tagestext=""+tag;}
+var uhrzeit = new Date();
+var stunde = uhrzeit.getHours();
+if(stunde<10){Stundentext="0"+stunde;}else{Stundentext=""+stunde;}
+var minute = uhrzeit.getMinutes();
+if(minute<10){Minutentext="0"+minute;}else{Minutentext=""+minute;}
+var sekunde = uhrzeit.getSeconds();
+if(sekunde<10){Sekundentext="0"+sekunde;}else{Sekundentext=""+sekunde;}
+document.uhrZeitstempelii.digitalZeitstempelii.value= "_Tageszeitstempel "+jahr+""+monatstext+""+tagestext ;
+setTimeout("zeitZeitstempelii()",10000);
+}
+zeitZeitstempelii();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+<form name="uhrZeitstempeliii">
+</li></ul>
+
+<ul><li>
+<input value="_Monatszeitstempel 201501" size="34" name="digitalZeitstempeliii" type="text">
+</form>
+<script type="text/javascript">
+function zeitZeitstempeliii() {
+var heute = new Date();
+var jahr = heute.getFullYear();
+var monat = heute.getMonth()+1;
+if(monat<10){monatstext="0"+monat;}else{monatstext=""+monat;}
+var tag = heute.getDate();
+if(tag<10){tagestext="0"+tag;}else{tagestext=""+tag;}
+var uhrzeit = new Date();
+var stunde = uhrzeit.getHours();
+if(stunde<10){Stundentext="0"+stunde;}else{Stundentext=""+stunde;}
+var minute = uhrzeit.getMinutes();
+if(minute<10){Minutentext="0"+minute;}else{Minutentext=""+minute;}
+var sekunde = uhrzeit.getSeconds();
+if(sekunde<10){Sekundentext="0"+sekunde;}else{Sekundentext=""+sekunde;}
+document.uhrZeitstempeliii.digitalZeitstempeliii.value= "_Monatszeitstempel "+jahr+""+monatstext;
+setTimeout("zeitZeitstempeliii()",10000);
+}
+zeitZeitstempeliii();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+<form name="uhrZeitstempeliv">
+</li></ul>
+
+<ul><li>
+<input value="_Jahreszeitstempel 2015" size="34" name="digitalZeitstempeliv" type="text">
+</form>
+<script type="text/javascript">
+function zeitZeitstempeliv() {
+var heute = new Date();
+var jahr = heute.getFullYear();
+var monat = heute.getMonth()+1;
+if(monat<10){monatstext="0"+monat;}else{monatstext=""+monat;}
+var tag = heute.getDate();
+if(tag<10){tagestext="0"+tag;}else{tagestext=""+tag;}
+var uhrzeit = new Date();
+var stunde = uhrzeit.getHours();
+if(stunde<10){Stundentext="0"+stunde;}else{Stundentext=""+stunde;}
+var minute = uhrzeit.getMinutes();
+if(minute<10){Minutentext="0"+minute;}else{Minutentext=""+minute;}
+var sekunde = uhrzeit.getSeconds();
+if(sekunde<10){Sekundentext="0"+sekunde;}else{Sekundentext=""+sekunde;}
+document.uhrZeitstempeliv.digitalZeitstempeliv.value= "_Jahreszeitstempel "+jahr;
+setTimeout("zeitZeitstempeliv()",10000);
+}
+zeitZeitstempeliv();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+<br>
+<!--- http://www.web-toolbox.net/webtoolbox/datum/code-kalenderwocheaktuell.htm --->
+<form name="uhrZeitstempelKW">
+</li></ul>
+
+<ul><li>
+<input value="_Wochenzeitstempel KW4" size="34" name="digitalZeitstempelKW" type="text">
+</form>
+<script type="text/javascript">
+function zeitZeitstempelKW() {
+var KWDatum = new Date();
+var DonnerstagDat = new Date(KWDatum.getTime() +(3-((KWDatum.getDay()+6) % 7)) * 86400000);
+KWJahr = DonnerstagDat.getFullYear();
+var DonnerstagKW = new Date(new Date(KWJahr,0,4).getTime() +(3-((new Date(KWJahr,0,4).getDay()+6) % 7)) * 86400000);
+KW = Math.floor(1.5 + (DonnerstagDat.getTime() -
+DonnerstagKW.getTime()) / 86400000/7);
+document.uhrZeitstempelKW.digitalZeitstempelKW.value= "_Wochenzeitstempel KW"+KW ;
+setTimeout("zeitZeitstempelKW()",10000);
+}
+zeitZeitstempelKW();
+</script><!--- document.uhr.digital.value= ""+tag+"."+monatstext+"."+jahr +" " +stunde + ":" + minute + ":" + sekunde;--->
+</li></ul>
+
+
+
+<h4>5. Quellen</h4>
+<ul><li>
+<a href="https://html-php.de/index.php?seite=j_mathe">Rechner</a>
+</li></ul>
+<ul><li>
+<a href="https://html-php.de/index.php?seite=j_index">Schaltjahr</a>
+</li></ul>
+<ul><li>
+<a href="https://en.m.wikipedia.org/wiki/Day_count_convention">Zinsrechnung</a>
+</li></ul>
+<ul><li>
+<a href="https://zinsen-berechnen.de/zinsmethoden/">Zinsmethoden</a>
+</li></ul>
+<ul><li>
+<a href="https://de.selfhtml.org/javascript/objekte/date.htm">Datumsberechnungen</a>
+</li></ul>
+<ul><li>
+<a href="https://de.m.wikipedia.org/wiki/Rundung">Runden</a>
+</li></ul>
+
+</body></html>
+
+
+
+
