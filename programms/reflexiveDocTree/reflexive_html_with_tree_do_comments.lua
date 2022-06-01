@@ -951,7 +951,7 @@ commentsTable["collection of tree data by applying the recursive function"]={
 "Der rekursive Durchlauf durch die Baumstruktur wird angewendet.",
 "The recursive traversation of the tree is to be applied.",
 }
-commentsTable["Beckmann und Partner colors"]={
+commentsTable["colors"]={
 "Die spezifischen Farben werden nach der Definition festgelegt: Rot, Hellgrau, Grau und Blau.",
 "The special colors are defined: red, light grey, grey and blue.",
 }
