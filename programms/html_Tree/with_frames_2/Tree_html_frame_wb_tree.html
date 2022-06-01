@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
+<html>
+<head>
+  <title>Tree</title>
+  <base target="wb_cont">
+  <style type="text/css">
+  .tree { font-family: helvetica, sans-serif; font-size: 10pt; }
+  .tree p { margin: 0px; white-space: nowrap; }
+  .tree div { display: none; margin: 0px; }
+  .tree img { vertical-align: middle; }
+  .tree a:hover { text-decoration: none; background-color: #e0e0ff }
+  </style>
+  <script type="text/javascript">
+  lastLink = null;
+  
+  function hideFolder(folder, id) {
+    var imageNode = document.images["img" + id];
+    if (imageNode != null) {
+      var len = imageNode.src.length;
+      if (imageNode.src.substring(len-8,len-4) == "last")
+        imageNode.src = "wb_img/plusnodelast.png";
+      else if (imageNode.src.substring(len-8,len-4) == "node")
+        {imageNode.src = "wb_img/plusnode.png";
+        imageNode.alt = "+";}
+    } //if (imageNode != null) {   
+    folder.style.display = "none";
+  } //function hideFolder(folder, id) {
+  
+  function showFolder(folder, id) {
+    var imageNode = document.images["img" + id];
+    if (imageNode != null) {
+      var len = imageNode.src.length;
+      if (imageNode.src.substring(len-8,len-4) == "last")
+        imageNode.src = "wb_img/minusnodelast.png";
+      else if (imageNode.src.substring(len-8,len-4) == "node")
+        {imageNode.src = "wb_img/minusnode.png";
+        imageNode.alt = "-";}
+		} //if (imageNode.src.substring(len-8,len-4) == "last")
+    folder.style.display = "block";
+  } //function showFolder(folder, id) {
+
+  function toggleFolder(id) {
+    var folder = document.getElementById(id);
+    if (folder.style.display == "block") 
+      hideFolder(folder, id);
+    else 
+      showFolder(folder, id);
+  } //function toggleFolder(id) {
+  
+  function setFoldersAtLevel(level, show) {
+    var i = 1;
+    do {
+      var folder_id = level + "." + i;
+      var id = "folder" + folder_id;
+      var folder = document.getElementById(id);
+      if (folder != null) {
+        setFoldersAtLevel(folder_id, show);
+        if (show)
+          showFolder(folder, id);
+        else
+          hideFolder(folder, id);
+      } //if (folder != null) {
+      i++;
+    } while(folder != null);
+  } //function setFoldersAtLevel(level, show) {
+   
+  function showAllFolders() {setFoldersAtLevel("", true); }
+  function hideAllFolders() {setFoldersAtLevel("", false);}
+
+  function searchInTree() {
+  for (var i = 0; i < document.links.length; i++) {      
+      var link = document.links[i];
+		if (link.text.toLowerCase().search(document.G.Q.value.toLowerCase())>=0) //e.g. "Tree_Baum.html"
+		{ document.G.R.value=getFolderId(link.name); 
+			link.style.color = "#00ff00";  
+			//return;
+			}
+		else
+		{  //document.G.Q.value=link.name;
+			link.style.color = "#0000ff";  
+			//return;
+		} //if (link.name==document.G.Q.value)
+    } //for (var i = 0; i < document.links.length; i++) {      
+  showAllFolders()
+} //function searchInTree()
+
+  function searchInTreeNext() {
+  var searchI=0;
+  for (var i = 0; i < document.links.length; i++) {      
+      var link = document.links[i];
+		if (link.text.toLowerCase().search(document.G.Q.value.toLowerCase())>=0) //e.g. "Tree_Baum.html"
+		{  document.G.R.value=getFolderId(link.name);
+			link.style.color = "#00ff00";  
+			//return;
+			goToLink(link)
+			parent.wb_cont.location.href = link.href;
+			searchI=i;
+			}
+		else
+		{  //document.G.Q.value=link.name;
+			link.style.color = "#0000ff";  
+			//return;
+		} //if (link.name==document.G.Q.value)
+    } //for (var i = 0; i < document.links.length; i++) {      
+//test with: document.G.C.value = document.G.C.value + "nr: " + searchI
+  for (var i = searchI -1 ; i >=0 ; i--) {      
+//test with: document.G.C.value=document.G.C.value+"-"+getFolderId(document.links[i].name);
+	if (document.G.R.value.toLowerCase().search(getFolderId(document.links[i].name).toLowerCase())>=0) {
+		document.links[i].style.color = "#ff0000";  
+	} //if (document.G.R.value.toLowerCase().search(getFolderId(document.links[i].name).toLowerCase())>=0) {
+  } //  for (var i = 0; i < document.links.length; i++) {      
+} //function searchInTreeNext()
+
+
+  function goToLink(link) { //because of the systematic for the folder names in the link.name it is not possible to go to link together with correct mark of tree                 
+    var id = getFolderId(link.name);
+	document.G.Q.value=document.G.Q.value + "->" + link.text; //text of a href 
+    showFolderRec(id);
+    location.hash = "#" + link.name;
+    link.style.color = "#00ff00";  
+    //clear link
+    clearLastLink();
+    lastLink = link;
+  } //function goToLink(link) {
+
+ function getFolderId(name) {return name.substring(name.indexOf("folder"), name.length); }
+
+ function showFolderRec(id) {
+    var folder = document.getElementById(id);
+    if (folder != null) {
+      showFolder(folder, id);
+      var parent_id = id.substring(0, id.lastIndexOf("."))
+      if (parent_id != null && parent_id != "folder") {
+         showFolderRec(parent_id)
+      } //if (parent_id != null && parent_id != "folder") {
+    } //if (folder != null) {
+  } //function showFolderRec(id) {
+
+  function clearLastLink() {
+    if (lastLink != null) {
+      lastLink.style.color = ""  
+      lastLink = null;
+    } //if (lastLink != null) {
+  } //function clearLastLink() {
+
+  
+  </script>
+</head>
+
+<body style="margin: 2px; background-color: #F1F1F1"  onload="showStartPage()"> 
+
+<form name="G">
+<img alt="Expand All Nodes" src="wb_img/showall.png" onclick="showAllFolders()" onmouseover="this.src='wb_img/showall_over.png'" onmouseout="this.src='wb_img/showall.png'">
+
+<img alt="Contract All Nodes" src="wb_img/hideall.png" onclick="hideAllFolders()" onmouseover="this.src='wb_img/hideall_over.png'" onmouseout="this.src='wb_img/hideall.png'">
+
+Suche von:<input value="" name="Q" size="54" type="text"> 
+<input value="Markieren aller Fundstellen und Ausklappen" onclick="searchInTree()" type="button">
+<input value="Markieren der ersten Fundstelle" onclick="searchInTreeNext()" type="button"> 
+Bei Bedarf auf IDIV klicken.
+Ergebnis:<input value="" name="R" size="54" type="text">
+<!--test with:--><!--input value="" name="C" size="54" type="text"-->
+</form>
+
+
+<div class="tree">
+<h3 style="margin: 5px 0px 0px 5px;font-size: 12pt;"  ><a href="Tree_html_frame_home.html">IDIV</a></h3>
+	<p><img name="imgfolder.1" src="wb_img/minusnode.png" alt="-" onclick="toggleFolder('folder.1')"><a name="link1folder.1" href="">Html mit den drei Feldern (frames)</a></p>
+	<div id="folder.1" style="display:block">
+		<p style="margin: 0px 0px 5px 30px"><img name="imgfolder.1.1" src="wb_img/plusnode.png" alt="+" onclick="toggleFolder('folder.1.1')"><a name="link1folder.1.1" href="Tree_html_frame.html">Tree_html_frame.html</a></p>
+		<div id="folder.1.1">
+			<p style="margin: 0px 0px 5px 60px"><img name="imgfolder.1.1.1" src="wb_img/plusnode.png" alt="+" onclick="toggleFolder('folder.1.1.1')"><a name="link1folder.1.1.1" href="Tree_html_frame_home.html">Startbildschirm rechts</a></p>
+			<div id="folder.1.1.1">
+				<p style="margin: 0px 0px 5px 90px"><a name="link1folder.1.1.1.1" href="Tree_html_frame_home.html">Tree_html_frame_home.html</a></p>
+			</div>
+
+			<p style="margin: 0px 0px 5px 60px"><img name="imgfolder.1.1.2" src="wb_img/plusnode.png" alt="+" onclick="toggleFolder('folder.1.1.2')"><a name="link1folder.1.1.2" href="Tree_html_frame_wb_tree.html">Baumansicht links</a></p>
+			<div id="folder.1.1.2">
+				<p style="margin: 0px 0px 5px 90px"><a name="link1folder.1.1.2.1" href="Tree_html_frame_wb_tree.html">Tree_html_frame_wb_tree.html</a></p>
+			</div>
+		</div>
+		<p style="margin: 0px 0px 5px 30px"><img name="imgfolder.1.2" src="wb_img/plusnode.png" alt="+" onclick="toggleFolder('folder.1.2')"><a name="link1folder.1.2" href="">Ordner des IDIV-Arbeitsplatzes</a></p>
+		<div id="folder.1.2">
+			<p style="margin: 0px 0px 5px 60px"><a name="link2folder.1.2.1" href="C:\Tree\html_Tree">C:\Tree\html_Tree</a></p>
+			<p style="margin: 0px 0px 5px 60px"><img name="imgfolder.1.2.2" src="wb_img/plusnode.png" alt="+" onclick="toggleFolder('folder.1.2.2')"><a name="link1folder.1.2.2" href="">Ordner für die Bilder</a></p>
+			<div id="folder.1.2.2">
+				<p style="margin: 0px 0px 5px 90px"><a name="link1folder.1.2.2.1" href="wb_img">wb_img</a></p>
+				<p style="margin: 0px 0px 5px 90px"><img name="imgfolder.1.2.2.2" src="wb_img/plusnode.png" alt="+" onclick="toggleFolder('folder.1.2.2.2')"><a name="link1folder.1.2.2.2" href="wb_img">Einzelbilder</a></p>
+				<div id="folder.1.2.2.2">
+					<p style="margin: 0px 0px 5px 120px"><a name="link1folder.1.2.2.2.1" href="wb_img\hideall.png">wb_img\hideall.png</a></p>
+					<p style="margin: 0px 0px 5px 120px"><a name="link1folder.1.2.2.2.2" href="wb_img\hideall_over.png">wb_img\hideall_over.png</a></p>
+					<p style="margin: 0px 0px 5px 120px"><a name="link1folder.1.2.2.2.3" href="wb_img\showall.png">wb_img\showall.png</a></p>
+					<p style="margin: 0px 0px 5px 120px"><a name="link1folder.1.2.2.2.4" href="wb_img\showall_over.png">wb_img\showall_over.png</a></p>
+					<p style="margin: 0px 0px 5px 120px"><a name="link1folder.1.2.2.2.5" href="wb_img\minusnode.png">wb_img\minusnode.png</a></p>
+					<p style="margin: 0px 0px 5px 120px"><a name="link1folder.1.2.2.2.6" href="wb_img\plusnode.png">wb_img\plusnode.png</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
