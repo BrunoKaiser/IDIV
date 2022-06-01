@@ -44,35 +44,35 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 
 
 
-{branchname="Anzahl Tage im Zähler bestimmen und soweit schon möglich im Nenner, sonst weitere Knoten verwenden", --27
-{branchname="Tageskonventionen für 360 Tage mit der Formel",  state="COLLAPSED",--28
+{branchname="Anzahl Tage im ZÃ¤hler bestimmen und soweit schon mÃ¶glich im Nenner, sonst weitere Knoten verwenden", --27
+{branchname="Tageskonventionen fÃ¼r 360 Tage mit der Formel",  state="COLLAPSED",--28
 {branchname="Tage = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1)", --29
 {branchname="30/360 Bond Basis, 30A/360:", state="COLLAPSED",  --30
 "This convention is exactly as 30U/360 below, except for the first two rules. Note that the order of calculations is important:",  --31
 "D1 = MIN (D1, 30).If D1 = 30 Then D2 = MIN (D2,30)", --32
 "Sources: ISDA 2006 Section 4.16(f), though the first two rules are not included. 'ISDA Definitions, Section 4.16'. 2006. Retrieved2014-09-18.", --33
 }, --{branchname="30/360 Bond Basis, 30A/360:",
-{branchname="Anzahl Tage Zähler 30 und Nenner 360", --onclick="Anzahltage30zaehler()" --34
+{branchname="Anzahl Tage ZÃ¤hler 30 und Nenner 360", --onclick="Anzahltage30zaehler()" --34
 "", --35: document.FormularZins.Anzahltage30.value
-}, --{branchname="Anzahl Tage Zähler 30 und Nenner 360",
+}, --{branchname="Anzahl Tage ZÃ¤hler 30 und Nenner 360",
 
 {branchname="30/360 ISDA:", state="COLLAPSED", --36
 "Regel 1: If D1 is 31, then change D1 to 30.", --37
 "Regel 2 If D1 = 30 after applying Regel 1 and D2 =31 then change D2 to 30.", --38
 "Sources: alternate names of day conventions.", --39
 }, --{branchname="30/360 ISDA:",
-{branchname="Anzahl Tage Zähler 30ISDA und Nenner 360", --onclick="Anzahltage30ISDAzaehler()" --40
+{branchname="Anzahl Tage ZÃ¤hler 30ISDA und Nenner 360", --onclick="Anzahltage30ISDAzaehler()" --40
 "" --41: document.FormularZins.Anzahltage30ISDA.value
 }, --"",
  
 {branchname="30E/360, 30/360 ICMA, 30S/360, Eurobond basis (ISDA 2006), Special German (spezielle deutsche Zinsmethode):", state="COLLAPSED", --42
 "Regel 1: If D1 is 31, then change D1 to 30.", --43
 "Regel 2 If D2 is 31, then change D2 to 30.", --44
-"Sources: 'ICMA Rule Book, Rule 251'. Retrieved 2014-09-18. ICMA Rule 251.1(ii), 251.2. 'ISDA Definitions, Section 4.16'. 2006. Retrieved 2014-09-18. ISDA 2006 Section 4.16(g).", --45
+"Sources: 'ICMA Rule Book, Rule 251'. RetrievedÂ 2014-09-18. ICMA Rule 251.1(ii), 251.2. 'ISDA Definitions, Section 4.16'. 2006. Retrieved 2014-09-18. ISDA 2006 Section 4.16(g).", --45
 }, --{branchname="30E/360, 30/360 ICMA, 30S/360, Eurobond basis (ISDA 2006), Special German (spezielle deutsche Zinsmethode):",
-{branchname="Anzahl Tage Zähler 30E und Nenner 360", --onclick="Anzahltage30Ezaehler()" --46
+{branchname="Anzahl Tage ZÃ¤hler 30E und Nenner 360", --onclick="Anzahltage30Ezaehler()" --46
 "" --47: document.FormularZins.Anzahltage30E.value
-}, --{branchname="Anzahl Tage Zähler 30E und Nenner 360",
+}, --{branchname="Anzahl Tage ZÃ¤hler 30E und Nenner 360",
 
 
 
@@ -81,14 +81,14 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 "Regel 2 If D2 is 31, set D2.M2.Y2 to 1st day of the next month.", --50
 "Sources: alternate names of day conventions.", --51
 }, --{branchname="30E+/360:",
-{branchname="Zum Endedatum 1. des Folgemonats für Regel 30E+:", --52
+{branchname="Zum Endedatum 1. des Folgemonats fÃ¼r Regel 30E+:", --52
 "2013", --53: document.FormularZins.EndejahrPlus.value
 "6",    --54: document.FormularZins.EndemonatPlus.value
 "1",   --55: document.FormularZins.EndetagPlus.value
-}, --{branchname="Zum Endedatum 1. des Folgemonats für Regel 30E+:",
-{branchname="Anzahl Tage Zähler 30E+ und Nenner 360", --onclick="Anzahltage30EPluszaehler()" --56
+}, --{branchname="Zum Endedatum 1. des Folgemonats fÃ¼r Regel 30E+:",
+{branchname="Anzahl Tage ZÃ¤hler 30E+ und Nenner 360", --onclick="Anzahltage30EPluszaehler()" --56
 "" --57: document.FormularZins.Anzahltage30EPlus.value
-}, --{branchname="Anzahl Tage Zähler 30E+ und Nenner 360",
+}, --{branchname="Anzahl Tage ZÃ¤hler 30E+ und Nenner 360",
 
 
 {branchname="30/360 German (spezielle deutsche Zinsmethode siehe oben):", state="COLLAPSED", --58
@@ -96,9 +96,9 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 "Regel 2 If D1.M1.Y1 and/or D2.M2.Y2 = last day of february =1.3.-1 Tag then change D1 to 30 and/or D2 to 30.", --60
 "Sources: alternate names of day conventions.", --61
 }, --{branchname="30/360 German (spezielle deutsche Zinsmethode siehe oben):",
-{branchname="Anzahl Tage Zähler 30German und Nenner 360", --onclick="Anzahltage30Germanzaehler()" --62
+{branchname="Anzahl Tage ZÃ¤hler 30German und Nenner 360", --onclick="Anzahltage30Germanzaehler()" --62
 "" --63: document.FormularZins.Anzahltage30German.value
-}, --{branchname="Anzahl Tage Zähler 30German und Nenner 360",
+}, --{branchname="Anzahl Tage ZÃ¤hler 30German und Nenner 360",
 
 {branchname="30/360 US:", state="COLLAPSED", --64
 "Regel 1: If D2.M2.Y2 ist the last day of February (28 ohne Schaltjahr und 29 im Schaltjahr) and D1.M1.Y1 ist the last day of February then D2 = 30", --65
@@ -107,31 +107,31 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 "Regel 4: If D1 is 31, then change D1 to 30.", --68
 "Sources: alternate names of day conventions.", --69
 }, --{branchname="30/360 US:",
-{branchname="Anzahl Tage Zähler 30US und Nenner 360", --onclick="Anzahltage30USzaehler()" --70
+{branchname="Anzahl Tage ZÃ¤hler 30US und Nenner 360", --onclick="Anzahltage30USzaehler()" --70
 "" --71: document.FormularZins.Anzahltage30US.value 
-}, --{branchname="Anzahl Tage Zähler 30US und Nenner 360",
+}, --{branchname="Anzahl Tage ZÃ¤hler 30US und Nenner 360",
 
 }, --{branchname="Tage = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1)",
-}, --{branchname="Tageskonventionen für 360 Tage mit der Formel",
+}, --{branchname="Tageskonventionen fÃ¼r 360 Tage mit der Formel",
 
 
 
-{branchname="Tageskonventionen actual mit der exakten Anzahl Tage im Zähler und Nenner für actual im Weiteren Knoten bestimmen", state="COLLAPSED", --72
-{branchname="Anzahl Tage Zähler actual und Nenner für actual im Weiteren Knoten bestimmen", --onclick="Anzahltagezaehler()" --73
+{branchname="Tageskonventionen actual mit der exakten Anzahl Tage im ZÃ¤hler und Nenner fÃ¼r actual im Weiteren Knoten bestimmen", state="COLLAPSED", --72
+{branchname="Anzahl Tage ZÃ¤hler actual und Nenner fÃ¼r actual im Weiteren Knoten bestimmen", --onclick="Anzahltagezaehler()" --73
 "", --74: document.FormularZins.Anzahltageactual.value 
-{branchname="Für die no leap year abgezogene Tage im Zähler bei der Methode NL/365", --75
+{branchname="FÃ¼r die no leap year abgezogene Tage im ZÃ¤hler bei der Methode NL/365", --75
 "0", --76: document.FormularZins.AnzahltageNoLeap.value
-}, --{branchname="Für die no leap year abgezogene Tage im Zähler bei der Methode NL/365"
-}, --{branchname="Anzahl Tage Zähler actual und Nenner für actual im Weiteren Knoten bestimmen",
-}, --{branchname="Tageskonventionen actual mit der exakten Anzahl Tage im Zähler und Nenner für actual im Weiteren Knoten bestimmen"
+}, --{branchname="FÃ¼r die no leap year abgezogene Tage im ZÃ¤hler bei der Methode NL/365"
+}, --{branchname="Anzahl Tage ZÃ¤hler actual und Nenner fÃ¼r actual im Weiteren Knoten bestimmen",
+}, --{branchname="Tageskonventionen actual mit der exakten Anzahl Tage im ZÃ¤hler und Nenner fÃ¼r actual im Weiteren Knoten bestimmen"
 
-{branchname="Für die Rechnung benutzte Tage im Zähler", --77
+{branchname="FÃ¼r die Rechnung benutzte Tage im ZÃ¤hler", --77
 "", --78: document.FormularZins.AnzahlTageZaehler.value
-{branchname="Nenner bestimmen für Tageskonventionen actual mit der exakten Anzahl Tage", state="COLLAPSED", --79
+{branchname="Nenner bestimmen fÃ¼r Tageskonventionen actual mit der exakten Anzahl Tage", state="COLLAPSED", --79
 
 {branchname="actual 365.25 1/1:", state="COLLAPSED", --80
 "This is used for inflation instruments and divides the overall 4 year period distributing the additional day across all 4 years i.e. giving 365.25 days to each year.", --81
-"Sources: 'ISDA Definitions, Section 4.16'. 2006. Retrieved2014-09-18. ISDA 2006 Section 4.16(a). 'FBF Master Agreement for Financial Transactions, Supplement to the Derivatives Annex, Edition 2004'. 2004. Retrieved 2014-09-18. FBF Master Agreement for Financial Transactions, Supplement to the Derivatives Annex, Edition 2004, section 7a.", --82
+"Sources: 'ISDA Definitions, Section 4.16'. 2006. Retrieved2014-09-18. ISDA 2006 Section 4.16(a). 'FBF Master Agreement for Financial Transactions, Supplement to the Derivatives Annex, Edition 2004'. 2004. RetrievedÂ 2014-09-18. FBF Master Agreement for Financial Transactions, Supplement to the Derivatives Annex, Edition 2004, section 7a.", --82
 }, --{branchname="actual 365.25 1/1:",
 {branchname="Nenner actual 365.25 1/1", --onclick="Nenneractual36525()" --83
 "", --84: document.FormularZins.Nenner36525.value
@@ -139,7 +139,7 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 
 
 {branchname="actual 366:", state="COLLAPSED", --85
-"Für Schaltjahre oder Act/365A für gesamte Periode, falls Schalttag vorhanden oder Act/365L falls Endedatum im Schaltjahr" --86
+"FÃ¼r Schaltjahre oder Act/365A fÃ¼r gesamte Periode, falls Schalttag vorhanden oder Act/365L falls Endedatum im Schaltjahr" --86
 }, --{branchname="actual 365.25 1/1:",
 {branchname="Nenner actual 366", --onclick="Nenneractual366()" --87
 "", --88: document.FormularZins.Nenner366.value
@@ -166,19 +166,19 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 "", --99: document.FormularZins.Nenner364.value
 }, --{branchname="Nenner actual 364"
 
-{branchname="Actual 360, Act/360, A/360, French (französische Methode):", state="COLLAPSED", --100
-"This convention is used in money markets for short-term lending of currencies, including the US dollar and Euro, and is applied in ESCBmonetary policy operations. It is the convention used withRepurchase agreements. Each month is treated normally and the year is assumed to be 360 days. For example, in a period from February 1, 2005 to April 1, 2005, the Factor is 59 days divided by 360 days.", --101
+{branchname="Actual 360, Act/360, A/360, French (franzÃ¶sische Methode):", state="COLLAPSED", --100
+"This convention is used inÂ money marketsÂ for short-term lending of currencies, including the US dollar and Euro, and is applied inÂ ESCBmonetary policy operations. It is the convention used withRepurchase agreements. Each month is treated normally and the year is assumed to be 360 days. For example, in a period from February 1, 2005 to April 1, 2005, the Factor is 59 days divided by 360 days.", --101
 "The CouponFactor uses the same formula, replacing Date2 by Date3. In general, coupon payments will vary from period to period, due to the differing number of days in the periods. The formula applies to both regular and irregular coupon periods.", --102
-"Sources: 'ICMA Rule Book, Rule 251'. Retrieved 2014-09-18. ICMA Rule 251.1(i) (not sterling). 'ISDA Definitions, Section 4.16'. 2006. Retrieved2014-09-18. ISDA 2006 Section 4.16(e). (Mayle 1993)", --103
-}, --{branchname="Actual 360, Act/360, A/360, French (französische Methode):",
+"Sources: 'ICMA Rule Book, Rule 251'. RetrievedÂ 2014-09-18. ICMA Rule 251.1(i) (not sterling). 'ISDA Definitions, Section 4.16'. 2006. Retrieved2014-09-18. ISDA 2006 Section 4.16(e). (Mayle 1993)", --103
+}, --{branchname="Actual 360, Act/360, A/360, French (franzÃ¶sische Methode):",
 {branchname="Nenner actual 360", --onclick="Nenneractual360()" --104
 "", --105: document.FormularZins.Nenner360.value
 }, --{branchname="Nenner actual 364"
 
-}, --{branchname="Nenner bestimmen für Tageskonventionen actual mit der exakten Anzahl Tage",
+}, --{branchname="Nenner bestimmen fÃ¼r Tageskonventionen actual mit der exakten Anzahl Tage",
 
 
-{branchname="Für die Rechnung benutzte Tage im Nenner", --106
+{branchname="FÃ¼r die Rechnung benutzte Tage im Nenner", --106
 "", --107: document.FormularZins.AnzahlTageNenner.value
 }, --{branchname="
 
@@ -190,10 +190,10 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 }, --{branchname="Geben Sie die Anzahl Jahre mit Nachkommastellen manuell ein:",
 
 
-{branchname="Für die Rechnung benutzte Jahre mit Nachkommastellen", --111
+{branchname="FÃ¼r die Rechnung benutzte Jahre mit Nachkommastellen", --111
 "", --112: document.FormularZins.Jahre.value
-}, --{branchname="Für die Rechnung benutzte Jahre mit Nachkommastellen",
-{branchname="Für die Rechnung benutzte Methode:", --113
+}, --{branchname="FÃ¼r die Rechnung benutzte Jahre mit Nachkommastellen",
+{branchname="FÃ¼r die Rechnung benutzte Methode:", --113
 "", --114: document.FormularZins.Methode.value
 }, --{branchname="Methode:",
 
@@ -227,16 +227,16 @@ os.date("%Y"),           --8: document.Formular1.Eingabe3.value
 
 }, --{branchname="Kapital und Zinssatz eintragen",
 
-{branchname="Zurücksetzen", -- onclick="KapitalZinssatzZuruecksetzen()" --128
+{branchname="ZurÃ¼cksetzen", -- onclick="KapitalZinssatzZuruecksetzen()" --128
 
-}, --{branchname="Zurücksetzen",
+}, --{branchname="ZurÃ¼cksetzen",
 
 
 }, --{branchname="Zinsberechnung",
 
 
-}, --{branchname="Für die Rechnung benutzte Tage im Zähler"
-}, --{branchname="Anzahl Tage im Zähler bestimmen und soweit schon möglich im Nenner, sonst weitere Knoten verwenden",
+}, --{branchname="FÃ¼r die Rechnung benutzte Tage im ZÃ¤hler"
+}, --{branchname="Anzahl Tage im ZÃ¤hler bestimmen und soweit schon mÃ¶glich im Nenner, sonst weitere Knoten verwenden",
 }, --{branchname="3. Zinsberechnung",
 
 {branchname="Quellen", state="COLLAPSED",
@@ -303,15 +303,15 @@ end --do --sandboxing
 --1.2.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---1.2.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--1.2.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue --works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -359,7 +359,7 @@ if (Tage==29) then tree['title' .. 10] =Jahr .. " ist ein Schaltjahr" end ;
 end --function Schaltjahr()
 
 function Rechner()
-load("Ergebnis = " .. tree['title' .. 3]:gsub('×','*'):gsub('÷','/'):gsub(',','.'))()
+load("Ergebnis = " .. tree['title' .. 3]:gsub('Ã—','*'):gsub('Ã·','/'):gsub(',','.'))()
 tree['title' .. 5]=Ergebnis
 end--function Rechner()
 
@@ -436,10 +436,10 @@ M2Plus = -(-tree['title54'])
 Y1 = -(-tree['title16'])
 Y2 = -(-tree['title22'])
 Y2Plus = -(-tree['title53'])
-veraendert = "unverändert: "
+veraendert = "unverÃ¤ndert: "
 if (D1==31) then D1 = 30 end --Regel 1: If D1 is 31, then change D1 to 30.
-if (D2==31) then D2 = D2Plus; M2 = M2Plus; Y2 = Y2Plus; veraendert = "verändert: " end --Regel 2: If D2 is 31, then set D2.M2.Y2 to 1st day of the next month.
---Die Umrechnung in den ersten des nächsten Monats entspricht der Beibehaltung des 31. des Endemonats in der Formel. Es wird eh nur ein Tag hinzugerechnet.
+if (D2==31) then D2 = D2Plus; M2 = M2Plus; Y2 = Y2Plus; veraendert = "verÃ¤ndert: " end --Regel 2: If D2 is 31, then set D2.M2.Y2 to 1st day of the next month.
+--Die Umrechnung in den ersten des nÃ¤chsten Monats entspricht der Beibehaltung des 31. des Endemonats in der Formel. Es wird eh nur ein Tag hinzugerechnet.
 Ergebnis = 360 * ( Y2 -  Y1 ) + 30 * ( M2 - M1 ) + (D2 - D1)
 tree['title57'] = Ergebnis .. " Endedatum " .. veraendert .. D2 .. "." .. M2 .. "." .. Y2;
 tree['title78'] = Ergebnis
@@ -461,7 +461,7 @@ D1LetzterFebruar =""
 D2LetzterFebruar =""
 if (D1==31) then D1 = 30 end --Regel 1: If D1 is 31, then change D1 to 30.
 if (D2==31) then D2 = 30 end --Regel 1: If D2 is 31, then change D2 to 30.
---nämlich Regel 1: If D1 and/or D2 is 31, then change D1 to 30 and/or D2 to.
+--nÃ¤mlich Regel 1: If D1 and/or D2 is 31, then change D1 to 30 and/or D2 to.
 if (tree['title20']=="ja") then D1=30; D1LetzterFebruar=" Startdatum letzter vom Februar " end
 if (tree['title26']=="ja") then D2=30; D2LetzterFebruar=" Endedatum letzter vom Februar "  end
 -- Regel 2 If D1.M1.Y1 and/or D2.M2.Y2 = last day of february =1.3.-1 Tag then change D1 to 30 and/or D2 to 30.
@@ -705,11 +705,11 @@ img_logo = iup.image{
   { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 
@@ -734,7 +734,7 @@ img_functionarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
 
   -- Sets "X" image colors
-  ; colors = { color_background_tree, color_red_bpc}
+  ; colors = { color_background_tree, color_red}
 }
 img_inputarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
@@ -755,7 +755,7 @@ img_inputarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
 
   -- Sets "X" image colors
-  ; colors = { color_background_tree, color_red_bpc}
+  ; colors = { color_background_tree, color_red}
 }
 img_rightarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
@@ -776,7 +776,7 @@ img_rightarrow= iup.image{
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
 
   -- Sets "X" image colors
-  ; colors = { color_background_tree, color_red_bpc}
+  ; colors = { color_background_tree, color_red}
 }
 
 --7.2 build tree
@@ -793,13 +793,13 @@ markmode="SINGLE",--for Drag & Drop SINGLE not MULTIPLE
 function tree:rightclick_cb(id)
 	if tree['title']=="Berechnen"                                                                         then Rechner()
 	elseif tree['title']=="Ausgabe"                                                                       then Schaltjahr()
-	elseif tree['title']=="Anzahl Tage Zähler 30 und Nenner 360"                                          then Anzahltage30zaehler()
-	elseif tree['title']=="Anzahl Tage Zähler 30ISDA und Nenner 360"                                      then Anzahltage30ISDAzaehler()
-	elseif tree['title']=="Anzahl Tage Zähler 30E und Nenner 360"                                         then Anzahltage30Ezaehler()
-	elseif tree['title']=="Anzahl Tage Zähler 30E+ und Nenner 360"                                        then Anzahltage30EPluszaehler()
-	elseif tree['title']=="Anzahl Tage Zähler 30German und Nenner 360"                                    then Anzahltage30Germanzaehler()
-	elseif tree['title']=="Anzahl Tage Zähler 30US und Nenner 360"                                        then Anzahltage30USzaehler()
-	elseif tree['title']=="Anzahl Tage Zähler actual und Nenner für actual im Weiteren Knoten bestimmen"  then Anzahltagezaehler()
+	elseif tree['title']=="Anzahl Tage ZÃ¤hler 30 und Nenner 360"                                          then Anzahltage30zaehler()
+	elseif tree['title']=="Anzahl Tage ZÃ¤hler 30ISDA und Nenner 360"                                      then Anzahltage30ISDAzaehler()
+	elseif tree['title']=="Anzahl Tage ZÃ¤hler 30E und Nenner 360"                                         then Anzahltage30Ezaehler()
+	elseif tree['title']=="Anzahl Tage ZÃ¤hler 30E+ und Nenner 360"                                        then Anzahltage30EPluszaehler()
+	elseif tree['title']=="Anzahl Tage ZÃ¤hler 30German und Nenner 360"                                    then Anzahltage30Germanzaehler()
+	elseif tree['title']=="Anzahl Tage ZÃ¤hler 30US und Nenner 360"                                        then Anzahltage30USzaehler()
+	elseif tree['title']=="Anzahl Tage ZÃ¤hler actual und Nenner fÃ¼r actual im Weiteren Knoten bestimmen"  then Anzahltagezaehler()
 	elseif tree['title']=="Nenner actual 365.25 1/1"                                                      then Nenneractual36525()
 	elseif tree['title']=="Nenner actual 366"                                                             then Nenneractual366()
 	elseif tree['title']=="Nenner actual 365"                                                             then Nenneractual365()
@@ -813,7 +813,7 @@ function tree:rightclick_cb(id)
 	elseif tree['title']=="Zinsen mit Zinseszinsen = Kapital * ((1+Zinssatz)^(Anzahl_Tage_Zaehler / Anzahl_Tage_Nenner)-1)"                                                       then Zinseszinsen()
 	elseif tree['title']=="Zinsen stetig verzinst = Kapital * (e^(Zinssatz * Anzahl_Tage_Zaehler / Anzahl_Tage_Nenner) -1)"                                                        then Zinsenstetig()
 	elseif tree['title']=="Alle Zinsen mit Titel in eine Datei ausgeben"                                  then ZinsErgebnisAlleZeilenAusgabe()
-	elseif tree['title']=="Zurücksetzen"                                                                  then KapitalZinssatzZuruecksetzen()
+	elseif tree['title']=="ZurÃ¼cksetzen"                                                                  then KapitalZinssatzZuruecksetzen()
 	elseif tree['title']:match("^.:\\.*%.[^\\ ]+$") or tree['title']:match("^.:\\.*[^\\]+$") or tree['title']:match("^.:\\$") or tree['title']:match("^[^ ]*//[^ ]+$")                                                             then menu:popup(iup.MOUSEPOS,iup.MOUSEPOS) --popup the defined menue
 	end --if tree['title']=="Berechnen" then
 end --function tree:rightclick_cb(id)
@@ -842,13 +842,13 @@ maindlg:showxy(iup.LEFT,iup.CENTER)
 --image for branches with functions
 tree['imageexpanded4']=img_functionarrow   --Berechnen                                                                      Rechner()
 tree['imageexpanded9']=img_functionarrow   --Ausgabe                                                                        Schaltjahr()
-tree['imageexpanded34']=img_functionarrow  --Anzahl Tage Zähler 30 und Nenner 360                                           Anzahltage30zaehler()
-tree['imageexpanded40']=img_functionarrow  --Anzahl Tage Zähler 30ISDA und Nenner 360                                       Anzahltage30ISDAzaehler()
-tree['imageexpanded46']=img_functionarrow  --Anzahl Tage Zähler 30E und Nenner 360                                          Anzahltage30Ezaehler()
-tree['imageexpanded56']=img_functionarrow  --Anzahl Tage Zähler 30E+ und Nenner 360                                         Anzahltage30EPluszaehler()
-tree['imageexpanded62']=img_functionarrow  --Anzahl Tage Zähler 30German und Nenner 360                                     Anzahltage30Germanzaehler()
-tree['imageexpanded70']=img_functionarrow  --Anzahl Tage Zähler 30US und Nenner 360                                         Anzahltage30USzaehler()
-tree['imageexpanded73']=img_functionarrow  --Anzahl Tage Zähler actual und Nenner für actual im Weiteren Knoten bestimmen   Anzahltagezaehler()
+tree['imageexpanded34']=img_functionarrow  --Anzahl Tage ZÃ¤hler 30 und Nenner 360                                           Anzahltage30zaehler()
+tree['imageexpanded40']=img_functionarrow  --Anzahl Tage ZÃ¤hler 30ISDA und Nenner 360                                       Anzahltage30ISDAzaehler()
+tree['imageexpanded46']=img_functionarrow  --Anzahl Tage ZÃ¤hler 30E und Nenner 360                                          Anzahltage30Ezaehler()
+tree['imageexpanded56']=img_functionarrow  --Anzahl Tage ZÃ¤hler 30E+ und Nenner 360                                         Anzahltage30EPluszaehler()
+tree['imageexpanded62']=img_functionarrow  --Anzahl Tage ZÃ¤hler 30German und Nenner 360                                     Anzahltage30Germanzaehler()
+tree['imageexpanded70']=img_functionarrow  --Anzahl Tage ZÃ¤hler 30US und Nenner 360                                         Anzahltage30USzaehler()
+tree['imageexpanded73']=img_functionarrow  --Anzahl Tage ZÃ¤hler actual und Nenner fÃ¼r actual im Weiteren Knoten bestimmen   Anzahltagezaehler()
 tree['imageexpanded83']=img_functionarrow  --Nenner actual 365.25 1/1                                                       Nenneractual36525()
 tree['imageexpanded87']=img_functionarrow  --Nenner actual 366                                                              Nenneractual366()
 tree['imageexpanded93']=img_functionarrow  --Nenner actual 365                                                              Nenneractual365()
@@ -863,8 +863,8 @@ tree['imageexpanded120']=img_functionarrow --Zinsen linear = Kapital * Zinssatz 
 tree['imageexpanded122']=img_functionarrow --Zinsen mit Zinseszinsen = Kapital * ((1+Zinssatz)^(Anzahl_Tage_Zaehler / Anzahl_Tage_Nenner)-1)                                                        Zinseszinsen()
 tree['imageexpanded124']=img_functionarrow --Zinsen stetig verzinst = Kapital * (e^(Zinssatz * Anzahl_Tage_Zaehler / Anzahl_Tage_Nenner) -1)                                                         Zinsenstetig()
 tree['imageexpanded126']=img_functionarrow --Alle Zinsen mit Titel in eine Datei ausgeben                                   ZinsErgebnisAlleZeilenAusgabe()
-tree['imageexpanded128']=img_functionarrow --Zurücksetzen                                                                   KapitalZinssatzZuruecksetzen()
-tree['image128']=img_functionarrow --Zurücksetzen                                                                           KapitalZinssatzZuruecksetzen()
+tree['imageexpanded128']=img_functionarrow --ZurÃ¼cksetzen                                                                   KapitalZinssatzZuruecksetzen()
+tree['image128']=img_functionarrow --ZurÃ¼cksetzen                                                                           KapitalZinssatzZuruecksetzen()
 
 
 
