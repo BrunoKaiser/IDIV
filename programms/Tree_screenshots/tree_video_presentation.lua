@@ -65,15 +65,15 @@ end --do --sandboxing
 --1.2.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---1.2.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--1.2.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -235,7 +235,7 @@ img_logo = iup.image{
   { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
   { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 
 --7. Main Dialog
