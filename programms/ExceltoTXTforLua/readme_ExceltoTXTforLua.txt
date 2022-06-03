@@ -9,3 +9,8 @@ This script is only for Windows because there the luacom-Library of the IUP-Lua 
 2. Excel_Tree.xlsm
 
 This excel file contains a vba tree.
+
+3. ExcelColumnFormattoTXTandLuaTree.lua
+
+This script exports an Excel file with the data in independent columns in textfile csv with tabulators and write the content in a tree.
+
