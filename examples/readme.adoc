@@ -48,6 +48,10 @@ This script contains the IDIV-Bibliothek (IDIV-bibliothèque).
 
 This script contains the IDIV-Arbeitsplatz (IDIV-bureau).
 
+=== 3.2.1 IDIV_bureau_simplifie.lua
+
+This script contains a simplified version of the IDIV-Arbeitsplatz (IDIV-bureau simplifié).
+
 == 4. calculs
 
 === 4.1 IDIV_calcul_interests_reflexif.lua
