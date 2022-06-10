@@ -498,6 +498,73 @@ Set objTree = Nothing
 End Sub
 
 
+Private Sub Befehl11_Click() 'Update Tree_result
+
+Dim Db As DAO.Database
+Dim rs As DAO.Recordset
+Dim rs1 As DAO.Recordset
+Dim strSQL As String
+Dim strSQL_output As String
+Dim arrayTree As Variant
+Dim x As Integer
+Dim dataText As String
+
+DoCmd.SetWarnings False
+Set Db = CurrentDb
+
+Dim Dict As Scripting.Dictionary 'needs Microsoft Scripting Runtime
+Set Dict = New Scripting.Dictionary
+'Dict.Add Key:="x", Item:="122"
+'Debug.Print Dict("x")
+strSQL = "SELECT Matrixex_Prototyp_ExcelDB_Tree.IBAN, Matrixex_Prototyp_ExcelDB_Tree.Saldo FROM Matrixex_Prototyp_ExcelDB_Tree;"
+Set rs1 = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
+Dim IBANText As String
+Dim SaldoZahl As Variant
+Do While Not rs1.EOF
+    'Debug.Print rs1!IBAN & " " & rs1!Saldo
+    IBANText = rs1!IBAN
+    SaldoZahl = rs1!Saldo
+    Dict.Add Key:=IBANText, Item:=SaldoZahl
+    rs1.MoveNext
+Loop 'Do While Not rs.EOF
+'For Each Key In Dict.Keys
+'Debug.Print Key & " " & Dict(Key)
+'Next Key
+'Debug.Print Dict("DE1234567890123123")
+'put data in dictionary end
+
+strSQL = "SELECT Tree.Tree, Tree.Tree_result FROM Tree ;"
+Set rs = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
+
+levelNumber = 0
+isLeaf = "no"
+Do While Not rs.EOF
+    rs.Edit
+    'Debug.Print "rs!Tree: " & rs!Tree
+    outputText = rs!Tree
+    arrayTree = Split(Replace(Replace(Replace(rs!Tree, Chr(13) & Chr(10), ""), """,""", """,{leaf"""), "}", """}"""), """")
+    'treat the array of the nodes in the tree of the cell
+    For x = 0 To UBound(arrayTree)
+        NodeText = Replace(Replace(Replace(Replace(Replace(arrayTree(x), """", ""), "{branchname=", ""), "}", ""), ",", ""), "Tree=", "")
+        dataText = Dict(NodeText)
+        If Not dataText = "" Then
+            'Debug.Print NodeText & ": " & dataText
+            outputText = Replace(outputText, NodeText, NodeText & ": " & dataText)
+        End If 'If Not NodeText = "" Then
+    Next 'For x = 0 To UBound(arrayTree)
+    'Debug.Print outputText
+    rs!Tree_result = outputText
+    rs.Update
+    rs.MoveNext
+Loop 'Do While Not rs.EOF
+
+DoCmd.SetWarnings True
+
+
+
+End Sub
+
+
 Private Sub Form_Load() 'Load Tree
     Dim objTree As TreeView
     Set objTree = Me.TreeView0.Object
@@ -505,7 +572,7 @@ Private Sub Form_Load() 'Load Tree
 'objTree.Nodes.Add Key:="Bedarf", Text:="Bedarf"
 'Add node that is a child
 'objTree.Nodes.Add Relative:="Bedarf", Relationship:=tvwChild, Key:="Access VBA Formular", Text:="Access VBA Formular"
-'objTree.Nodes.Add Relative:="Bedarf", Relationship:=tvwChild, Key:="Befüllung durch Tabelle möglich", Text:="Befüllung durch Tabelle möglich"
+'objTree.Nodes.Add Relative:="Bedarf", Relationship:=tvwChild, Key:="BefÃ¼llung durch Tabelle mÃ¶glich", Text:="BefÃ¼llung durch Tabelle mÃ¶glich"
 
 'objTree.Nodes.Add Key:="Tree", Text:="Tree"
 
