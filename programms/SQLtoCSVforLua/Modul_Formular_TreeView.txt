@@ -326,6 +326,180 @@ Next
 End Sub
 
 
+Private Sub Befehl28_Click() 'Update subtotals
+
+
+
+Dim Db As DAO.Database
+Dim rs As DAO.Recordset
+Dim rs1 As DAO.Recordset
+Dim strSQL As String
+Dim strSQL_output As String
+Dim arrayTree As Variant
+Dim arrayTreeFilled() As Variant
+Dim arrayTreeValue() As Variant
+Dim arrayLevel() As Variant
+Dim levelValue(0 To 120) As Variant
+Dim oldlevelValue(0 To 120) As Variant
+Dim x As Integer
+Dim x1 As Integer
+Dim dataText As String
+   
+  
+
+
+DoCmd.SetWarnings False
+Set Db = CurrentDb
+
+
+strSQL = "SELECT Tree.Tree, Tree.Tree_result FROM Tree;"
+Set rs = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
+
+Do While Not rs.EOF
+    rs.Edit
+    levelNumber = 0
+    isLeaf = "no"
+    For x = 0 To UBound(levelValue)
+        levelValue(x) = 0
+        oldlevelValue(x) = 0
+    Next 'For x = 0 To UBound(levelValue)
+
+    
+    'Debug.Print "rs!Tree: " & rs!Tree_result
+    outputText = "" 'rs!Tree_result
+    arrayTree = Split(Replace(Replace(Replace(rs!Tree_result, Chr(13) & Chr(10), ""), """,""", """,{leaf"""), "}", """}"""), """")
+    'treat the array of the nodes in the tree of the cell
+    x1 = 0
+   
+    
+    For x = 0 To UBound(arrayTree)
+        If arrayTree(x) = ",{branchname=" Then
+            levelNumber = levelNumber + 1
+        ElseIf arrayTree(x) = "}" And isLeaf = "yes" Then
+            levelNumber = levelNumber - 2
+            isLeaf = "no"
+        ElseIf arrayTree(x) = "}" Then
+            levelNumber = levelNumber - 1
+            isLeaf = "no"
+        ElseIf arrayTree(x) = ",{leaf" And isLeaf = "no" Then
+            levelNumber = levelNumber + 1
+            isLeaf = "yes"
+        End If
+        'Debug.Print levelNumber
+        If Not arrayTree(x) = "}" And Not arrayTree(x) = "" And Not arrayTree(x) = "," And InStr(1, arrayTree(x), "{branchname=", vbTextCompare) = 0 Then
+        'Debug.Print arrayTree(x)
+            x1 = x1 + 1
+            ReDim Preserve arrayLevel(x1)
+            arrayLevel(x1) = levelNumber
+            ReDim Preserve arrayTreeFilled(x1)
+            arrayTreeFilled(x1) = arrayTree(x)
+            ReDim Preserve arrayTreeValue(x1)
+            arrayTreeValue(x1) = 0
+        End If 'If Not arrayTree(x) = "}" And Not arrayTree(x) = "," And InStr(1, arrayTree(x), "Tree={branchname=", vbTextCompare) = 0 Then
+    Next 'For x = 0 To UBound(arrayTree)
+        
+        Debug.Print arrayTreeFilled(UBound(arrayTreeFilled)) & ": " & arrayLevel(UBound(arrayTreeFilled))
+        Debug.Print "U" & UBound(arrayTreeFilled) & ": " & arrayLevel(UBound(arrayTreeFilled))
+        'ReDim Preserve levelValue(arrayLevel(UBound(arrayTreeFilled)))
+
+    For x = 0 To UBound(arrayTreeFilled) - 1
+        'Debug.Print x
+        If InStr(1, arrayTreeFilled(UBound(arrayTreeFilled) - x), ": ", vbTextCompare) = 0 Then
+            dataNumber = 0
+        Else
+            dataNumber = Mid(arrayTreeFilled(UBound(arrayTreeFilled) - x), InStr(1, arrayTreeFilled(UBound(arrayTreeFilled) - x), ": ", vbTextCompare) + 2)
+        End If 'If InStr(1, arrayTreeFilled(UBound(arrayTreeFilled) - x), ": ", vbTextCompare) = 0 Then
+        'Debug.Print arrayTreeFilled(UBound(arrayTreeFilled) - x) & ": " & dataNumber & ": " & arrayLevel(UBound(arrayTreeFilled) - x)
+        
+        If x > 0 Then
+        'Debug.Print "I" & UBound(arrayTreeFilled) - x & ": " & arrayLevel(UBound(arrayTreeFilled) - x)
+            If arrayLevel(UBound(arrayTreeFilled) - x) < arrayLevel(UBound(arrayTreeFilled) - x + 1) Then
+                oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) + oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                'Debug.Print "O" & oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x) + 1) + oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x) + 1)
+                arrayTreeValue(UBound(arrayTreeFilled) - x) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                'Debug.Print levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+            ElseIf arrayLevel(UBound(arrayTreeFilled) - x) > arrayLevel(UBound(arrayTreeFilled) - x + 1) Then
+                levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = dataNumber 'Zurücksetzen, aber noch andere Knoten weiter unten im Baum mitzählen
+                arrayTreeValue(UBound(arrayTreeFilled) - x) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                'Debug.Print levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+            Else
+                levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) * 1 + dataNumber
+                arrayTreeValue(UBound(arrayTreeFilled) - x) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                'Debug.Print levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+            End If
+        Else
+            levelValue(arrayLevel(UBound(arrayTreeFilled))) = dataNumber
+            arrayTreeValue(UBound(arrayTreeFilled)) = levelValue(arrayLevel(UBound(arrayTreeFilled)))
+    
+        End If 'If arrayLevel(UBound(arrayTreeFilled) - x) < arrayLevel(UBound(arrayTreeFilled) - x + 1) Then
+    
+    Next 'For x = 0 To UBound(arrayTree)
+    'test with: For x = 0 To UBound(levelValue)
+    'test with:     Debug.Print x & ": " & levelValue(x)
+    'test with: Next 'For x = 0 To UBound(levelValue)
+    
+    'start with first node
+    If InStr(1, arrayTreeFilled(1), ": ", vbTextCompare) > 0 Then
+        'Debug.Print "Tree={branchname=""" & arrayTreeFilled(1)
+        outputText = "Tree={branchname=""" & arrayTreeFilled(1)
+    Else
+        'Debug.Print "Tree={branchname=""" & arrayTreeFilled(1) & ": " & arrayTreeValue(1) & """"
+        outputText = "Tree={branchname=""" & arrayTreeFilled(1) & ": " & arrayTreeValue(1) & """"
+    End If 'If InStr(1, arrayTreeFilled(1), ": ", vbTextCompare) > 0 Then
+    
+
+    For x = 2 To UBound(arrayTreeValue)
+        oldarrayLevel = arrayLevel(x - 1)
+        If InStr(1, arrayTreeFilled(x), ": ", vbTextCompare) > 0 Then
+            'Debug.Print x & ": " & arrayTreeFilled(x)
+            nodeText = arrayTreeFilled(x)
+        Else
+            'Debug.Print x & ": " & arrayTreeFilled(x) & ": " & arrayTreeValue(x)
+            nodeText = arrayTreeFilled(x) & ": " & arrayTreeValue(x)
+        End If 'If InStr(1, arrayTreeFilled(x), ": ", vbTextCompare) > 0 Then
+        
+        
+        
+        If oldarrayLevel < arrayLevel(x) Then
+            'Debug.Print ",{branchname=""" & nodeText & """"
+            outputText = outputText & "," & vbCrLf & "{branchname=""" & nodeText & """"
+        ElseIf oldarrayLevel = arrayLevel(x) Then
+            'Debug.Print "},{branchname=""" & nodeText & """"
+            outputText = outputText & "}," & vbCrLf & "{branchname=""" & nodeText & """"
+        ElseIf oldarrayLevel > arrayLevel(x) Then
+            For i = 1 To oldarrayLevel - arrayLevel(x)
+                'Debug.Print "},"
+                outputText = outputText & "}," & vbCrLf
+            Next
+            'Debug.Print "},{branchname=""" & nodeText & """"
+            outputText = outputText & "}," & vbCrLf & "{branchname=""" & nodeText & """"
+        End If
+    Next 'For x = 2 To UBound(arrayTreeValue)
+    
+    For i = 1 To arrayLevel(UBound(arrayTreeValue))
+        'Debug.Print "},"
+        outputText = outputText & "}," & vbCrLf
+    Next
+    'Debug.Print "}"
+    outputText = outputText & "}" & vbCrLf
+
+    'Debug.Print outputText
+    rs!Tree_result = outputText
+    rs.Update
+    rs.MoveNext
+
+
+Loop 'Do While Not rs.EOF
+
+
+
+DoCmd.SetWarnings True
+
+
+
+End Sub
+
 Private Sub Befehl3_Click() 'Expand Tree
     Dim objTree As TreeView
     Set objTree = Me.TreeView0.Object
@@ -347,7 +521,7 @@ Private Sub Befehl16_Click() 'Mark Node
             objTree.Nodes.Item(ctr).ForeColor = RGB(0, 0, 255)
             Set noddy = objTree.Nodes.Item(ctr).Parent
             noddy.ForeColor = RGB(255, 0, 0)
-            For i = 1 To 12
+            For i = 1 To objTree.Nodes.Count - ctr
                 On Error Resume Next
                 Set noddy = noddy.Parent
                 On Error Resume Next
@@ -403,7 +577,7 @@ objTree.Nodes.Remove x
 End Sub
 
 
-Private Sub Befehl27_Click() 'Delete Node
+Private Sub Befehl27_Click() 'Delete Node result
     Dim objTree As TreeView
     Set objTree = Me.TreeView2.Object
     Dim x As Integer
@@ -434,7 +608,7 @@ Dim arrayTree As Variant
 Dim x As Integer
 Dim levelNumber As Integer
 Dim isLeaf As String
-Dim arrayNode(-1 To 12) As Variant
+Dim arrayNode() As Variant 'Dim arrayNode(-1 To 120) As Variant 'this limit of 120 is not necessary with ReDim
 
 Debug.Print Forms!Tree.ID
 
@@ -476,6 +650,7 @@ If Not rs!Tree_result = "" Then
             End If 'If Not arrayTree(x) = "}" And Not arrayTree(x) = "," And InStr(1, arrayTree(x), "Tree={branchname=", vbTextCompare) = 0 Then
             'Debug.Print arrayNode(levelNumber - 1) & ": " & arrayNode(levelNumber)
             On Error Resume Next
+            ReDim Preserve arrayNode(levelNumber) 'resize array to have no limit, i.e. 120
             If Not arrayNode(levelNumber) = "" And Not Left(arrayNode(levelNumber), 1) = "," Then
                 objTree.Nodes.Add Relative:=arrayNode(levelNumber - 1), Relationship:=tvwChild, Key:=arrayNode(levelNumber), Text:=arrayNode(levelNumber)
             End If 'If Not arrayNode(levelNumber) = "" And InStr(1, arrayNode(levelNumber), ",", vbTextCompare) = 0 Then
@@ -506,6 +681,7 @@ Dim rs1 As DAO.Recordset
 Dim strSQL As String
 Dim strSQL_output As String
 Dim arrayTree As Variant
+Dim arrayTree_result() As Variant
 Dim x As Integer
 Dim dataText As String
 
@@ -533,26 +709,35 @@ Loop 'Do While Not rs.EOF
 'Debug.Print Dict("DE1234567890123123")
 'put data in dictionary end
 
-strSQL = "SELECT Tree.Tree, Tree.Tree_result FROM Tree ;"
+strSQL = "SELECT Tree.Tree, Tree.Tree_result FROM Tree;"
 Set rs = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
 
-levelNumber = 0
-isLeaf = "no"
+			   
+			 
 Do While Not rs.EOF
     rs.Edit
     'Debug.Print "rs!Tree: " & rs!Tree
-    outputText = rs!Tree
-    arrayTree = Split(Replace(Replace(Replace(rs!Tree, Chr(13) & Chr(10), ""), """,""", """,{leaf"""), "}", """}"""), """")
+    outputText = ""
+    arrayTree = Split(rs!Tree, """")
     'treat the array of the nodes in the tree of the cell
     For x = 0 To UBound(arrayTree)
-        NodeText = Replace(Replace(Replace(Replace(Replace(arrayTree(x), """", ""), "{branchname=", ""), "}", ""), ",", ""), "Tree=", "")
-        dataText = Dict(NodeText)
+        'Debug.Print arrayTree(x)
+        ReDim Preserve arrayTree_result(x)
+        nodeText = Replace(Replace(Replace(Replace(Replace(arrayTree(x), """", ""), "{branchname=", ""), "}", ""), ",", ""), "Tree=", "")
+        dataText = Dict(nodeText)
         If Not dataText = "" Then
             'Debug.Print NodeText & ": " & dataText
-            outputText = Replace(outputText, NodeText, NodeText & ": " & dataText)
+            arrayTree_result(x) = Replace(arrayTree(x), nodeText, nodeText & ": " & dataText)
+            outputText = outputText & arrayTree_result(x) & """"
+        ElseIf InStr(1, arrayTree(x), "{branchname=", vbTextCompare) > 0 Then
+            outputText = outputText & arrayTree(x) & """"
+        Else
+            outputText = outputText & arrayTree(x) & """"
         End If 'If Not NodeText = "" Then
+        'Debug.Print arrayTree_result(x)
     Next 'For x = 0 To UBound(arrayTree)
     'Debug.Print outputText
+    outputText = Replace(outputText, "}""", "}")
     rs!Tree_result = outputText
     rs.Update
     rs.MoveNext
@@ -585,7 +770,7 @@ Dim arrayTree As Variant
 Dim x As Integer
 Dim levelNumber As Integer
 Dim isLeaf As String
-Dim arrayNode(-1 To 12) As Variant
+Dim arrayNode() As Variant 'Dim arrayNode(-1 To 120) As Variant 'this limit of 120 is not necessary with ReDim
 
 Debug.Print Forms!Tree.ID
 
@@ -625,6 +810,7 @@ Do While Not rs.EOF
         End If
         'Debug.Print arrayNode(levelNumber - 1) & ": " & arrayNode(levelNumber)
     On Error Resume Next
+    ReDim Preserve arrayNode(levelNumber) 'resize array to have no limit, i.e. 120
     If Not arrayNode(levelNumber) = "" And Not Left(arrayNode(levelNumber), 1) = "," Then
         objTree.Nodes.Add Relative:=arrayNode(levelNumber - 1), Relationship:=tvwChild, Key:=arrayNode(levelNumber), Text:=arrayNode(levelNumber)
     End If
