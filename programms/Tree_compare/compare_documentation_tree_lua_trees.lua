@@ -771,7 +771,92 @@ function button_tree1_not_in_tree:flat_action()
 	end --if file_exists(textbox2.value) then
 end --function button_tree1_not_in_tree:flat_action()
 
---6.9 button for deleting one node leaving all other nodes but changing the order
+--6.9 copy of all nodes of a node put them in a Lua table and put them into the compare tree
+button_put_in_compare_tree=iup.flatbutton{title="Baum in Vergleichsbaum\neinbauen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_put_in_compare_tree:flat_action()
+	if file_exists(textbox2.value) then
+		tree.delnode0 = "CHILDREN"
+		tree.title=''
+		--load tree2 from file in compare tree
+		inputfile2=io.open(textbox2.value,"r")
+		inputText=inputfile2:read("*all")
+		inputfile2:close()
+		treeTable=inputText:match("[^=]+=(%b{})")
+		if treeTable:match('{ *branchname *= *"')==nil then firstEqualPosition=inputText:find("=") treeTable=inputText:sub(firstEqualPosition+1) end
+		--save table in the variable actualtree
+		--Lua 5.1 has the function loadstring() - in later versions, this is replaced by load(), hence we detect this here
+		if _VERSION=='Lua 5.1' then
+			loadstring('actualtree='..treeTable)()	
+		else
+			load('actualtree='..treeTable)() --now actualtree is the table.
+		end --if _VERSION=='Lua 5.1' then
+		iup.TreeAddNodes(tree,actualtree)
+		--collect subtrees
+		nodeTreeTable={}
+		for startNodeNumber=1,tree1.count-1 do
+			--collect subtree of node
+			--dynamise this: local startNodeNumber=tree1.value
+			local endNodeNumber=startNodeNumber+tree1['totalchildcount' .. startNodeNumber]
+			local levelStartNode=tree1['depth' .. startNodeNumber]
+			local levelOldNode=tree1['depth' .. startNodeNumber]
+			nodeText='tree_nodes={branchname="' .. string.escape_forbidden_char(tree1['title' .. startNodeNumber]) .. '",\n'
+			for i=startNodeNumber+1,endNodeNumber do
+				tree1.value=i
+				--test with: nodeText=nodeText .. '\n von: ' .. tonumber(levelOldNode) .. " zu: " .. tonumber(tree1['depth']) .. '\n'
+				--test with: print('von: ' .. tonumber(levelOldNode) .. " zu: " .. tonumber(tree1['depth']) )
+				--end curly brakets
+				if tonumber(levelOldNode)>tonumber(tree1['depth']) then 
+					for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(tree1['depth'])) do 
+						nodeText=nodeText .. '},\n' 
+					end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(tree1['depth'])) do 
+				end --if tonumber(levelOldNode)>tonumber(tree1['depth']) then 
+				--take branch or leaf
+				if tree1['KIND']=="BRANCH" and tonumber(tree1['depth'])>=levelStartNode+1 and levelOldNode>=tree1['depth'] and tree1['KIND' .. i-1]=="BRANCH" then
+					nodeText=nodeText .. '},\n{branchname="' .. string.escape_forbidden_char(tree1['title']) .. '",\n' 
+				elseif tree1['KIND']=="LEAF" and tonumber(tree1['depth'])>=levelStartNode+1 and levelOldNode>=tree1['depth'] and tree1['KIND' .. i-1]=="BRANCH" then
+					nodeText=nodeText .. '},\n"' .. string.escape_forbidden_char(tree1['title']) .. '",\n' 
+				elseif tree1['KIND']=="BRANCH" and tonumber(tree1['depth'])>=levelStartNode+1 then
+					nodeText=nodeText .. '{branchname="' .. string.escape_forbidden_char(tree1['title']) .. '",\n' 
+				elseif tree1['KIND']=="LEAF" and tonumber(tree1['depth'])>=levelStartNode+1 then
+					nodeText=nodeText .. '"' .. string.escape_forbidden_char(tree1['title']) .. '",\n' 
+				end --if tree1['KIND']=="BRANCH" and tonumber(tree1['depth'])>=levelStartNode+1 and levelOldNode>=tree1['depth'] and tree1['KIND' .. i-1]=="BRANCH" then
+				levelOldNode=tree1['depth']
+			end --for i=endNodeNumber,startNodeNumber,-1 do
+			if tree1['KIND' .. endNodeNumber]=="BRANCH" and tonumber(tree1['depth' .. endNodeNumber])>=levelStartNode+1 then
+				for iLevel=1,tonumber(tree1['depth' .. endNodeNumber])-levelStartNode do
+					nodeText=nodeText .. '},\n'
+				end --for iLevel=tonumber(tree1['depth' .. endNodeNumber])-levelStartNode do
+			end --if tree1['KIND' .. endNodeNumber]=="BRANCH" and tonumber(tree1['depth' .. endNodeNumber])>=levelStartNode+1 then
+			--test with: nodeText=nodeText .. '\n von: ' .. tonumber(levelOldNode) .. " zu: " .. tonumber(levelStartNode) .. '\n'
+			--end curly brakets
+			if tonumber(levelOldNode)>tonumber(levelStartNode) then 
+				for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode))-1 do 
+					nodeText=nodeText .. '}'
+					if i<math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) then 
+						nodeText=nodeText .. ',\n'
+					end --if i<math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) then 
+				end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode))-1 do 
+			end --if tonumber(levelOldNode)>tonumber(levelStartNode) then 
+			nodeText=nodeText .. '}\n'
+			--test with: print(math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)))
+			--test with: print(nodeText)
+			--load tree_nodes Lua table
+			load(nodeText)()
+			--test with: for k,v in pairs(tree_nodes) do print(k,v) if type(v)=="table" then for k1,v1 in pairs(v) do print(k1,v1) end end end
+			--test add tree_nodes to node: tree:AddNodes(tree_nodes,startNodeNumber)
+			--put subtrees in nodeTreeTable
+			nodeTreeTable[tree1['title' .. startNodeNumber]]=tree_nodes
+		end --for startNodeNumber=1,tree1.count-1 do
+		--put the new nodes in the tree
+		for i=tree.count-1,1,-1 do
+			if nodeTreeTable[tree['title' .. i]] then
+				tree:AddNodes(nodeTreeTable[tree['title' .. i]],i)
+			end --if tree_nodes then
+		end --for i=1,tree2.count-1 do
+	end --if file_exists(textbox2.value) then
+end --function button_put_in_compare_tree:flat_action()
+
+--6.10 button for deleting one node leaving all other nodes but changing the order
 button_delete_in_tree=iup.flatbutton{title="Ebene herauslöschen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete_in_tree:flat_action()
 	if tree.totalchildcount=="0" then
@@ -802,7 +887,7 @@ function button_delete_in_tree:flat_action()
 	end --if tree.totalchildcount==0 then
 end --function button_delete_in_tree:flat_action()
 
---6.10 button for saving tree
+--6.11 button for saving tree
 button_save_lua_table=iup.flatbutton{title="Baum als Lua-Tabelle speichern", size="125x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_lua_table:flat_action()
 	--open a filedialog
@@ -816,7 +901,7 @@ function button_save_lua_table:flat_action()
 	end --if filedlg2.status=="1" or filedlg2.status=="0" then
 end --function button_save_lua_table:flat_action()
 
---6.11 button with second logo
+--6.12 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
 	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
@@ -890,6 +975,7 @@ maindlg = iup.dialog{
 			button_sort_with_tree,
 			button_sort_in_tree,
 			button_tree1_not_in_tree,
+			button_put_in_compare_tree,
 			iup.label{size="5x",},
 			button_delete_in_tree,
 			button_expand_collapse_dialog,
