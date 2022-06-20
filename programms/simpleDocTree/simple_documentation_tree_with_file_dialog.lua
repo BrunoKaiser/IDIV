@@ -822,24 +822,33 @@ function copy_nodes_of_node:action()
 				nodeText=nodeText .. '},\n' 
 			end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(tree['depth'])) do 
 		end --if tonumber(levelOldNode)>tonumber(tree['depth']) then 
-		levelOldNode=tree['depth']
 		--take branch or leaf
-		if tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
+		if tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 and levelOldNode>=tree['depth'] and tree['KIND' .. i-1]=="BRANCH" then
+			nodeText=nodeText .. '},\n{branchname="' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
+		elseif tree['KIND']=="LEAF" and tonumber(tree['depth'])>=levelStartNode+1 and levelOldNode>=tree['depth'] and tree['KIND' .. i-1]=="BRANCH" then
+			nodeText=nodeText .. '},\n"' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
+		elseif tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
 			nodeText=nodeText .. '{branchname="' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
 		elseif tree['KIND']=="LEAF" and tonumber(tree['depth'])>=levelStartNode+1 then
 			nodeText=nodeText .. '"' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
-		end --if tree['KIND']=="LEAF" then
+		end --if tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 and levelOldNode>=tree['depth'] and tree['KIND' .. i-1]=="BRANCH" then
+		levelOldNode=tree['depth']
 	end --for i=endNodeNumber,startNodeNumber,-1 do
+	if tree['KIND' .. endNodeNumber]=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
+		nodeText=nodeText .. '},\n'
+	end --if tree['KIND' .. endNodeNumber]=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
 	--test with: nodeText=nodeText .. '\n von: ' .. tonumber(levelOldNode) .. " zu: " .. tonumber(levelStartNode) .. '\n'
 	--end curly brakets
 	if tonumber(levelOldNode)>tonumber(levelStartNode) then 
-		for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) do 
+		for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode))-1 do 
 			nodeText=nodeText .. '}'
 			if i<math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) then 
 				nodeText=nodeText .. ',\n'
 			end --if i<math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) then 
-		end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(tree['depth'])) do 
-	end --if tonumber(levelOldNode)>tonumber(tree['depth']) then 
+		end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode))-1 do
+	end --if tonumber(levelOldNode)>tonumber(levelStartNode) then
+	nodeText=nodeText .. '}\n'
+	--test with: print(math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)))
 	--test with: print(nodeText)
 	--load tree_nodes Lua table
 	load(nodeText)()
