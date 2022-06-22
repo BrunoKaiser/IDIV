@@ -1,11 +1,11 @@
 = Examples/Beispiele/exemples
 
 == Introduction
-This repository contains examples of interactive dynamic tables of contents.
+This repository contains examples of interactive dynamic tables of contents. Trees can also be written by hand on paper. As a standard the root ist written in a box. The lines between nodes are drawn as L. The highest level under the root can be underlinned. If necessary levels can be underlined another time so that the highest level under the root is underlined twice and the second level once and so on.
 
-Dieser Ordner enthält Beispieldateien von interaktiv-dynamischen Inhaltsverzeichnissen.
+Dieser Ordner enthält Beispieldateien von interaktiv-dynamischen Inhaltsverzeichnissen. Baumansichten können auch auf Papier geschrieben werden. Als Standard wird der oberste Knoten, der Stamm, in einer Box geschrieben. Die Linien zum Verbinden der Knoten werden als L geschrieben. Die höchste Ebene unter dem Stamm kann einfach unterstrichen werden. Bei Bedarf können die Ebenen erneut unterstrichen werden, so dass die höchste Ebene zweimal und die zweite Ebene einmal unterstrichen sind usw.
 
-Ce répertoire contiens des exemples de tables des matières interactive dynamiques.
+Ce répertoire contiens des exemples de tables des matières interactive dynamiques. Les arborescences peuvent aussi être écrite sur papier. La convention est d'écrire le tronc dans un rectangle. Les lignes entre les branches et les feuilles sont dessinées en form de L. Le niveau le plus élevé en dessous du tronc peut être souligné. Si néecessaire les niveaux sont soulignés une fois de plus de tel manière que le niveau le plus élevé en dessous du tronc est souligné deux fois, le second niveau est souligné une fois etc.
 
 == 1. arborescence avec des comptes
 
