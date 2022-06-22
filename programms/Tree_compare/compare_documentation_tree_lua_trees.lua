@@ -854,6 +854,19 @@ function button_put_in_compare_tree:flat_action()
 			end --if tree_nodes then
 		end --for i=1,tree2.count-1 do
 	end --if file_exists(textbox2.value) then
+	--go through tree 2
+	local file2existsTable={}
+	for i=0,tree2.totalchildcount0 do
+		file2existsTable[tree2['TITLE' .. i]]=true
+	end --for i=0,tree2.totalchildcount0 do
+	--mark the tree in blue for nodes from tree 1
+	for i=0,tree.totalchildcount0 do
+		if file2existsTable[tree['TITLE' .. i]] then
+			tree["color" .. i]=color_grey_bpc
+		else
+			tree["color" .. i]="0 0 250"
+		end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
+	end --for i=tree.totalchildcount0,0,-1 do
 end --function button_put_in_compare_tree:flat_action()
 
 --6.10 button for deleting one node leaving all other nodes but changing the order
