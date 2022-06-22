@@ -413,10 +413,17 @@ Do While Not rs.EOF
         
         If x > 0 Then
         'Debug.Print "I" & UBound(arrayTreeFilled) - x & ": " & arrayLevel(UBound(arrayTreeFilled) - x)
-            If arrayLevel(UBound(arrayTreeFilled) - x) < arrayLevel(UBound(arrayTreeFilled) - x + 1) Then
+            'If arrayLevel(UBound(arrayTreeFilled) - x) < arrayLevel(UBound(arrayTreeFilled) - x + 1) Then 'is not sufficient if dataNumber overwritten by new value
+            If arrayLevel(UBound(arrayTreeFilled) - x) < arrayLevel(UBound(arrayTreeFilled) - x + 1) And InStr(1, arrayTreeFilled(UBound(arrayTreeFilled) - x), ": ", vbTextCompare) = 0 Then
                 oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) + oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x))
                 'Debug.Print "O" & oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x))
                 levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x) + 1) + oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x) + 1)
+                arrayTreeValue(UBound(arrayTreeFilled) - x) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                'Debug.Print levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+            ElseIf arrayLevel(UBound(arrayTreeFilled) - x) < arrayLevel(UBound(arrayTreeFilled) - x + 1) And InStr(1, arrayTreeFilled(UBound(arrayTreeFilled) - x), ": ", vbTextCompare) > 0 Then
+                oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = Mid(arrayTreeFilled(UBound(arrayTreeFilled) - x), InStr(1, arrayTreeFilled(UBound(arrayTreeFilled) - x), ": ", vbTextCompare) + 2) + oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                'Debug.Print "O" & oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x))
+                levelValue(arrayLevel(UBound(arrayTreeFilled) - x)) = 0 + oldlevelValue(arrayLevel(UBound(arrayTreeFilled) - x) + 1)
                 arrayTreeValue(UBound(arrayTreeFilled) - x) = levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
                 'Debug.Print levelValue(arrayLevel(UBound(arrayTreeFilled) - x))
             ElseIf arrayLevel(UBound(arrayTreeFilled) - x) > arrayLevel(UBound(arrayTreeFilled) - x + 1) Then
