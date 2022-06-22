@@ -7,7 +7,7 @@ Dieser Ordner enthält Beispieldateien von interaktiv-dynamischen Inhaltsverzeic
 
 Ce répertoire contiens des exemples de tables des matières interactive dynamiques.
 
-==1. arborescences sur papier
+== 1. arborescences sur papier
 
 Trees can also be written by hand on paper. As a standard the root ist written in a box. The lines between nodes are drawn as L. The highest level under the root can be underlinned. If necessary levels can be underlined another time so that the highest level under the root is underlined twice and the second level once and so on.
 
@@ -15,11 +15,11 @@ Baumansichten können auch auf Papier geschrieben werden. Als Standard wird der 
 
 Les arborescences peuvent aussi être écrite sur papier. La convention est d'écrire le tronc dans un rectangle. Les lignes entre les branches et les feuilles sont dessinées en form de L. Le niveau le plus élevé en dessous du tronc peut être souligné. Si néecessaire les niveaux sont soulignés une fois de plus de tel manière que le niveau le plus élevé en dessous du tronc est souligné deux fois, le second niveau est souligné une fois etc.
 
-==1.1 IDIV-Papier_1.png
+== 1.1 IDIV-Papier_1.png
 
 This photo shows a IDIV-papier with highest level under root underlined one time.
 
-==1.2 IDIV-Papier_2.png
+== 1.2 IDIV-Papier_2.png
 
 This photo shows a IDIV-papier with highest level under root underlined two time and the second level underlined twice.
 
