@@ -379,10 +379,9 @@ function searchup:flat_action()
 		iup.NextField(maindlg)
 		iup.NextField(dlg_search)
 	end --if help==false then
-end --	function searchup:flat_action()
+end --function searchup:flat_action()
 
 checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
-checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
 --put above together in a search dialog
@@ -390,7 +389,7 @@ dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
 			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
-			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,
+			iup.hbox{searchmark,unmark,
 			}, 
 			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
@@ -756,24 +755,33 @@ function cut_nodes_of_node:action()
 				nodeText=nodeText .. '},\n' 
 			end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(tree['depth'])) do 
 		end --if tonumber(levelOldNode)>tonumber(tree['depth']) then 
-		levelOldNode=tree['depth']
 		--take branch or leaf
-		if tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
+		if tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 and levelOldNode>=tree['depth'] and tree['KIND' .. i-1]=="BRANCH" then
+			nodeText=nodeText .. '},\n{branchname="' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
+		elseif tree['KIND']=="LEAF" and tonumber(tree['depth'])>=levelStartNode+1 and levelOldNode>=tree['depth'] and tree['KIND' .. i-1]=="BRANCH" then
+			nodeText=nodeText .. '},\n"' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
+		elseif tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
 			nodeText=nodeText .. '{branchname="' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
 		elseif tree['KIND']=="LEAF" and tonumber(tree['depth'])>=levelStartNode+1 then
 			nodeText=nodeText .. '"' .. string.escape_forbidden_char(tree['title']) .. '",\n' 
-		end --if tree['KIND']=="LEAF" then
+		end --if tree['KIND']=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 and levelOldNode>=tree['depth'] and tree['KIND' .. i-1]=="BRANCH" then
+		levelOldNode=tree['depth']
 	end --for i=endNodeNumber,startNodeNumber,-1 do
+	if tree['KIND' .. endNodeNumber]=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
+		nodeText=nodeText .. '},\n'
+	end --if tree['KIND' .. endNodeNumber]=="BRANCH" and tonumber(tree['depth'])>=levelStartNode+1 then
 	--test with: nodeText=nodeText .. '\n von: ' .. tonumber(levelOldNode) .. " zu: " .. tonumber(levelStartNode) .. '\n'
 	--end curly brakets
 	if tonumber(levelOldNode)>tonumber(levelStartNode) then 
-		for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) do 
+		for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode))-1 do 
 			nodeText=nodeText .. '}'
 			if i<math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) then 
 				nodeText=nodeText .. ',\n'
 			end --if i<math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)) then 
-		end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(tree['depth'])) do 
-	end --if tonumber(levelOldNode)>tonumber(tree['depth']) then 
+		end --for i=1,math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode))-1 do
+	end --if tonumber(levelOldNode)>tonumber(levelStartNode) then
+	nodeText=nodeText .. '}\n'
+	--test with: print(math.tointeger(tonumber(levelOldNode)-tonumber(levelStartNode)))
 	--delete nodes
 	for i=endNodeNumber,startNodeNumber+1,-1 do
 		tree.value=i
@@ -1155,6 +1163,7 @@ showdragdrop="YES",
 }
 --set colors of tree
 tree.BGCOLOR=color_background_tree --set the background color of the tree
+
 -- Callback of the right mouse button click
 function tree:rightclick_cb(id)
 	tree.value = id
