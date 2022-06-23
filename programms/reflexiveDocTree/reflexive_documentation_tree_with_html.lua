@@ -57,6 +57,214 @@ thisfilename=arg[0]:match("\\([^\\]+)$")
 --test with: print(arg[0])
 --test with: print(thisfilename)
 
+--1.4 text written in html to build a tree in html with textboxes, buttons and functions
+textBeginHTML=[[
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
+<html>
+<head>
+  <title>Tree</title>
+  <base target="wb_cont">
+  <style type="text/css">
+  .tree { font-family: helvetica, sans-serif; font-size: 10pt; }
+  .tree p { margin: 0px; white-space: nowrap; }
+  .tree div { display: none; margin: 0px; }
+  .tree img { vertical-align: middle; }
+  .tree a:hover { text-decoration: none; background-color: #e0e0ff }
+  </style>
+  <script type="text/javascript">
+  lastLink = null;
+
+  function hideFolder(folder, id) {
+    var imageNode = document.images["img" + id];
+    if (imageNode != null) {
+      var len = imageNode.src.length;
+      if (imageNode.src.substring(len-8,len-4) == "last")
+        imageNode.src = "wb_img/plusnodelast.png";
+      else if (imageNode.src.substring(len-8,len-4) == "node")
+        {imageNode.src = "wb_img/plusnode.png";
+        imageNode.alt = "+ ";}
+    } //if (imageNode != null) {
+    folder.style.display = "none";
+  } //function hideFolder(folder, id) {
+
+  function showFolder(folder, id) {
+    var imageNode = document.images["img" + id];
+    if (imageNode != null) {
+      var len = imageNode.src.length;
+      if (imageNode.src.substring(len-8,len-4) == "last")
+        imageNode.src = "wb_img/minusnodelast.png";
+      else if (imageNode.src.substring(len-8,len-4) == "node")
+        {imageNode.src = "wb_img/minusnode.png";
+        imageNode.alt = "- ";}
+		} //if (imageNode.src.substring(len-8,len-4) == "last")
+    folder.style.display = "block";
+  } //function showFolder(folder, id) {
+
+  function toggleFolder(id) {
+    var folder = document.getElementById(id);
+    if (folder.style.display == "block")
+      hideFolder(folder, id);
+    else
+      showFolder(folder, id);
+  } //function toggleFolder(id) {
+
+  function setFoldersAtLevel(level, show) {
+    var i = 1;
+    do {
+      var folder_id = level + "." + i;
+      var id = "folder" + folder_id;
+      var folder = document.getElementById(id);
+      if (folder != null) {
+        setFoldersAtLevel(folder_id, show);
+        if (show)
+          showFolder(folder, id);
+        else
+          hideFolder(folder, id);
+      } //if (folder != null) {
+      i++;
+    } while(folder != null);
+  } //function setFoldersAtLevel(level, show) {
+
+  function showAllFolders() {setFoldersAtLevel("", true); }
+  function hideAllFolders() {setFoldersAtLevel("", false);}
+
+  function searchInTree() {
+  var getFolderNameText="";
+  var GRfoundText="";
+  document.G.NR.value=0;
+  document.G.AR.value=document.links.length + 1;
+  for (var i = 0; i < document.links.length; i++) {
+      var link = document.links[i];
+		if (link.text.toLowerCase().search(document.G.Q.value.toLowerCase())>=0) //e.g. "Tree_Baum.html"
+		{ document.G.R.value=getFolderId(link.name);
+			link.style.color = "#00ff00";
+			//return;
+			//search for all node above with a folder included in text of the founded node, e.g. folder.1 and folder.1.3 as texts are in text folder.1.3.4
+			for (var k = 0; k < document.links.length; k++) {   
+				GRfoundText=document.G.R.value.toLowerCase().replaceAll(".","~");
+				getFolderNameText=getFolderId(document.links[k].name).toLowerCase().replaceAll(".","~") + "~";
+				if (GRfoundText.search(getFolderNameText)>=0 && k < i) {
+					document.links[k].style.color = "#ff0000";  
+					//test with: document.G.PR.value=document.G.R.value.toLowerCase() +" mit " + getFolderNameText + "-" + document.G.PR.value;
+				} //if (GRfoundText.search(getFolderNameText)>=0 && k < i) {
+			  } //  for (var k = 0; k < document.links.length; k++) {      
+			}
+		else
+		{  //document.G.Q.value=link.name;
+			link.style.color = "#0000ff";
+			//return;
+		} //if (link.name==document.G.Q.value)
+    } //for (var i = 0; i < document.links.length; i++) {
+  showAllFolders()
+} //function searchInTree()
+
+  function searchInTreeNext() {
+  var getFolderNameText="";
+  var GRfoundText="";
+  var searchI=0;
+  //search begin up to number of node found
+  for (var i = document.G.NR.value; i < document.links.length; i++) {
+      var link = document.links[i];
+		if (link.text.toLowerCase().search(document.G.Q.value.toLowerCase())>=0) //e.g. "Tree_Baum.html"
+		{  document.G.R.value=getFolderId(link.name);
+			searchI=i;
+			document.G.NR.value=(Number(i)+1).toString(); //should be add with 1 to find the next node
+			//test with: document.G.R.value = document.G.R.value + "nr: " + searchI
+			  for (var i = 0; i < document.links.length; i++) {
+			//test with: document.G.R.value=document.G.R.value+"-"+getFolderId(document.links[i].name);
+			GRfoundText=document.G.R.value.toLowerCase().replaceAll(".","~");
+			getFolderNameText=getFolderId(document.links[i].name).toLowerCase().replaceAll(".","~") + "~";
+			//search for all node above with a folder included in text of the founded node, e.g. folder.1 and folder.1.3 as texts are in text folder.1.3.4
+				if (GRfoundText.search(getFolderNameText)>=0 && i < searchI) {
+					document.links[i].style.color = "#ff0000";
+				} //if (GRfoundText.search(getFolderNameText)>=0 && i < searchI) {
+			  } //  for (var i = 0; i < document.links.length; i++) {
+			link.style.color = "#00ff00";
+			//return;
+			goToLink(link)
+			parent.wb_cont.location.href = link.href;
+			}
+		else
+		{  //document.G.Q.value=link.name;
+			link.style.color = "#0000ff";
+			//return;
+		} //if (link.name==document.G.Q.value)
+    } //for (var i = 0; i < document.links.length; i++) {
+} //function searchInTreeNext()
+
+
+  function goToLink(link) { //because of the systematic for the folder names in the link.name it is not possible to go to link together with correct mark of tree
+    var id = getFolderId(link.name);
+    document.G.Q.value=document.G.Q.value; // + "->" + link.text    text of a href 
+    showFolderRec(id);
+    location.hash = "#" + link.name;
+    link.style.color = "#00ff00";
+    //clear link
+    clearLastLink();
+    lastLink = link;
+  } //function goToLink(link) {
+
+ function getFolderId(name) {return name.substring(name.indexOf("folder"), name.length); }
+
+ function showFolderRec(id) {
+    var folder = document.getElementById(id);
+    if (folder != null) {
+      showFolder(folder, id);
+      var parent_id = id.substring(0, id.lastIndexOf("."))
+      if (parent_id != null && parent_id != "folder") {
+         showFolderRec(parent_id)
+      } //if (parent_id != null && parent_id != "folder") {
+    } //if (folder != null) {
+  } //function showFolderRec(id) {
+
+  function clearLastLink() {
+    if (lastLink != null) {
+      lastLink.style.color = ""
+      lastLink = null;
+    } //if (lastLink != null) {
+  } //function clearLastLink() {
+
+
+  </script>
+</head>
+
+<body style="margin: 2px; background-color: #F1F1F1"  onload="showStartPage()">
+
+<form name="G">
+IDIV-Basiskomponente:
+<img alt="Expand All Nodes" src="wb_img/showall.png" onclick="showAllFolders()" onmouseover="this.src='wb_img/showall_over.png'" onmouseout="this.src='wb_img/showall.png'">
+
+<img alt="Contract All Nodes" src="wb_img/hideall.png" onclick="hideAllFolders()" onmouseover="this.src='wb_img/hideall_over.png'" onmouseout="this.src='wb_img/hideall.png'">
+
+<br>
+Suche von:
+<br>
+<input value="" name="Q" size="54" type="text">
+<br>
+<input value="Markieren aller Fundstellen und Ausklappen" onclick="searchInTree()" type="button">
+<br>
+<input value="Markieren der weiteren Fundstelle" onclick="searchInTreeNext()" type="button">
+<br>
+Ergebnis:
+<br>
+<input value="" name="R" size="54" type="text">
+<br>
+Fundstellennummer:
+<br>
+<input value="0" name="NR" size="54" type="text">
+<br>
+Anzahl Knoten:
+<br>
+<input value="0" name="AR" size="54" type="text">
+<br>
+
+<!--test with: input value="0" name="PR" size="54" type="text"-->
+</form>
+
+
+
+]]
+
 --2. global data definition
 aktuelleSeite=1
 
@@ -221,6 +429,87 @@ function change_state_keyword(new_state,keyword,descendants_also)
 		end --for i=0,tree.count-1 do
 	end --if descendants_also=="YES" then
 end --function change_state_keyword(new_state,level,descendants_also)
+
+--3.6 function to build recursively the tree
+function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
+	linkNumber=linkNumberStart or 1
+	iNumber= iStart or 1
+	levelFolder = (levelFolderStart or "") .. "." .. iNumber --string.rep(".x",level+1)
+	--test with: print(" >" .. levelFolder)
+	level = levelStart or 0
+	if TreeTable.branchname:match('"([^"]*)">') then
+		AusgabeTabelle[TreeTable.branchname:match('"([^"]*)">')]=true
+	else
+		AusgabeTabelle[TreeTable.branchname]=true
+	end --if TreeTable.branchname:match('"([^"]*)">') then
+	--build the branches
+	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px">'
+	if TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML ..
+		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+	else
+		textforHTML = textforHTML ..
+		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+	end --if state=="COLLAPSED" then
+	if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+		LinkText='"' .. tostring(TreeTable.branchname) .. '">'
+	elseif TreeTable.branchname:match('"([^"]*)">')==nil then
+		LinkText='"">' --start html itself and not Tree_html_frame_home.html
+	else
+		LinkText=""
+	end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+	textforHTML = textforHTML ..
+	'<a name="link' .. linkNumber .. 'folder' .. levelFolder .. '" href=' ..
+	LinkText .. tostring(TreeTable.branchname)
+	:gsub("Ã¤","&auml;")
+	:gsub("Ã„","&Auml;")
+	:gsub("Ã¶","&ouml;")
+	:gsub("Ã–","&Ouml;")
+	:gsub("Ã¼","&uuml;")
+	:gsub("Ãœ","&Uuml;")
+	:gsub("ÃŸ","&szlig;")
+	.. "</a>" .. "</p>\n"
+	if TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '">\n'
+	else
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '" style="display:block">\n'
+	end --if state=="COLLAPSED" then
+	for i,v in ipairs(TreeTable) do
+		linkNumber=linkNumber+1
+		if type(v)=="table" then
+			level = level +1
+			readTreetohtmlRecursiveLinks(v,level,levelFolder,i,linkNumber)
+		else
+			if v:match('"([^"]*)">') then
+				AusgabeTabelle[v:match('"([^"]*)">')]=true
+			else
+				AusgabeTabelle[v]=true
+			end --if v:match('"([^"]*)">') then
+			if v:match('"([^"]*)">')==nil and tostring(v):match("http") then
+				LinkText='"' .. tostring(v) .. '">'
+			elseif v:match('"([^"]*)">')==nil then
+				LinkText='"">' --start html itself and not Tree_html_frame_home.html
+			else
+				LinkText=""
+			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px">' .. '<a name="link' .. linkNumber .. 'folder' .. levelFolder .. "." .. i .. '" href=' .. 
+			LinkText .. v
+			:gsub("Ã¤","&auml;")
+			:gsub("Ã„","&Auml;")
+			:gsub("Ã¶","&ouml;")
+			:gsub("Ã–","&Ouml;")
+			:gsub("Ã¼","&uuml;")
+			:gsub("Ãœ","&Uuml;")
+			:gsub("ÃŸ","&szlig;")
+			.. "</a>" .. "</p>\n"
+		end --if type(v)=="table" then
+	end --for i, v in ipairs(TreeTable) do
+	--test with: print("  " .. levelFolder)
+	levelFolder=levelFolder:match("(.*)%.%d+$")
+	--test with: print("->" .. levelFolder)
+	textforHTML = textforHTML .. string.rep("\t",level) .. "</div>\n"
+	level = level - 1
+end --readTreetohtmlRecursiveLinks(TreeTable)
 
 --4. dialogs
 --4.1 rename dialog
@@ -866,17 +1155,17 @@ function button_load_tree_to_html:flat_action()
 			tostring(tree['TITLE' .. i])
 			:gsub("Ã¤","&auml;")
 			:gsub("ä","&auml;")
-			:gsub("Ã","&Auml;")
+			:gsub("Ã„","&Auml;")
 			:gsub("Ä","&Auml;")
 			:gsub("Ã¶","&ouml;")
 			:gsub("ö","&ouml;")
-			:gsub("Ã","&Ouml;")
+			:gsub("Ã–","&Ouml;")
 			:gsub("Ö","&Ouml;")
 			:gsub("Ã¼","&uuml;")
 			:gsub("ü","&uuml;")
-			:gsub("Ã","&Uuml;")
+			:gsub("Ãœ","&Uuml;")
 			:gsub("Ü","&Uuml;")
-			:gsub("Ã","&szlig;")
+			:gsub("ÃŸ","&szlig;")
 			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "</b>" .. "\n"
 		elseif i>0 and tonumber(tree["DEPTH" .. i ]) > tonumber(tree["DEPTH" .. i-1 ]) and tree["KIND" .. i ] == "BRANCH" then
@@ -885,17 +1174,17 @@ function button_load_tree_to_html:flat_action()
 			tostring(tree['TITLE' .. i])
 			:gsub("Ã¤","&auml;")
 			:gsub("ä","&auml;")
-			:gsub("Ã","&Auml;")
+			:gsub("Ã„","&Auml;")
 			:gsub("Ä","&Auml;")
 			:gsub("Ã¶","&ouml;")
 			:gsub("ö","&ouml;")
-			:gsub("Ã","&Ouml;")
+			:gsub("Ã–","&Ouml;")
 			:gsub("Ö","&Ouml;")
 			:gsub("Ã¼","&uuml;")
 			:gsub("ü","&uuml;")
-			:gsub("Ã","&Uuml;")
+			:gsub("Ãœ","&Uuml;")
 			:gsub("Ü","&Uuml;")
-			:gsub("Ã","&szlig;")
+			:gsub("ÃŸ","&szlig;")
 			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "</b>" .. "\n"
 		elseif i>0 and tonumber(tree["DEPTH" .. i ]) <= tonumber(tree["DEPTH" .. i-1 ]) and tree["KIND" .. i ] == "BRANCH" then
@@ -910,17 +1199,17 @@ function button_load_tree_to_html:flat_action()
 			tostring(tree['TITLE' .. i])
 			:gsub("Ã¤","&auml;")
 			:gsub("ä","&auml;")
-			:gsub("Ã","&Auml;")
+			:gsub("Ã„","&Auml;")
 			:gsub("Ä","&Auml;")
 			:gsub("Ã¶","&ouml;")
 			:gsub("ö","&ouml;")
-			:gsub("Ã","&Ouml;")
+			:gsub("Ã–","&Ouml;")
 			:gsub("Ö","&Ouml;")
 			:gsub("Ã¼","&uuml;")
 			:gsub("ü","&uuml;")
-			:gsub("Ã","&Uuml;")
+			:gsub("Ãœ","&Uuml;")
 			:gsub("Ü","&Uuml;")
-			:gsub("Ã","&szlig;")
+			:gsub("ÃŸ","&szlig;")
 			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "</b>" .. "\n"
 			--test with: print(tree['TITLE' .. i])
@@ -936,17 +1225,17 @@ function button_load_tree_to_html:flat_action()
 			tostring(tree['TITLE' .. i])
 			:gsub("Ã¤","&auml;")
 			:gsub("ä","&auml;")
-			:gsub("Ã","&Auml;")
+			:gsub("Ã„","&Auml;")
 			:gsub("Ä","&Auml;")
 			:gsub("Ã¶","&ouml;")
 			:gsub("ö","&ouml;")
-			:gsub("Ã","&Ouml;")
+			:gsub("Ã–","&Ouml;")
 			:gsub("Ö","&Ouml;")
 			:gsub("Ã¼","&uuml;")
 			:gsub("ü","&uuml;")
-			:gsub("Ã","&Uuml;")
+			:gsub("Ãœ","&Uuml;")
 			:gsub("Ü","&Uuml;")
-			:gsub("Ã","&szlig;")
+			:gsub("ÃŸ","&szlig;")
 			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "\n"
 			--test with: print(tree['TITLE' .. i])
@@ -956,21 +1245,24 @@ function button_load_tree_to_html:flat_action()
 			tostring(tree['TITLE' .. i])
 			:gsub("Ã¤","&auml;")
 			:gsub("ä","&auml;")
-			:gsub("Ã","&Auml;")
+			:gsub("Ã„","&Auml;")
 			:gsub("Ä","&Auml;")
 			:gsub("Ã¶","&ouml;")
 			:gsub("ö","&ouml;")
-			:gsub("Ã","&Ouml;")
+			:gsub("Ã–","&Ouml;")
 			:gsub("Ö","&Ouml;")
 			:gsub("Ã¼","&uuml;")
 			:gsub("ü","&uuml;")
-			:gsub("Ã","&Uuml;")
+			:gsub("Ãœ","&Uuml;")
 			:gsub("Ü","&Uuml;")
-			:gsub("Ã","&szlig;")
+			:gsub("ÃŸ","&szlig;")
 			:gsub("ß","&szlig;")
 			:gsub("\\n","<br>") .. "\n"
 		end --if i>0 and tonumber(tree["DEPTH" .. i ]) > tonumber(tree["DEPTH" .. i-1 ]) then
 	end --for i=0,tree.count - 1 do --loop for all nodes
+	for i=tonumber(tree["DEPTH" .. tree.count - 1]),0,-1 do
+		webbrowserText=webbrowserText .. "</li></ul>" .. "\n"
+	end --for i=tonumber(tree["DEPTH" .. tree.count - 1]),0,-1 do
 	webbrowserText=webbrowserText .. "</font>"
 	webbrowser1.HTML=webbrowserText
 end --function button_load_tree_to_html:action()
@@ -983,39 +1275,56 @@ function button_save_as_html:flat_action()
 	for k,v in pairs(TextHTMLtable) do
 		outputfile1:write(v:gsub("Ã¤","&auml;")
 				:gsub("ä","&auml;")
-				:gsub("Ã","&Auml;")
+				:gsub("Ã„","&Auml;")
 				:gsub("Ä","&Auml;")
 				:gsub("Ã¶","&ouml;")
 				:gsub("ö","&ouml;")
-				:gsub("Ã","&Ouml;")
+				:gsub("Ã–","&Ouml;")
 				:gsub("Ö","&Ouml;")
 				:gsub("Ã¼","&uuml;")
 				:gsub("ü","&uuml;")
-				:gsub("Ã","&Uuml;")
+				:gsub("Ãœ","&Uuml;")
 				:gsub("Ü","&Uuml;")
-				:gsub("Ã","&szlig;")
+				:gsub("ÃŸ","&szlig;")
 				:gsub("ß","&szlig;")
 				.. "\n")
 	end --for k,v in pairs(TextHTMLtable) do
 	outputfile1:write(webbrowser1.HTML:gsub("Ã¤","&auml;")
 				:gsub("ä","&auml;")
-				:gsub("Ã","&Auml;")
+				:gsub("Ã„","&Auml;")
 				:gsub("Ä","&Auml;")
 				:gsub("Ã¶","&ouml;")
 				:gsub("ö","&ouml;")
-				:gsub("Ã","&Ouml;")
+				:gsub("Ã–","&Ouml;")
 				:gsub("Ö","&Ouml;")
 				:gsub("Ã¼","&uuml;")
 				:gsub("ü","&uuml;")
-				:gsub("Ã","&Uuml;")
+				:gsub("Ãœ","&Uuml;")
 				:gsub("Ü","&Uuml;")
-				:gsub("Ã","&szlig;")
+				:gsub("ÃŸ","&szlig;")
 				:gsub("ß","&szlig;")
 				.. "\n")
 	outputfile1:close()
 end --function button_save_as_html:flat_action()
 
---6.9 button with second logo
+--6.9 button for saving TextHTMLtable as html tree file
+button_save_as_tree_html=iup.flatbutton{title="Startdatei als html \nBaumansicht speichern", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_save_as_tree_html:flat_action()
+	--apply the recursive function and build html file
+	textforHTML=""
+	AusgabeTabelle={}
+	readTreetohtmlRecursiveLinks(lua_tree_output)
+	--write tree in html in the tree frame
+	outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua$",".html"),"w")
+	outputfile1:write(textBeginHTML)
+	--word wrap without this: outputfile1:write('<div class="tree">' .. "\n")
+	outputfile1:write(textforHTML)
+	--word wrap without this: outputfile1:write("</div>")
+	outputfile1:write("\n</body>\n</html>")
+	outputfile1:close()
+end --function button_save_as_tree_html:flat_action()
+
+--6.10 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
 	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de)
@@ -1094,10 +1403,8 @@ maindlg = iup.dialog {
 			textbox1,
 			iup.fill{},
 			button_save_as_html,
-			button_search_in_pages,
+			button_save_as_tree_html,
 			textbox2,
-			button_go_forward,
-			button_new_page,
 			button_logo2,
 		}, --iup.hbox{
 		iup.split{iup.frame{title="Manuelle Zuordnung als Baum",tree,},webbrowser1,},
@@ -1121,17 +1428,17 @@ function readTreetohtmlRecursive(TreeTable)
 	tostring(TreeTable.branchname)
 	:gsub("Ã¤","&auml;")
 	:gsub("ä","&auml;")
-	:gsub("Ã","&Auml;")
+	:gsub("Ã„","&Auml;")
 	:gsub("Ä","&Auml;")
 	:gsub("Ã¶","&ouml;")
 	:gsub("ö","&ouml;")
-	:gsub("Ã","&Ouml;")
+	:gsub("Ã–","&Ouml;")
 	:gsub("Ö","&Ouml;")
 	:gsub("Ã¼","&uuml;")
 	:gsub("ü","&uuml;")
-	:gsub("Ã","&Uuml;")
+	:gsub("Ãœ","&Uuml;")
 	:gsub("Ü","&Uuml;")
-	:gsub("Ã","&szlig;")
+	:gsub("ÃŸ","&szlig;")
 	:gsub("ß","&szlig;")
 	:gsub("\\n","<br>") .. "</b>" .. "\n"
 	for k,v in ipairs(TreeTable) do
@@ -1141,17 +1448,17 @@ function readTreetohtmlRecursive(TreeTable)
 			AusgabeTabelle[v]=true
 			webbrowserText=webbrowserText .. v:gsub("Ã¤","&auml;")
 							:gsub("ä","&auml;")
-							:gsub("Ã","&Auml;")
+							:gsub("Ã„","&Auml;")
 							:gsub("Ä","&Auml;")
 							:gsub("Ã¶","&ouml;")
 							:gsub("ö","&ouml;")
-							:gsub("Ã","&Ouml;")
+							:gsub("Ã–","&Ouml;")
 							:gsub("Ö","&Ouml;")
 							:gsub("Ã¼","&uuml;")
 							:gsub("ü","&uuml;")
-							:gsub("Ã","&Uuml;")
+							:gsub("Ãœ","&Uuml;")
 							:gsub("Ü","&Uuml;")
-							:gsub("Ã","&szlig;")
+							:gsub("ÃŸ","&szlig;")
 							:gsub("ß","&szlig;")
 							:gsub("\\n","<br>")
 							.. "\n"
