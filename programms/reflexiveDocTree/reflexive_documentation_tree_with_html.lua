@@ -1,5 +1,5 @@
 lua_tree_output={ branchname="Title\\n\\n", 
-{ branchname="Subtitle\\n\\n", 
+{ branchname="Subtitle\\n\\n", state="COLLAPSED",
  "This is a text with a paragraph end.\\n\\n", "This is a text without line break ", 
  "that is finished in the next node.\\n\\n", 
 },
@@ -58,7 +58,7 @@ thisfilename=arg[0]:match("\\([^\\]+)$")
 --test with: print(thisfilename)
 
 --1.4 text written in html to build a tree in html with textboxes, buttons and functions
-textBeginHTML=[[
+textBeginHTML_1=[[
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 <html>
 <head>
@@ -224,11 +224,19 @@ textBeginHTML=[[
     } //if (lastLink != null) {
   } //function clearLastLink() {
 
+  function onLoadFunction() {
+
+]]
+
+textBeginHTML_2=[[
+
+
+  } //function onLoadFunction() {
 
   </script>
 </head>
 
-<body style="margin: 2px; background-color: #F1F1F1"  onload="showStartPage()">
+<body style="margin: 2px; background-color: #F1F1F1" onload="onLoadFunction()">
 
 <form name="G">
 IDIV-Basiskomponente:
@@ -444,9 +452,14 @@ function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iSta
 	end --if TreeTable.branchname:match('"([^"]*)">') then
 	--build the branches
 	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px">'
-	if TreeTable.state=="COLLAPSED" then
+	if TreeTable[1]==nil then
+		textforHTML = textforHTML ..
+		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+	--collapsed does function with the onload function for the body
+	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
 		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. "toggleFolder('folder" .. levelFolder .. "')" .. "\n" .. "toggleFolder('folder" .. levelFolder .. "')"
 	else
 		textforHTML = textforHTML ..
 		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
@@ -1312,11 +1325,14 @@ button_save_as_tree_html=iup.flatbutton{title="Startdatei als html \nBaumansicht
 function button_save_as_tree_html:flat_action()
 	--apply the recursive function and build html file
 	textforHTML=""
+	textforOnLoad=""
 	AusgabeTabelle={}
 	readTreetohtmlRecursiveLinks(lua_tree_output)
 	--write tree in html in the tree frame
 	outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua$",".html"),"w")
-	outputfile1:write(textBeginHTML)
+	outputfile1:write(textBeginHTML_1)
+	outputfile1:write(textforOnLoad)
+	outputfile1:write(textBeginHTML_2)
 	--word wrap without this: outputfile1:write('<div class="tree">' .. "\n")
 	outputfile1:write(textforHTML)
 	--word wrap without this: outputfile1:write("</div>")
@@ -1327,7 +1343,7 @@ end --function button_save_as_tree_html:flat_action()
 --6.10 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de)
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --7 Main Dialog
