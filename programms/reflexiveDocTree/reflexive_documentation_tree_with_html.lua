@@ -459,7 +459,6 @@ function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iSta
 	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
 		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. "toggleFolder('folder" .. levelFolder .. "')" .. "\n" .. "toggleFolder('folder" .. levelFolder .. "')"
 	else
 		textforHTML = textforHTML ..
 		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
@@ -483,7 +482,7 @@ function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iSta
 	:gsub("ÃŸ","&szlig;")
 	.. "</a>" .. "</p>\n"
 	if TreeTable.state=="COLLAPSED" then
-		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '">\n'
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '" style="display:none">\n'
 	else
 		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '" style="display:block">\n'
 	end --if state=="COLLAPSED" then
