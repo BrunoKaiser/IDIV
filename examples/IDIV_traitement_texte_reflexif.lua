@@ -273,6 +273,72 @@ Anzahl Knoten:
 
 ]]
 
+
+textBeginHTML_3=[[
+
+<form name="InputForm">
+
+
+]]
+
+
+textBeginHTML_4=[[
+
+<input type="button" value="Suche in der Kachelbaumansicht" onclick='funktionSucheInAllenTabellen()'> 
+<input value="Status" name="searchText" size="54" type="text"> 
+</form>
+<script>
+
+function funktionEinklappen(tableFolder) {
+	var element1 = document.getElementById(tableFolder);//"imgfolder.1.1");
+	element1.style="display:none";
+} //function funktionEinklappenErsteKacheln()
+
+
+function funktionSuche(tableFolder) {
+	var table = document.getElementById(tableFolder);
+	if (table!=null){
+		for (let i=0;row=table.rows[i];i++){
+			for (let j=0;col=row.cells[j];j++){
+				if (row.cells[j].innerText.replaceAll("_","").toLowerCase().search(document.InputForm.searchText.value.toLowerCase())>=0){
+					//alert(row.cells[j].innerText.replaceAll("_",""));
+					row.cells[j].style="vertical-align:top;height:200px;color:#090";
+					
+				} //if (row.cells.innerHTML=="Misstrauen"){
+			} //for (let j=0;col=row.cells[j];j++){
+		} //for(let i=0;row=table.rows[i];i++){
+		//test with: alert(table);
+		  var testText=tableFolder;//"imgfolder.1.1.1.1";
+		  //alert(testText.length);
+		  for (var i = 10; i < testText.length; i++){
+				if (testText.substring(i-1,i)!="."){
+					//test with: alert(testText.substring(0,i));
+					funktionSuche(testText.substring(0,i)); //Tabellen, die in der Hierarchie darüber sind: Problem gelöschte Tabellen
+				} //if (testText.substring(i,i)+="."){
+		  }//for (var i = 0; i < testText.length; i++){
+		  //testText=testText.substring(1,testText.length-1);
+		  //alert(testText);
+	} //if (table!=null){
+} //function funktionSuche()
+
+
+function funktionSucheInAllenTabellen() {
+
+]]
+
+
+textBeginHTML_5=[[
+
+
+}//function funktionSucheInAllenTabellen() {
+
+
+
+</script>
+
+
+]]
+
 --2. global data definition
 aktuelleSeite=1
 
@@ -438,7 +504,7 @@ function change_state_keyword(new_state,keyword,descendants_also)
 	end --if descendants_also=="YES" then
 end --function change_state_keyword(new_state,level,descendants_also)
 
---3.6 function to build recursively the tree
+--3.6.1 function to build recursively the tree
 function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
 	linkNumber=linkNumberStart or 1
 	iNumber= iStart or 1
@@ -520,6 +586,87 @@ function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iSta
 	levelFolder=levelFolder:match("(.*)%.%d+$")
 	--test with: print("->" .. levelFolder)
 	textforHTML = textforHTML .. string.rep("\t",level) .. "</div>\n"
+	level = level - 1
+end --readTreetohtmlRecursiveLinks(TreeTable)
+
+--3.6.2 function to build recursively the tree with table view
+function readTreetohtmlRecursiveLinksTable(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
+	linkNumber=linkNumberStart or 1
+	iNumber= iStart or 1
+	levelFolder = (levelFolderStart or "") .. "." .. iNumber --string.rep(".x",level+1)
+	--test with: print(" >" .. levelFolder)
+	level = levelStart or 0
+	if TreeTable.branchname:match('"([^"]*)">') then
+		AusgabeTabelle[TreeTable.branchname:match('"([^"]*)">')]=true
+	else
+		AusgabeTabelle[TreeTable.branchname]=true
+	end --if TreeTable.branchname:match('"([^"]*)">') then
+	--build the branches
+	textforHTML = textforHTML .. string.rep("\t",level)
+	if TreeTable[1]==nil then
+		textforHTML = textforHTML ..
+		[[<table id="imgfolder]] .. levelFolder .. [[" border="1">]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
+	else
+		textforHTML = textforHTML ..
+		[[<table id="imgfolder]] .. levelFolder .. [[" border="1">]]
+		textforOnLoad_1=textforOnLoad_1 .. "\n" .. [[ <input type="button" value="Einklappen Knoten]] .. levelFolder .. [[" onclick='funktionEinklappen("imgfolder]] .. levelFolder .. [[")'>  ]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
+	end --if state=="COLLAPSED" then
+	if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+		LinkText='"' .. tostring(TreeTable.branchname)
+	elseif TreeTable.branchname:match('"([^"]*)">')==nil then
+		LinkText='' --start html itself and not Tree_html_frame_home.html
+	else
+		LinkText=""
+	end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+	textforHTML = textforHTML ..
+	'<tr style="height:200px"><td style="vertical-align:top;width:200px;background-color:#090">' ..
+	LinkText .. tostring(TreeTable.branchname)
+	:gsub("Ã¤","&auml;")
+	:gsub("Ã„","&Auml;")
+	:gsub("Ã¶","&ouml;")
+	:gsub("Ã–","&Ouml;")
+	:gsub("Ã¼","&uuml;")
+	:gsub("Ãœ","&Uuml;")
+	:gsub("ÃŸ","&szlig;")
+	.. "" .. "\n"
+	for i,v in ipairs(TreeTable) do
+		linkNumber=linkNumber+1
+		if type(v)=="table" then
+			level = level +1
+			readTreetohtmlRecursiveLinksTable(v,level,levelFolder,i,linkNumber)
+		else
+			if v:match('"([^"]*)">') then
+				AusgabeTabelle[v:match('"([^"]*)">')]=true
+			else
+				AusgabeTabelle[v]=true
+			end --if v:match('"([^"]*)">') then
+			if v:match('"([^"]*)">')==nil and tostring(v):match("http") then
+				LinkText='"' .. tostring(v) .. '">'
+			elseif v:match('"([^"]*)">')==nil then
+				LinkText='' --start html itself and not Tree_html_frame_home.html
+			else
+				LinkText=""
+			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<table id="imgfolder' .. levelFolder .. "." .. i .. '"><tr><td style="vertical-align:top;width:200px;background-color:#090">' .. 
+			LinkText .. v
+			:gsub("Ã¤","&auml;")
+			:gsub("Ã„","&Auml;")
+			:gsub("Ã¶","&ouml;")
+			:gsub("Ã–","&Ouml;")
+			:gsub("Ã¼","&uuml;")
+			:gsub("Ãœ","&Uuml;")
+			:gsub("ÃŸ","&szlig;")
+			.. " " .. "</td></tr></table>\n"
+--		textforOnLoad_1=textforOnLoad_1 .. "\n" .. [[ <input type="button" value="Einklappen Knoten]] .. levelFolder .. [[" onclick='funktionEinklappen("imgfolder]] .. levelFolder .. [[")'>  ]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
+		end --if type(v)=="table" then
+	end --for i, v in ipairs(TreeTable) do
+	--test with: print("  " .. levelFolder)
+	levelFolder=levelFolder:match("(.*)%.%d+$")
+	--test with: print("->" .. levelFolder)
+	textforHTML = textforHTML .. string.rep("\t",level) .. "</td></tr></table>\n"
 	level = level - 1
 end --readTreetohtmlRecursiveLinks(TreeTable)
 
@@ -1319,8 +1466,8 @@ function button_save_as_html:flat_action()
 	outputfile1:close()
 end --function button_save_as_html:flat_action()
 
---6.9 button for saving TextHTMLtable as html tree file
-button_save_as_tree_html=iup.flatbutton{title="Startdatei als html \nBaumansicht speichern", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.9.1 button for saving TextHTMLtable as html tree file
+button_save_as_tree_html=iup.flatbutton{title="Startdatei als html \nBaumansicht speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_as_tree_html:flat_action()
 	--apply the recursive function and build html file
 	textforHTML=""
@@ -1338,6 +1485,29 @@ function button_save_as_tree_html:flat_action()
 	outputfile1:write("\n</body>\n</html>")
 	outputfile1:close()
 end --function button_save_as_tree_html:flat_action()
+
+--6.9.2 button for saving TextHTMLtable as html tree file
+button_save_as_table_html=iup.flatbutton{title="Startdatei als html \nTabellenansicht speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_save_as_table_html:flat_action()
+	--apply the recursive function and build html file
+	textforHTML=""
+	textforOnLoad_1=""
+	textforOnLoad_2=""
+	AusgabeTabelle={}
+	readTreetohtmlRecursiveLinksTable(lua_tree_output)
+	--write tree in html in the tree frame
+	outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua$",".html"),"w")
+	outputfile1:write(textBeginHTML_3)
+	outputfile1:write(textforOnLoad_1)
+	outputfile1:write(textBeginHTML_4)
+	outputfile1:write(textforOnLoad_2)
+	outputfile1:write(textBeginHTML_5)
+	--word wrap without this: outputfile1:write('<div class="tree">' .. "\n")
+	outputfile1:write(textforHTML)
+	--word wrap without this: outputfile1:write("</div>")
+	outputfile1:write("\n</body>\n</html>")
+	outputfile1:close()
+end --function button_save_as_table_html:flat_action()
 
 --6.10 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
@@ -1419,6 +1589,7 @@ maindlg = iup.dialog {
 			iup.fill{},
 			button_save_as_html,
 			button_save_as_tree_html,
+			button_save_as_table_html,
 			textbox2,
 			button_logo2,
 		}, --iup.hbox{
