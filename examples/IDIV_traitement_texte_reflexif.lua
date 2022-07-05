@@ -311,7 +311,7 @@ function funktionSuche(tableFolder) {
 		  var testText=tableFolder;//"imgfolder.1.1.1.1";
 		  //alert(testText.length);
 		  for (var i = 10; i < testText.length; i++){
-				if (testText.substring(i-1,i)!="."){
+				if (testText.substring(i-1,i)!="." && testText.substring(i,i+1)=="."){
 					//test with: alert(testText.substring(0,i));
 					funktionSuche(testText.substring(0,i)); //Tabellen, die in der Hierarchie darüber sind: Problem gelöschte Tabellen
 				} //if (testText.substring(i,i)+="."){
@@ -335,6 +335,83 @@ textBeginHTML_5=[[
 
 
 </script>
+
+
+]]
+
+textBeginHTML_6=[[
+
+  } //function onLoadFunction() {
+
+
+function funktionMarkieren(divTextFolder) {
+var divText = document.getElementById(divTextFolder);
+	divText.style="margin: "+divText.style.margin+";color:#f90";
+}//function funktionMarkieren(divTextFolder) {
+
+
+function funktionEntMarkieren(divTextFolder) {
+var divText = document.getElementById(divTextFolder);
+	divText.style="margin: "+divText.style.margin+";color:#000";
+}//function funktionEntMarkieren(divTextFolder) {
+
+
+function funktionSuche(divTextFolder) {
+	var divText = document.getElementById(divTextFolder);
+	//test with: alert(divTextFolder);
+	if (divText!=null){
+		if (divText.innerText.toLowerCase().search(document.InputForm.searchText.value.toLowerCase())>=0){
+			//alert(row.cells[j].innerText.replaceAll("_",""));
+			divText.style="margin: "+divText.style.margin+";color:#090";
+			//test with: alert(divText);
+			var testText=divTextFolder;//"imgfolder.1.1.1.1";
+			//alert(testText.length);
+			for (var i = 10; i < testText.length; i++){
+				if (testText.substring(i-1,i)!="." && testText.substring(i,i+1)=="."){
+					//test with: alert(testText.substring(0,i));
+					funktionMarkieren(testText.substring(0,i)); //Tabellen, die in der Hierarchie darüber sind: Problem gelöschte Tabellen
+				} //if (testText.substring(i,i)+="."){
+			}//for (var i = 0; i < testText.length; i++){
+			//testText=testText.substring(1,testText.length-1);
+			//alert(testText);
+		} //if (divText.innerText.toLowerCase().search(document.InputForm.searchText.value.toLowerCase())>=0){
+	} //if (divText!=null){
+} //function funktionSuche()
+
+
+function funktionSucheInAllenKnoten() {
+
+]]
+
+
+textBeginHTML_7=[[
+
+
+}//function funktionSucheInAllenKnoten() {
+
+
+
+function funktionEntmarkierenAllerKnoten() {
+
+]]
+
+
+textBeginHTML_8=[[
+
+
+}//function funktionEntmarkierenAllerKnoten() {
+
+
+
+  </script>
+</head>
+
+<form name="InputForm">
+<input type="button" value="Entmarkieren" onclick='funktionEntmarkierenAllerKnoten()'> 
+<input type="button" value="Suche in der Baumansicht" onclick='funktionSucheInAllenKnoten()'> 
+<input value="Status" name="searchText" size="54" type="text"> 
+</form>
+
 
 
 ]]
@@ -504,7 +581,7 @@ function change_state_keyword(new_state,keyword,descendants_also)
 	end --if descendants_also=="YES" then
 end --function change_state_keyword(new_state,level,descendants_also)
 
---3.6.1 function to build recursively the tree
+--3.6.1.1 function to build recursively the tree
 function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
 	linkNumber=linkNumberStart or 1
 	iNumber= iStart or 1
@@ -589,6 +666,186 @@ function readTreetohtmlRecursiveLinks(TreeTable,levelStart,levelFolderStart,iSta
 	level = level - 1
 end --readTreetohtmlRecursiveLinks(TreeTable)
 
+--3.6.1.2 function to build recursively the tree with leafs as text
+function readTreetohtmlRecursiveLinksLeaf(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
+	linkNumber=linkNumberStart or 1
+	iNumber= iStart or 1
+	levelFolder = (levelFolderStart or "") .. "." .. iNumber --string.rep(".x",level+1)
+	--test with: print(" >" .. levelFolder)
+	level = levelStart or 0
+	if TreeTable.branchname:match('"([^"]*)">') then
+		AusgabeTabelle[TreeTable.branchname:match('"([^"]*)">')]=true
+	else
+		AusgabeTabelle[TreeTable.branchname]=true
+	end --if TreeTable.branchname:match('"([^"]*)">') then
+	--build the branches
+	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px">'
+	if TreeTable[1]==nil then
+		textforHTML = textforHTML ..
+		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+	--collapsed does function with the onload function for the body
+	elseif TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML ..
+		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+	else
+		textforHTML = textforHTML ..
+		[[<img name="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+	end --if state=="COLLAPSED" then
+	if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+		LinkText='"' .. tostring(TreeTable.branchname) .. '">'
+	elseif TreeTable.branchname:match('"([^"]*)">')==nil then
+		LinkText='"">' --start html itself and not Tree_html_frame_home.html
+	else
+		LinkText=""
+	end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+	textforHTML = textforHTML ..
+	'<a name="link' .. linkNumber .. 'folder' .. levelFolder .. '" href=' ..
+	LinkText .. tostring(TreeTable.branchname)
+	:gsub("Ã¤","&auml;")
+	:gsub("Ã„","&Auml;")
+	:gsub("Ã¶","&ouml;")
+	:gsub("Ã–","&Ouml;")
+	:gsub("Ã¼","&uuml;")
+	:gsub("Ãœ","&Uuml;")
+	:gsub("ÃŸ","&szlig;")
+	.. "</a>" .. "</p>\n"
+	if TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '" style="display:none">\n'
+	else
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '" style="display:block">\n'
+	end --if state=="COLLAPSED" then
+	for i,v in ipairs(TreeTable) do
+		linkNumber=linkNumber+1
+		if type(v)=="table" then
+			level = level +1
+			readTreetohtmlRecursiveLinksLeaf(v,level,levelFolder,i,linkNumber)
+		else
+			if v:match('"([^"]*)">') then
+				AusgabeTabelle[v:match('"([^"]*)">')]=true
+			else
+				AusgabeTabelle[v]=true
+			end --if v:match('"([^"]*)">') then
+			if v:match('"([^"]*)">')==nil and tostring(v):match("http") then
+				LinkText='"' .. tostring(v) .. '">'
+			elseif v:match('"([^"]*)">')==nil then
+				LinkText='"">' --start html itself and not Tree_html_frame_home.html
+			else
+				LinkText=""
+			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px">' .. 
+			v
+			:gsub("Ã¤","&auml;")
+			:gsub("Ã„","&Auml;")
+			:gsub("Ã¶","&ouml;")
+			:gsub("Ã–","&Ouml;")
+			:gsub("Ã¼","&uuml;")
+			:gsub("Ãœ","&Uuml;")
+			:gsub("ÃŸ","&szlig;")
+			.. "</p>\n"
+		end --if type(v)=="table" then
+	end --for i, v in ipairs(TreeTable) do
+	--test with: print("  " .. levelFolder)
+	levelFolder=levelFolder:match("(.*)%.%d+$")
+	--test with: print("->" .. levelFolder)
+	textforHTML = textforHTML .. string.rep("\t",level) .. "</div>\n"
+	level = level - 1
+end --readTreetohtmlRecursiveLinksLeaf(TreeTable)
+
+--3.6.1.3 function to build recursively the tree with text
+function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
+	linkNumber=linkNumberStart or 1
+	iNumber= iStart or 1
+	levelFolder = (levelFolderStart or "") .. "." .. iNumber --string.rep(".x",level+1)
+	--test with: print(" >" .. levelFolder)
+	level = levelStart or 0
+	if TreeTable.branchname:match('"([^"]*)">') then
+		AusgabeTabelle[TreeTable.branchname:match('"([^"]*)">')]=true
+	else
+		AusgabeTabelle[TreeTable.branchname]=true
+	end --if TreeTable.branchname:match('"([^"]*)">') then
+	--build the branches
+	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px"'
+	if TreeTable[1]==nil then
+		textforHTML = textforHTML ..
+		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. [[");]]
+	--collapsed does function with the onload function for the body
+	elseif TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML ..
+		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. [[");]]
+	else
+		textforHTML = textforHTML ..
+		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. [[");]]
+	end --if state=="COLLAPSED" then
+	if TreeTable.branchname:match('"([^"]*)">')~=nil and tostring(TreeTable.branchname):match("http") then
+		LinkText='<a href='
+		LinkText_1='</a>'
+	elseif TreeTable.branchname:match('"([^"]*)">')==nil then
+		LinkText=''
+		LinkText_1=""
+	else
+		LinkText=""
+		LinkText_1=""
+	end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+	textforHTML = textforHTML ..
+	LinkText .. tostring(TreeTable.branchname)
+	:gsub("Ã¤","&auml;")
+	:gsub("Ã„","&Auml;")
+	:gsub("Ã¶","&ouml;")
+	:gsub("Ã–","&Ouml;")
+	:gsub("Ã¼","&uuml;")
+	:gsub("Ãœ","&Uuml;")
+	:gsub("ÃŸ","&szlig;")
+	.. LinkText_1 .. "</p>\n"
+	if TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '" style="display:none">\n'
+	else
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. '" style="display:block">\n'
+	end --if state=="COLLAPSED" then
+	for i,v in ipairs(TreeTable) do
+		linkNumber=linkNumber+1
+		if type(v)=="table" then
+			level = level +1
+			readTreetohtmlRecursiveLinksText(v,level,levelFolder,i,linkNumber)
+		else
+			if v:match('"([^"]*)">') then
+				AusgabeTabelle[v:match('"([^"]*)">')]=true
+			else
+				AusgabeTabelle[v]=true
+			end --if v:match('"([^"]*)">') then
+			if v:match('"([^"]*)">')==nil and tostring(v):match("http") then
+				LinkText='"' .. tostring(v) .. '">'
+			elseif v:match('"([^"]*)">')==nil then
+				LinkText='"">' --start html itself and not Tree_html_frame_home.html
+			else
+				LinkText=""
+			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. '>' ..  
+			v
+			:gsub("Ã¤","&auml;")
+			:gsub("Ã„","&Auml;")
+			:gsub("Ã¶","&ouml;")
+			:gsub("Ã–","&Ouml;")
+			:gsub("Ã¼","&uuml;")
+			:gsub("Ãœ","&Uuml;")
+			:gsub("ÃŸ","&szlig;")
+			.. "</p>\n"
+			textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
+			textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
+		end --if type(v)=="table" then
+	end --for i, v in ipairs(TreeTable) do
+	--test with: print("  " .. levelFolder)
+	levelFolder=levelFolder:match("(.*)%.%d+$")
+	--test with: print("->" .. levelFolder)
+	textforHTML = textforHTML .. string.rep("\t",level) .. "</div>\n"
+	level = level - 1
+end --readTreetohtmlRecursiveLinksText(TreeTable)
+
 --3.6.2 function to build recursively the tree with table view
 function readTreetohtmlRecursiveLinksTable(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
 	linkNumber=linkNumberStart or 1
@@ -613,12 +870,15 @@ function readTreetohtmlRecursiveLinksTable(TreeTable,levelStart,levelFolderStart
 		textforOnLoad_1=textforOnLoad_1 .. "\n" .. [[ <input type="button" value="Einklappen Knoten]] .. levelFolder .. [[" onclick='funktionEinklappen("imgfolder]] .. levelFolder .. [[")'>  ]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
 	end --if state=="COLLAPSED" then
-	if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
-		LinkText='"' .. tostring(TreeTable.branchname)
+	if TreeTable.branchname:match('"([^"]*)">')~=nil and tostring(TreeTable.branchname):match("http") then
+		LinkText='<a href='
+		LinkText_1='</a>'
 	elseif TreeTable.branchname:match('"([^"]*)">')==nil then
-		LinkText='' --start html itself and not Tree_html_frame_home.html
+		LinkText=''
+		LinkText_1=''
 	else
 		LinkText=""
+		LinkText_1=""
 	end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
 	textforHTML = textforHTML ..
 	'<tr style="height:200px"><td style="vertical-align:top;width:200px;background-color:#090">' ..
@@ -630,7 +890,7 @@ function readTreetohtmlRecursiveLinksTable(TreeTable,levelStart,levelFolderStart
 	:gsub("Ã¼","&uuml;")
 	:gsub("Ãœ","&Uuml;")
 	:gsub("ÃŸ","&szlig;")
-	.. "" .. "\n"
+	.. LinkText_1 .. "\n"
 	for i,v in ipairs(TreeTable) do
 		linkNumber=linkNumber+1
 		if type(v)=="table" then
@@ -645,7 +905,7 @@ function readTreetohtmlRecursiveLinksTable(TreeTable,levelStart,levelFolderStart
 			if v:match('"([^"]*)">')==nil and tostring(v):match("http") then
 				LinkText='"' .. tostring(v) .. '">'
 			elseif v:match('"([^"]*)">')==nil then
-				LinkText='' --start html itself and not Tree_html_frame_home.html
+				LinkText=''
 			else
 				LinkText=""
 			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
@@ -668,7 +928,7 @@ function readTreetohtmlRecursiveLinksTable(TreeTable,levelStart,levelFolderStart
 	--test with: print("->" .. levelFolder)
 	textforHTML = textforHTML .. string.rep("\t",level) .. "</td></tr></table>\n"
 	level = level - 1
-end --readTreetohtmlRecursiveLinks(TreeTable)
+end --readTreetohtmlRecursiveLinksTable(TreeTable)
 
 --4. dialogs
 --4.1 rename dialog
@@ -1466,7 +1726,7 @@ function button_save_as_html:flat_action()
 	outputfile1:close()
 end --function button_save_as_html:flat_action()
 
---6.9.1 button for saving TextHTMLtable as html tree file
+--6.9.1.1 button for saving TextHTMLtable as html tree file
 button_save_as_tree_html=iup.flatbutton{title="Startdatei als html \nBaumansicht speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_as_tree_html:flat_action()
 	--apply the recursive function and build html file
@@ -1486,7 +1746,51 @@ function button_save_as_tree_html:flat_action()
 	outputfile1:close()
 end --function button_save_as_tree_html:flat_action()
 
---6.9.2 button for saving TextHTMLtable as html tree file
+--6.9.1.2 button for saving TextHTMLtable as html tree file with leafs as text
+button_save_as_tree_leaf_html=iup.flatbutton{title="Startdatei als Blatt-html \nBaumansicht speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_save_as_tree_leaf_html:flat_action()
+	--apply the recursive function and build html file
+	textforHTML=""
+	textforOnLoad=""
+	AusgabeTabelle={}
+	readTreetohtmlRecursiveLinksLeaf(lua_tree_output)
+	--write tree in html in the tree frame
+	outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua$",".html"),"w")
+	outputfile1:write(textBeginHTML_1)
+	outputfile1:write(textforOnLoad)
+	outputfile1:write(textBeginHTML_2)
+	--word wrap without this: outputfile1:write('<div class="tree">' .. "\n")
+	outputfile1:write(textforHTML)
+	--word wrap without this: outputfile1:write("</div>")
+	outputfile1:write("\n</body>\n</html>")
+	outputfile1:close()
+end --function button_save_as_tree_leaf_html:flat_action()
+
+--6.9.1.3 button for saving TextHTMLtable as html tree file with text
+button_save_as_tree_text_html=iup.flatbutton{title="Startdatei als Text-html \nBaumansicht speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_save_as_tree_text_html:flat_action()
+	--apply the recursive function and build html file
+	textforHTML=""
+	textforOnLoad=""
+	textforOnLoad_2=""
+	AusgabeTabelle={}
+	readTreetohtmlRecursiveLinksText(lua_tree_output)
+	--write tree in html in the tree frame
+	outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua$",".html"),"w")
+	outputfile1:write(textBeginHTML_1)
+	outputfile1:write(textBeginHTML_6)
+	outputfile1:write(textforOnLoad)
+	outputfile1:write(textBeginHTML_7)
+	outputfile1:write(textforOnLoad_2)
+	outputfile1:write(textBeginHTML_8)
+	--word wrap without this: outputfile1:write('<div class="tree">' .. "\n")
+	outputfile1:write(textforHTML)
+	--word wrap without this: outputfile1:write("</div>")
+	outputfile1:write("\n</body>\n</html>")
+	outputfile1:close()
+end --function button_save_as_tree_text_html:flat_action()
+
+--6.9.2 button for saving TextHTMLtable as html tree file with table view
 button_save_as_table_html=iup.flatbutton{title="Startdatei als html \nTabellenansicht speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_as_table_html:flat_action()
 	--apply the recursive function and build html file
@@ -1589,6 +1893,8 @@ maindlg = iup.dialog {
 			iup.fill{},
 			button_save_as_html,
 			button_save_as_tree_html,
+			button_save_as_tree_leaf_html,
+			button_save_as_tree_text_html,
 			button_save_as_table_html,
 			textbox2,
 			button_logo2,
