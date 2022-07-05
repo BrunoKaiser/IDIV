@@ -825,7 +825,7 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 			else
 				LinkText=""
 			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
-			----[[with distinct lines and leafs can start at any key:
+			----[====[with distinct lines and leafs can start at any key:
 			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. '>' ..  
 			v
 			:gsub("Ã¤","&auml;")
@@ -836,9 +836,11 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 			:gsub("Ãœ","&Uuml;")
 			:gsub("ÃŸ","&szlig;")
 			.. "</p>\n"
-			--]]
+			textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
+			textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
+			--]====]
 			--
-			--[[with one text for all leafs when all leafs starts at key = 1
+			--[====[with one text for all leafs when all leafs starts at key = 1
 			if i==1 then
 				textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. '>' ..  
 				v
@@ -849,6 +851,8 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 				:gsub("Ã¼","&uuml;")
 				:gsub("Ãœ","&Uuml;")
 				:gsub("ÃŸ","&szlig;")
+				textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
+				textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
 			else
 				textforHTML = textforHTML .. " " .. 
 				v
@@ -861,9 +865,7 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 				:gsub("ÃŸ","&szlig;")
 				--not necessary, but difficult to set so omit:			.. "</p>\n"
 			end --if i==1 then
-			--]]
-			textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
-			textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
+			--]====]
 		end --if type(v)=="table" then
 	end --for i, v in ipairs(TreeTable) do
 	--test with: print("  " .. levelFolder)
