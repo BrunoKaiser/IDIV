@@ -56,7 +56,7 @@ end --function string.escape_forbidden_char(insertstring)
 --3.2.1 function for writing tree in a text file (function for printing tree)
 function printtree()
 	--open a filedialog
-	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
+	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswÃ¤hlen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
 	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg2.status=="1" or filedlg2.status=="0" then
 		local outputfile=io.output(filedlg2.value) --setting the outputfile
@@ -69,7 +69,7 @@ function printtree()
 		end --for i=0,tree.totalchildcount0 do
 		outputfile:close() --close the outputfile
 	else --no outputfile was choosen
-		iup.Message("Schließen","Keine Datei ausgewählt")
+		iup.Message("SchlieÃŸen","Keine Datei ausgewÃ¤hlt")
 		iup.NextField(maindlg)
 	end --if filedlg2.status=="1" or filedlg2.status=="0" then
 end --function printtree()
@@ -278,7 +278,7 @@ dlg_rename = iup.dialog{
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	local help=false
 	--downward search
@@ -337,7 +337,7 @@ end --for i=0, tree.count - 1 do
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	local help=false
 	--upward search
@@ -366,7 +366,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --	function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
@@ -374,12 +374,12 @@ search_label=iup.label{title="Suchfeld:"} --label for textfield
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,
 			}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 
 			iup.hbox{searchdown, searchup, 
 
@@ -492,7 +492,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -507,7 +507,7 @@ function addbranch_fromclipboard:action()
 end --function addbranch_fromclipboard:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -578,7 +578,7 @@ img_logo = iup.image{
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraÃŸe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
 end --function button_logo:flat_action()
 
 --6.2 button for saving tree
@@ -659,7 +659,7 @@ function button_load_tree_from_database_from_textbox1:flat_action()
 end --function button_load_tree_from_database_from_textbox1:flat_action()
 
 --6.6.2 button for loading next tree from Tree_ID
-button_load_next_tree_ID_from_database=iup.flatbutton{title="Nächsten Baum aus der \nDatenbank laden", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_load_next_tree_ID_from_database=iup.flatbutton{title="NÃ¤chsten Baum aus der \nDatenbank laden", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_load_next_tree_ID_from_database:flat_action()
 	treeMax=0
 	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Max(Tree_ID) AS Tree_Max from treeTable"')
@@ -788,7 +788,7 @@ function button_compute_results_in_database:flat_action()
 end --function button_compute_results_in_database:flat_action()
 
 --6.8.2 button for computing tree result in graphical user interface
-button_compute_results_in_GUI=iup.flatbutton{title="Ergebnisse in der \nOberfläche berechnen", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_compute_results_in_GUI=iup.flatbutton{title="Ergebnisse in der \nOberflÃ¤che berechnen", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_compute_results_in_GUI:flat_action()
 
 
@@ -800,7 +800,7 @@ function button_compute_results_in_GUI:flat_action()
 			for i1=i+1, i+tree2["totalchildcount" .. i] do
 				if tree2["parent" .. i1]==tostring(i) then
 					local saldoNumber=tonumber(tree2["TITLE" .. i1]:match(": +([^:]*)$"))
-					local compareNumber=tonumber(tree2["TITLE" .. i1]:match("; +(%d*)[^:]*: +[^:]*$"))
+					local compareNumber=tonumber(tree2["TITLE" .. i1]:match("; +(%d*[^:]*): +[^:]*$"))
 					--test with: print(saldoNumber)
 					totalSaldo=totalSaldo+(saldoNumber or 0)
 					compareSaldo=compareSaldo+(compareNumber or 0)
@@ -821,7 +821,7 @@ end --function button_compute_results_in_GUI:flat_action()
 --6.9 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraÃŸe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
 end --function button_logo:flat_action()
 
 --6 buttons end
