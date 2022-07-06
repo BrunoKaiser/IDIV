@@ -37,3 +37,9 @@ This script runs a graphical user interface (GUI) in order to built up a documen
 8. simple_documentation_tree_with_analysis.lua
 
 This script opens a tree and analysis of it can be done, especially the analysis of dublicate nodes.
+
+9. simple_documentation_tree_sqlite.lua
+
+This script opens a graphical user interface acting as a front end of a SQLite database. SQLite must be installed with command line tools so that C:\sqlite3\sqlite3.exe can be executed. SQLite can be download from https://sqlite.org/index.html website under https://sqlite.org/download.html, for instance https://sqlite.org/2022/sqlite-tools-win32-x86-3390000.zip or further versions.
+
+
