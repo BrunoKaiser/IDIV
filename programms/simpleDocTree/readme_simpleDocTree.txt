@@ -38,8 +38,15 @@ This script runs a graphical user interface (GUI) in order to built up a documen
 
 This script opens a tree and analysis of it can be done, especially the analysis of dublicate nodes.
 
-9. simple_documentation_tree_sqlite.lua
+9. graphical user interfaces with SQLite
 
-This script opens a graphical user interface acting as a front end of a SQLite database. SQLite must be installed with command line tools so that C:\sqlite3\sqlite3.exe can be executed. SQLite can be download from https://sqlite.org/index.html website under https://sqlite.org/download.html, for instance https://sqlite.org/2022/sqlite-tools-win32-x86-3390000.zip or further versions.
+These scripts needs SQLite. It must be installed with command line tools so that C:\sqlite3\sqlite3.exe can be executed. SQLite can be download from https://sqlite.org/index.html website under https://sqlite.org/download.html, for instance https://sqlite.org/2022/sqlite-tools-win32-x86-3390000.zip or further versions.
 
+9.1 simple_documentation_tree_sqlite.lua
+
+This script opens a graphical user interface acting as a front end of a SQLite database with the table treeTable with the fields Tree_ID and Tree.
+
+9.2 simple_documentation_tree_sqlite_with_import_data.lua
+
+This script opens a graphical user interface acting as a front end of a SQLite database with the table treeTable with the fields Tree_ID, Tree and Tree_result and combines the trees stored in the field Tree with the data stored in a table DataForTrees with the fields DataKey, DataValue and DataValue_compare. The aggregation of the data is done in the graphical user interface.
 
