@@ -322,6 +322,20 @@ function searchmark:flat_action()
 			iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})
 			iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"})
 		end --if tree["title" .. i]:upper():match(searchtext.value:upper())~= nil then
+	end --for i=0, tree.count - 1 do
+	--mark all nodes end
+	--unmark all nodes
+	for i=0, tree2.count - 1 do
+			tree2["color" .. i]="0 0 0"
+	end --for i=0, tree2.count - 1 do
+	--unmark all nodes end
+	--mark all nodes
+	for i=0, tree2.count - 1 do
+		if tree2["title" .. i]:upper():match(searchtext.value:upper())~= nil then
+			iup.TreeSetAncestorsAttributes(tree2,i,{color="255 0 0",})
+			iup.TreeSetNodeAttributes(tree2,i,{color="0 0 250",})
+			iup.TreeSetDescendantsAttributes(tree2,i,{color="90 195 0"})
+		end --if tree2["title" .. i]:upper():match(searchtext.value:upper())~= nil then
 	end --for i=0, tree2.count - 1 do
 	--mark all nodes end
 end --function searchmark:flat_action()
@@ -333,6 +347,11 @@ function unmark:flat_action()
 for i=0, tree.count - 1 do
 	tree["color" .. i]="0 0 0"
 end --for i=0, tree.count - 1 do
+--unmark all nodes end
+--unmark all nodes
+for i=0, tree2.count - 1 do
+	tree2["color" .. i]="0 0 0"
+end --for i=0, tree2.count - 1 do
 --unmark all nodes end
 end --function unmark:flat_action()
 
@@ -534,6 +553,21 @@ menu = iup.menu{
 --5.1 menu of tree end
 
 
+--5.2 menu of tree2
+--5.2.1 copy node of tree2
+startcopy2 = iup.item {title = "Knoten kopieren"}
+function startcopy2:action() --copy node
+	clipboard.text=tree2['title']
+end --function startcopy2:action() 
+
+--5.2.2 put the menu items together in the menu for tree2
+menu2 = iup.menu{
+		startcopy2,
+		}
+--5.2 menu of tree2 end
+
+
+
 --5. context menus (menus for right mouse click) end
 
 
@@ -588,7 +622,7 @@ function button_save_lua_table:flat_action()
 end --function button_save_lua_table:flat_action()
 
 --6.3 button for search in tree, tree2 and tree3
-button_search=iup.flatbutton{title="Suchen\n(Strg+F)", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_search=iup.flatbutton{title="Suchen\n(Strg+F)", size="35x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_search:flat_action()
 	searchtext.value=tree.title
 	searchtext.SELECTION="ALL"
@@ -596,7 +630,7 @@ function button_search:flat_action()
 end --function button_search:flat_action()
 
 --6.4 button for expand and collapse
-button_expand_collapse_dialog=iup.flatbutton{title="Ein-/Ausklappen\n(Strg+R)", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_expand_collapse_dialog=iup.flatbutton{title="Ein-/Ausklappen\n(Strg+R)", size="65x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_expand_collapse_dialog:flat_action()
 	text_expand_collapse.value=tree.title
 	dlg_expand_collapse:popup(iup.ANYWHERE, iup.ANYWHERE)
@@ -609,7 +643,7 @@ function button_alphabetic_sort:flat_action()
 end --function button_alphabetic_sort:flat_action()
 
 --6.6.1 button for loading tree from Tree_ID in textbox1
-button_load_tree_from_database_from_textbox1=iup.flatbutton{title="Baum aus der \nDatenbank laden", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_load_tree_from_database_from_textbox1=iup.flatbutton{title="Baum aus der \nDatenbank laden", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_load_tree_from_database_from_textbox1:flat_action()
 	tree.delnode0 = "CHILDREN"
 	tree.title='compare'
@@ -635,31 +669,33 @@ function button_load_tree_from_database_from_textbox1:flat_action()
 	tree:AddNodes(actualtree)
 	--result tree
 	tree2.delnode0 = "CHILDREN"
-	tree2.title='compare'
+	tree2.title='keine Ergebnisse'
 	tableNameFound="no"
-	TreeText=""
+	TreeText2=""
 	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Tree_result from treeTable where Tree_ID=' .. textbox1.value .. '"')
 	for line in p:lines() do
 		if tableNameFound=="no" and line:match('=')~= nil then 
 			tablename=line:sub(1,line:find('=')-1):gsub(' ', '')
 			tableNameFound="yes"
 		end --if line:match('=')~= nil then 
-		TreeText=TreeText .. line
+		TreeText2=TreeText2 .. line
 	end --for line in io.lines(path_documentation_tree) do
 	--save table in the variable actualtree
 	--Lua 5.1 has the function loadstring() - in later versions, this is replaced by load(), hence we detect this here
-	if _VERSION=='Lua 5.1' then
-		loadstring(TreeText)()
-		loadstring('resulttree='..tablename)()
-	else
-		load(TreeText)() --now actualtree is the table.
-		load('resulttree='..tablename)() --now actualtree is the table.
-	end --if _VERSION=='Lua 5.1' then
-	tree2:AddNodes(resulttree)
+	if TreeText2~="" then
+		if _VERSION=='Lua 5.1' then
+			loadstring(TreeText2)()
+			loadstring('resulttree='..tablename)()
+		else
+			load(TreeText2)() --now actualtree is the table.
+			load('resulttree='..tablename)() --now actualtree is the table.
+		end --if _VERSION=='Lua 5.1' then
+		tree2:AddNodes(resulttree)
+	end --if TreeText2~="" then
 end --function button_load_tree_from_database_from_textbox1:flat_action()
 
 --6.6.2 button for loading next tree from Tree_ID
-button_load_next_tree_ID_from_database=iup.flatbutton{title="Nächsten Baum aus der \nDatenbank laden", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_load_next_tree_ID_from_database=iup.flatbutton{title="Nächsten Baum aus der \nDatenbank laden", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_load_next_tree_ID_from_database:flat_action()
 	treeMax=0
 	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Max(Tree_ID) AS Tree_Max from treeTable"')
@@ -679,8 +715,8 @@ function button_load_next_tree_ID_from_database:flat_action()
 	end --if textbox1.value+1<=treeMax then
 end --function button_load_next_tree_ID_from_database:flat_action()
 
---6.6.2 button for loading previous tree from Tree_ID
-button_load_previous_tree_ID_from_database=iup.flatbutton{title="Vorigen Baum aus der \nDatenbank laden", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.6.3 button for loading previous tree from Tree_ID
+button_load_previous_tree_ID_from_database=iup.flatbutton{title="Vorigen Baum aus der \nDatenbank laden", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_load_previous_tree_ID_from_database:flat_action()
 	treeMax=0
 	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Max(Tree_ID) AS Tree_Max from treeTable"')
@@ -700,8 +736,31 @@ function button_load_previous_tree_ID_from_database:flat_action()
 	end --if textbox1.value+1<=treeMax then
 end --function button_load_previous_tree_ID_from_database:flat_action()
 
+--6.6.4 button for loading tree from Tree_ID of chosen node
+button_load_tree_ID_from_node_from_database=iup.flatbutton{title="Baum des Knotens aus \nder Datenbank laden", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_load_tree_ID_from_node_from_database:flat_action()
+	i=tree2.value
+	nodeChosen=tree2['title' .. i]
+	if nodeChosen:match("[^;]*;") then nodeChosen=nodeChosen:match("([^;]*);"):gsub(" *$","") end
+	--test with: 
+print(nodeChosen)
+	--test with: print([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree LIKE 'Tree={branchname=\"]] .. nodeChosen .. [[\"%'"]])
+	p=io.popen([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree LIKE 'Tree={branchname=\"]] .. nodeChosen .. [[\"%'"]])
+	j=1
+	for line in p:lines() do textbox1.value=line j=j+1 end
+	--test with: print(j)
+	if j>1 and tonumber(i)>0 then
+		textbox2.value=tree2['title' .. 0]
+		button_load_tree_from_database_from_textbox1:flat_action()
+	elseif tonumber(i)==0 then
+		textbox2.value=""
+	else
+		textbox2.value="Baum nicht gefunden"
+	end --if j>1 and i>0 then
+end --function button_load_tree_ID_from_node_from_database:flat_action()
+
 --6.7 button for saving tree in data base
-button_saving_tree_in_database=iup.flatbutton{title="Baum in Datenbank \nspeichern", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_saving_tree_in_database=iup.flatbutton{title="Baum in Datenbank \nspeichern", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_saving_tree_in_database:flat_action()
 	treeMax=0
 	treeText=save_tree_to_lua_database(tree)
@@ -713,8 +772,8 @@ function button_saving_tree_in_database:flat_action()
 	os.execute([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "INSERT INTO treeTable (Tree_ID,Tree) VALUES (]] .. treeMax+1 .. [[,']] .. treeText .. [[');"]])
 end --function button_saving_tree_in_database:flat_action()
 
---6.8.1 button for saving tree result in data base
-button_compute_results_in_database=iup.flatbutton{title="Ergebnisse in der \nDatenbank berechnen", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.8.1.1 button for saving tree result in data base
+button_compute_results_in_database=iup.flatbutton{title="Ergebnisse in der \nDatenbank berechnen", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_compute_results_in_database:flat_action()
 	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select DataKey, DataValue, DataValue_compare from DataForTrees;"')
 	ValueTable={}
@@ -751,6 +810,7 @@ function button_compute_results_in_database:flat_action()
 		end --for k, v in ipairs(TreeTable) do
 	end --readTreeToResultRecursive(TreeTable)
 
+	outputfile1=io.open("C:\\Temp\\Testdaten_Trees_Result.txt","w")
 	for i,v in ipairs(ID_Table) do
 		tableNameFound="no"
 		TreeText=""
@@ -775,23 +835,226 @@ function button_compute_results_in_database:flat_action()
 
 		--recursively go through the tree
 		resulttree={}
-		readTreeToResultRecursive(actualtree,resulttree)
 		outputText=""
+		readTreeToResultRecursive(actualtree,resulttree)
 		writeTreeTableRecursive(resulttree,"Tree_result=")
-		outputText= string.escape_forbidden_char(outputText) --:gsub("\"","\\\"") --etc...
+		--only for shell script: outputText= string.escape_forbidden_char(outputText) --:gsub("\"","\\\"") --etc...
+		outputfile1:write(v .. "|" .. outputText .. "\n")
 		--test with: print(outputText)
-		--
-		os.execute([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "UPDATE treeTable SET Tree_result=']] .. outputText .. [[' WHERE Tree_ID=]] .. v .. [[;"]])
+		--test with, but Befehlszeile ist zu lang: os.execute([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "UPDATE treeTable SET Tree_result=']] .. outputText .. [[' WHERE Tree_ID=]] .. v .. [[;"]])
 		--test with: print([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "UPDATE treeTable SET Tree_result=']] .. outputText .. [[' WHERE Tree_ID=]] .. v .. [[;"]])
 	end --for i,v in ipairs(ID_Table) do
+	outputfile1:close()
 
+outputfile2=io.open("c:\\temp\\Testdaten_Trees_ResultSQLite_Import.txt","w+")
+outputfile2:write([[
+DELETE FROM Tree_Result;
+.separator "|"
+.import c:/temp/Testdaten_Trees_Result.txt Tree_Result
+UPDATE treeTable SET Tree_result = (SELECT Tree_result FROM Tree_result WHERE Tree_ID = treeTable.Tree_ID);
+]])
+outputfile2:close()
+	os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite ".read c:/temp/Testdaten_Trees_ResultSQLite_Import.txt"')
 end --function button_compute_results_in_database:flat_action()
 
---6.8.2 button for computing tree result in graphical user interface
-button_compute_results_in_GUI=iup.flatbutton{title="Ergebnisse in der \nOberfläche berechnen", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
-function button_compute_results_in_GUI:flat_action()
+--6.8.1.2 button for computing tree result in data base with subtotals
+button_compute_results_in_tree=iup.flatbutton{title="Ergebnisse im \nBaum berechnen", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_compute_results_in_tree:flat_action()
+	--collect IDs in Lua table
+	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Tree_ID from treeTable;"')
+	ID_Table={}
+	for line in p:lines() do
+		ID_Table[#ID_Table+1]=line
+	end --for line in io.lines(path_documentation_tree) do
+
+	--Tree_result={branchname="GvKNr_1192296683","T1192296683; 9999: -99993798.73",{branchname="GvKBr_17",{branchname="T1192296683; 1: -3798.73",},},{branchname="GvKBr_9",{branchname="T7956662058; 1: 4091.86",},},{branchname="GvKBr_7",{branchname="T2131830513; 1: -12525.35",},},{branchname="GvKBr_14",{branchname="T8676430702; 1: -3122.14",},},}
+	outputfile1=io.open("C:\\Temp\\Testdaten_Trees_Result.txt","w")
+	for i,v in ipairs(ID_Table) do
+		TreeText=""
+		p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Tree_result from treeTable where Tree_ID=' .. v .. ';"')
+		for line in p:lines() do
+			if tableNameFound=="no" and line:match('=')~= nil then 
+				tablename=line:sub(1,line:find('=')-1):gsub(' ', '')
+				tableNameFound="yes"
+			end --if line:match('=')~= nil then 
+			TreeText=TreeText .. line
+		end --for line in io.lines(path_documentation_tree) do
+		--save table in the variable Tree_result
+		--Lua 5.1 has the function loadstring() - in later versions, this is replaced by load(), hence we detect this here
+		if _VERSION=='Lua 5.1' then
+			loadstring(TreeText)()
+			loadstring('Tree_result='..tablename)()
+		else
+			load(TreeText)() --now Tree_result is the table.
+			load('Tree_result='..tablename)() --now Tree_result is the table.
+		end --if _VERSION=='Lua 5.1' then
+		--test with: print(Tree_result)
+
+		--function for recursion to build the sum backwards
+		levelMax=0
+		local function BackwardRecursion(QuellTabelle,ZielTabelle)
+		levelMax=levelMax+1
+			ZielTabelle.branchname=QuellTabelle.branchname
+			--test with: print(QuellTabelle.branchname)
+			local Value_Sum=0
+			local Value_compare_Sum=0
+			for i,v in ipairs(QuellTabelle) do
+				--test with: print(i,v)
+				if type(v)=="table" and v.branchname:match("^.*;.*:")==nil then
+					ZielTabelle[i]=QuellTabelle[i]
+					Value_Sum=nil
+					Value_compare_Sum=nil
+					BackwardRecursion(v,ZielTabelle[i])
+				elseif type(v)=="table" and v.branchname:match("^.*;.*:") then
+					if Value_Sum then Value_Sum=Value_Sum+v.branchname:match("^.*;.*:(.*)") end
+					if Value_compare_Sum then Value_compare_Sum=Value_compare_Sum+v.branchname:match("^.*;(.*):.*") end
+					ZielTabelle[i]=QuellTabelle[i]
+				elseif v:match("^.*;.*:") then
+					if Value_Sum then Value_Sum=Value_Sum+v:match("^.*;.*:(.*)") end
+					if Value_compare_Sum then Value_compare_Sum=Value_compare_Sum+v:match("^.*;(.*):.*") end
+					ZielTabelle[i]=QuellTabelle[i]
+				else
+					ZielTabelle[i]=QuellTabelle[i]
+				end --if type(v)=="table" and type(v[1])~="number" then
+			end --if type(v)=="table" and v[1]:match("^.*;.*:")==nil then
+			if Value_Sum and Value_compare_Sum then
+				ZielTabelle.branchname=QuellTabelle.branchname .. ";" .. Value_compare_Sum .. ":" .. Value_Sum
+			end --if Value_Sum and Value_compare_Sum then
+		end --function BackwardRecursion(QuellTabelle)
+		--apply recursion with number of result trees as needed
+		Tree_resultTable={}
+		Tree_resultTable[1]={} BackwardRecursion(Tree_result,Tree_resultTable[1])
+		--test with: print(levelMax)
+		for i=2,math.tointeger(levelMax) do
+			--test with: print("i-1: " .. i-1 .. ": " .. Tree_resultTable[i-1].branchname)
+			if Tree_resultTable[i-1].branchname:match("^.*;.*:(.*)")==nil then
+				Tree_resultTable[i]={} BackwardRecursion(Tree_resultTable[i-1],Tree_resultTable[i])
+				--test with: print("new computation needed")
+			else
+				break
+			end --if Tree_resultTable[i-1].branchname:match("^.*;.*:(.*)")==nil then
+		end --for i=2,levelMax do
 
 
+		outputText=""
+		writeTreeTableRecursive(Tree_resultTable[#Tree_resultTable],"Tree_result=")
+		--only for shell script: outputText= string.escape_forbidden_char(outputText) --:gsub("\"","\\\"") --etc...
+		outputfile1:write(v .. "|" .. outputText .. "\n")
+	end --for i,v in ipairs(ID_Table) do
+	outputfile1:close()
+
+outputfile2=io.open("c:\\temp\\Testdaten_Trees_ResultSQLite_Import.txt","w+")
+outputfile2:write([[
+DELETE FROM Tree_Result;
+.separator "|"
+.import c:/temp/Testdaten_Trees_Result.txt Tree_Result
+UPDATE treeTable SET Tree_result = (SELECT Tree_result FROM Tree_result WHERE Tree_ID = treeTable.Tree_ID);
+]])
+outputfile2:close()
+	os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite ".read c:/temp/Testdaten_Trees_ResultSQLite_Import.txt"')
+
+
+end --function button_compute_results_in_tree:flat_action()
+
+--6.8.2.1 button for computing tree result in graphical user interface
+button_compute_results_in_GUI1=iup.flatbutton{title="Ergebnisse in der \nOberfläche berechnen 1", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_compute_results_in_GUI1:flat_action()
+	TreeText=""
+	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Tree from treeTable where Tree_ID=' .. textbox1.value .. '"')
+	for line in p:lines() do
+		if tableNameFound=="no" and line:match('=')~= nil then 
+			tablename=line:sub(1,line:find('=')-1):gsub(' ', '')
+			tableNameFound="yes"
+		end --if line:match('=')~= nil then 
+		TreeText=TreeText .. line
+	end --for line in io.lines(path_documentation_tree) do
+	--save table in the variable actualtree
+	--Lua 5.1 has the function loadstring() - in later versions, this is replaced by load(), hence we detect this here
+	if _VERSION=='Lua 5.1' then
+		loadstring(TreeText)()
+		loadstring('Tree_result='..tablename)()
+	else
+		load(TreeText)() --now actualtree is the table.
+		load('Tree_result='..tablename)() --now actualtree is the table.
+	end --if _VERSION=='Lua 5.1' then
+	--test with: Tree_result={branchname="GvKNr_1192296683","T1192296683; 9999: -99993798.73",{branchname="GvKBr_17",{branchname="T1192296683; 1: -3798.73",},},{branchname="GvKBr_9",{branchname="T7956662058; 1: 4091.86",},},{branchname="GvKBr_7",{branchname="T2131830513; 1: -12525.35",},},{branchname="GvKBr_14",{branchname="T8676430702; 1: -3122.14",},},}
+	--function for recursion to build the sum backwards
+	levelMax=0
+	local function BackwardRecursion(QuellTabelle,ZielTabelle)
+	levelMax=levelMax+1
+		ZielTabelle.branchname=QuellTabelle.branchname
+		--test with: print(QuellTabelle.branchname)
+		local Value_Sum=0
+		local Value_compare_Sum=0
+		for i,v in ipairs(QuellTabelle) do
+			--test with: print(i,v)
+			if type(v)=="table" and v.branchname:match("^.*;.*:")==nil then
+				ZielTabelle[i]=QuellTabelle[i]
+				Value_Sum=nil
+				Value_compare_Sum=nil
+				BackwardRecursion(v,ZielTabelle[i])
+			elseif type(v)=="table" and v.branchname:match("^.*;.*:") then
+				if Value_Sum then Value_Sum=Value_Sum+v.branchname:match("^.*;.*:(.*)") end
+				if Value_compare_Sum then Value_compare_Sum=Value_compare_Sum+v.branchname:match("^.*;(.*):.*") end
+				ZielTabelle[i]=QuellTabelle[i]
+			elseif v:match("^.*;.*:") then
+				if Value_Sum then Value_Sum=Value_Sum+v:match("^.*;.*:(.*)") end
+				if Value_compare_Sum then Value_compare_Sum=Value_compare_Sum+v:match("^.*;(.*):.*") end
+				ZielTabelle[i]=QuellTabelle[i]
+			else
+				ZielTabelle[i]=QuellTabelle[i]
+			end --if type(v)=="table" and type(v[1])~="number" then
+		end --if type(v)=="table" and v[1]:match("^.*;.*:")==nil then
+		if Value_Sum and Value_compare_Sum then
+			ZielTabelle.branchname=QuellTabelle.branchname .. ";" .. Value_compare_Sum .. ":" .. Value_Sum
+		end --if Value_Sum and Value_compare_Sum then
+	end --function BackwardRecursion(QuellTabelle)
+	--apply recursion with number of result trees as needed
+	Tree_resultTable={}
+	Tree_resultTable[1]={} BackwardRecursion(Tree_result,Tree_resultTable[1])
+	--test with: print(levelMax)
+	for i=2,math.tointeger(levelMax) do
+		--test with: print("i-1: " .. i-1 .. ": " .. Tree_resultTable[i-1].branchname)
+		if Tree_resultTable[i-1].branchname:match("^.*;.*:(.*)")==nil then
+			Tree_resultTable[i]={} BackwardRecursion(Tree_resultTable[i-1],Tree_resultTable[i])
+			--test with: print("new computation needed")
+		else
+			break
+		end --if Tree_resultTable[i-1].branchname:match("^.*;.*:(.*)")==nil then
+	end --for i=2,levelMax do
+	--write result in the tree2
+	tree2.delnode0 = "CHILDREN"
+	tree2.title='compare'
+	tree2:AddNodes(Tree_resultTable[#Tree_resultTable])
+	--
+	--[====[test with: write tree recursively
+	outputfile1=io.open("C:\\Temp\\Tree_LuatoLua_Tree.lua","w")
+	--define recursive function
+	function writeTreeRecursive(TreeTable,StartText)
+		--write StartText Tree= or , before {branchname=
+		--branch:
+		outputfile1:write(StartText .. '{branchname="' .. TreeTable.branchname:gsub("\\", "\\\\"):gsub("\"", "\\\""):gsub("\'", "\\\'"):gsub("\n", "\\n"):gsub("\r", "\\n") .. '"')
+		for i,v in ipairs(TreeTable) do
+			if type(v)=="table" then
+				writeTreeRecursive(v,",\n")
+			else
+				--leafs:
+				outputfile1:write(',\n"' .. v:gsub("\\", "\\\\"):gsub("\"", "\\\""):gsub("\'", "\\\'"):gsub("\n", "\\n"):gsub("\r", "\\n") .. '"')
+			end --if type(v)=="table" then
+		end --for i,v in ipairs(TreeTable) do
+		--after all leafs:
+		outputfile1:write(',} --' .. TreeTable.branchname .. '\n')
+	end --function writeTreeRecursive(TreeTable,StartText)
+	--use recursive function
+	writeTreeRecursive(Tree_resultTable[#Tree_resultTable],"Tree=")
+	--close file
+	outputfile1:close()
+	--]====]
+end --function button_compute_results_in_GUI1:flat_action()
+
+--6.8.2.2 button for computing tree result in graphical user interface
+button_compute_results_in_GUI2=iup.flatbutton{title="Ergebnisse in der \nOberfläche berechnen 2", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_compute_results_in_GUI2:flat_action()
 	for i=tree2.count-1,0,-1 do
 		if tree2["KIND" .. i]=="BRANCH" and tree2["depth" .. i]>="0" and tree2["TITLE" .. i]:match(":")==nil then
 			if tree2["depth" .. i]>"0" then tree2["state" .. i]="COLLAPSED" end
@@ -814,11 +1077,15 @@ function button_compute_results_in_GUI:flat_action()
 			tree2["titlefont" .. i] = "Courier, 10"
 		end --if tree2["KIND" .. i]=="BRANCH" and tree2["depth" .. i]>="1" then
 	end --for i=tree2.count-1,0,-1 do
+end --function button_compute_results_in_GUI2:flat_action()
 
+--6.9 button for the import of the data
+button_import_data=iup.flatbutton{title="Daten \nimportieren", size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_import_data:flat_action()
+	os.execute("C:\\Tree\\reflexiveDocTree\\reflexive_documentation_tree_with_dataform.lua")
+end --function button_import_data:flat_action()
 
-end --function button_compute_results_in_GUI:flat_action()
-
---6.9 button with second logo
+--6.10 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
 	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
@@ -829,7 +1096,8 @@ end --function button_logo:flat_action()
 
 --7 Main Dialog
 --text boxes
-textbox1=iup.text{value="1",size="40x20"}
+textbox1=iup.text{value="1",size="30x20"}
+textbox2=iup.multiline{value="",size="50x20",wordwrap="YES"}
 
 --7.1 load tree from database
 tableNameFound="no"
@@ -954,17 +1222,22 @@ maindlg = iup.dialog{
 			button_search,
 			button_expand_collapse_dialog,
 			button_alphabetic_sort,
-			iup.label{size="10x",},
+			iup.label{size="1x",},
 			button_load_tree_from_database_from_textbox1,
 			button_load_previous_tree_ID_from_database,
 			textbox1,
 			button_load_next_tree_ID_from_database,
-			iup.label{size="10x",},
+			button_load_tree_ID_from_node_from_database,
+			textbox2,
+			iup.label{size="1x",},
 			button_saving_tree_in_database,
-			iup.label{size="10x",},
+			button_compute_results_in_tree,
+			iup.label{size="1x",},
 			button_compute_results_in_database,
-			button_compute_results_in_GUI,
+			button_compute_results_in_GUI1,
+			button_compute_results_in_GUI2,
 			iup.fill{},
+			button_import_data,
 			button_logo2,
 		},
 		
