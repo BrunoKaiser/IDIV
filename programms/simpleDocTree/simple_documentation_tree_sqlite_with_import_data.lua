@@ -1062,9 +1062,9 @@ function button_compute_results_in_GUI2:flat_action()
 			local compareSaldo=0
 			for i1=i+1, i+tree2["totalchildcount" .. i] do
 				if tree2["parent" .. i1]==tostring(i) then
-					local saldoNumber=tonumber(tree2["TITLE" .. i1]:match(": +([^:]*)$"))
-					local compareNumber=tonumber(tree2["TITLE" .. i1]:match("; +(%d*[^:]*): +[^:]*$"))
-					--test with: print(saldoNumber)
+					local saldoNumber=tonumber(tree2["TITLE" .. i1]:match(": *([^:]*)$"))
+					local compareNumber=tonumber(tree2["TITLE" .. i1]:match("; *(%d*[^:]*): *[^:]*$"))
+					--test with: print(tree2["TITLE" .. i1], tostring(saldoNumber))
 					totalSaldo=totalSaldo+(saldoNumber or 0)
 					compareSaldo=compareSaldo+(compareNumber or 0)
 				end --if tree2["title" .. i1]:match("#")==nil then
