@@ -48,32 +48,33 @@ clipboard=iup.clipboard{}
 --1.2.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---1.2.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--1.2.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --1.2.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
 
---1.3 path of the graphical user interface and filename of this script
+--2. path of the graphical user interface and filename of this script
 path=arg[0]:match("(.*)\\")
 --test with: print(path)
 thisfilename=arg[0]:match("\\([^\\]+)$")
 --test with: print(arg[0])
 --test with: print(thisfilename)
 
---2. global data definition
-aktuelleSeite=1
-
-
 --3. functions
---3.1 simplified version of table.move for Lua 5.1 and Lua 5.2 that is enough for using of table.move here
+
+--3.1 general Lua functions
+
+if math.tointeger==nil then function math.tointeger(a) return a end end
+
+--3.1.1 simplified version of table.move for Lua 5.1 and Lua 5.2 that is enough for using of table.move here
 if _VERSION=='Lua 5.1' or _VERSION=='Lua 5.2' then
 	function table.move(a,f,e,t)
 	for i=f,e do
@@ -274,21 +275,21 @@ searchtext2 = iup.multiline{border="YES",expand="YES",wordwrap="YES"} --textfiel
 search_found_number = iup.text{border="YES",expand="YES",} --textfield for search found number
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abw‰rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "Abw√§rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	--for search for substantives in german questions
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uƒ÷‹][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uƒ÷‹][^%s%p]+ (.*)%?"):gsub("%? [%uƒ÷‹]+"," "):gsub("%. [%uƒ÷‹]+"," "):gsub(": [%uƒ÷‹]+"," ")
+	if searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+ (.*)%?"):gsub("%? [%u√Ñ√ñ√ú]+"," "):gsub("%. [%u√Ñ√ñ√ú]+"," "):gsub(": [%u√Ñ√ñ√ú]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uƒ÷‹][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uƒ÷‹][^%s%p]+") do 
+	end --if searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%u√Ñ√ñ√ú][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uƒ÷‹][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%u√Ñ√ñ√ú][^%s%p]+") do 
 	local help=false
 	--downward search
 	if checkboxforcasesensitive.value=="ON"  then
@@ -337,15 +338,15 @@ function searchmark:flat_action()
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uƒ÷‹][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uƒ÷‹][^%s%p]+ (.*)%?"):gsub("%? [%uƒ÷‹]+"," "):gsub("%. [%uƒ÷‹]+"," "):gsub(": [%uƒ÷‹]+"," ")
+	if searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+ (.*)%?"):gsub("%? [%u√Ñ√ñ√ú]+"," "):gsub("%. [%u√Ñ√ñ√ú]+"," "):gsub(": [%u√Ñ√ñ√ú]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uƒ÷‹][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uƒ÷‹][^%s%p]+") do 
+	end --if searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%u√Ñ√ñ√ú][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uƒ÷‹][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%u√Ñ√ñ√ú][^%s%p]+") do 
 	--unmark all nodes
 	for i=0, tree.count - 1 do
 			tree["color" .. i]="0 0 0"
@@ -411,21 +412,21 @@ function unmark:flat_action()
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufw‰rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "Aufw√§rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	--for search for substantives in german questions
 	searchtext2.value=""
 	local wordTable={}
 	local searchtextValue
-	if searchtext.value:match("[%uƒ÷‹][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
-		searchtextValue=searchtext.value:match("[%uƒ÷‹][^%s%p]+ (.*)%?"):gsub("%? [%uƒ÷‹]+"," "):gsub("%. [%uƒ÷‹]+"," "):gsub(": [%uƒ÷‹]+"," ")
+	if searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+.*%?") then --take words except space characters %s and punctuation characters %p
+		searchtextValue=searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+ (.*)%?"):gsub("%? [%u√Ñ√ñ√ú]+"," "):gsub("%. [%u√Ñ√ñ√ú]+"," "):gsub(": [%u√Ñ√ñ√ú]+"," ")
 	else
 		searchtextValue=searchtext.value
-	end --if searchtext.value:match("[%uƒ÷‹][^%s%p]+.*%?") then
-	for word in searchtextValue:gmatch("[%uƒ÷‹][^%s%p]+") do 
+	end --if searchtext.value:match("[%u√Ñ√ñ√ú][^%s%p]+.*%?") then
+	for word in searchtextValue:gmatch("[%u√Ñ√ñ√ú][^%s%p]+") do 
 		wordTable[#wordTable+1]=word 
 		searchtext2.value=searchtext2.value .. "/" .. word
-	end --for word in searchtextValue:gmatch("[%uƒ÷‹][^%s%p]+") do 
+	end --for word in searchtextValue:gmatch("[%u√Ñ√ñ√ú][^%s%p]+") do 
 	local help=false
 	--upward search
 	if checkboxforcasesensitive.value=="ON" then
@@ -465,7 +466,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groﬂ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="Gro√ü-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
@@ -474,11 +475,11 @@ search_label=iup.label{title="Suchfeld:"} --label for textfield
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,iup.vbox{searchtext,iup.label{title="Suchworte aus Fragen und Texten:"},searchtext2,}}, 
 
-			iup.label{title="Sonderzeichen: %. f¸r ., %- f¸r -, %+ f¸r +, %% f¸r %, %[ f¸r [, %] f¸r ], %( f¸r (, %) f¸r ), %^ f¸r ^, %$ f¸r $, %? f¸r ?",},
+			iup.label{title="Sonderzeichen: %. f√ºr ., %- f√ºr -, %+ f√ºr +, %% f√ºr %, %[ f√ºr [, %] f√ºr ], %( f√ºr (, %) f√ºr ), %^ f√ºr ^, %$ f√ºr $, %? f√ºr ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,}, 
-			iup.label{title="rot: ¸bergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: √ºbergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="gr¸n: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="gr√ºn: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 			iup.hbox{search_found_number,},
 			}; 
@@ -585,7 +586,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzuf¸gen"}
+addbranch = iup.item {title = "Ast hinzuf√ºgen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -593,7 +594,7 @@ function addbranch:action()
 end --function addbranch:action()
 
 --5.1.3.1 add branch to tree by insertbranch
-addbranchbottom = iup.item {title = "Ast darunter hinzuf¸gen"}
+addbranchbottom = iup.item {title = "Ast darunter hinzuf√ºgen"}
 function addbranchbottom:action()
 	tree["insertbranch" .. tree.value] = ""
 	for i=tree.value+1,tree.count-1 do
@@ -625,7 +626,7 @@ function addbranch_fromclipboardbottom:action()
 end --function addbranch_fromclipboardbottom:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzuf¸gen"}
+addleaf = iup.item {title = "Blatt hinzuf√ºgen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -677,26 +678,222 @@ end --function menu_goto_dataform:flat_action()
 --5.1.9 start the file or repository of the node of tree
 startnode = iup.item {title = "Starten"}
 function startnode:action() 
+	--test with: print(tree['title'])
 	if tree['title']:match("^.:\\.*%.[^\\ ]+$") or tree['title']:match("^.:\\.*[^\\]+$") or tree['title']:match("^.:\\$") or tree['title']:match("^[^ ]*//[^ ]+$") then os.execute('start "D" "' .. tree['title'] .. '"') end
 end --function startnode:action()
 
---5.1.10 start the file or repository of the node of tree
+--5.1.10 delete tree data from data base
+startnode_delete_database_trees = iup.item {title = "Tree-Daten aus der Datenbank l√∂schen"}
+function startnode_delete_database_trees:action() 
+	os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "DELETE FROM treeTable;"')
+	iup.Message("Die Tree-Daten","wurden aus der Datenbank gel√∂scht")
+end --function startnode_delete_database_trees:action()
+
+--5.1.11 start import into the data base
 start_import = iup.item {title = "Starten des Datenimports"}
 function start_import:action() 
-	iup.Message("Daten importieren mit den folgenden Werten",
-			textbox1.value .. "/" ..
-			textbox2.value .. "/" ..
-			textbox3.value .. "/" ..
-			textbox4.value .. "/" ..
-			textbox5.value .. "/" ..
-			textbox6.value .. "/" ..
-			textbox7.value .. "/" ..
-			textbox8.value .. "/" ..
-			textbox9.value .. "/" ..
-			textbox10.value )
+	i=tree.value
+	if DataTable[tree['title' .. i]] 
+		and textbox1.value~="" 
+		--can be empty: and textbox2.value~="" 
+		--can be empty: and textbox3.value~="" 
+		and textbox4.value~="" 
+		--can be empty: and textbox5.value~="" 
+		and textbox6.value~="" 
+		--can be empty: and textbox7.value~="" 
+		and textbox8.value~="" 
+		and textbox9.value~="" 
+		and textbox10.value~="" 
+		then
+		Level_0_Table={}
+		Level_0_1_Table={}
+		LevelExists_0_1_Table={}
+		outputfile1=io.open("C:\\Temp\\testDaten.txt","w")
+		i=0
+		for line in io.lines(textbox1.value) do --"C:\\Temp\\testDaten.csv") do
+			i=i+1
+			if i>1 then
+				local fieldTable={}
+				for field in (line .. ";"):gmatch("([^;]*);") do
+					fieldTable[#fieldTable+1]=field
+				end --for field in (line .. ";"):gmatch("([^;]*);") do
+				local Level_0_Text=textbox3.value .. fieldTable[math.tointeger(tonumber(textbox4.value))] --"Nr" .. fieldTable[6]
+				local Level_1_Text=textbox5.value .. fieldTable[math.tointeger(tonumber(textbox6.value))] --"Br" .. fieldTable[3]
+				--test with: print(Level_1_Text)
+				local DataKeyText=textbox7.value .. fieldTable[math.tointeger(tonumber(textbox8.value))] --"T" .. fieldTable[1]
+				local DataValueText=fieldTable[math.tointeger(tonumber(textbox9.value))]:gsub(",",".") --fieldTable[4]:gsub(",",".")
+				local DataValue_compareText=fieldTable[math.tointeger(tonumber(textbox10.value))]:gsub(",",".") --fieldTable[7]:gsub(",",".")
+				outputfile1:write(DataKeyText .. ";" .. DataValueText .. ";" .. DataValue_compareText .. "\n")
+				--build the levels
+				if Level_0_Table[Level_0_Text] and not LevelExists_0_1_Table[Level_0_Text .. "|" .. Level_1_Text] then
+				Level_0_Table[Level_0_Text] = Level_0_Table[Level_0_Text] .. Level_0_Text .. "|" .. Level_1_Text .. ","
+				LevelExists_0_1_Table[Level_0_Text .. "|" .. Level_1_Text]="Vorhanden"
+				elseif Level_0_Table[Level_0_Text] then
+				else
+				Level_0_Table[Level_0_Text]=Level_0_Text .. "|" .. Level_1_Text .. ","
+				LevelExists_0_1_Table[Level_0_Text .. "|" .. Level_1_Text]="Vorhanden"
+				end --if Not Level_0_Table(Level_0_Text) Then
+				if Level_0_1_Table[Level_0_Text .. "|" .. Level_1_Text] then
+				Level_0_1_Table[Level_0_Text .. "|" .. Level_1_Text] = Level_0_1_Table[Level_0_Text .. "|" .. Level_1_Text] .. '{branchname="' .. DataKeyText .. '"},'
+				else
+				Level_0_1_Table[Level_0_Text .. "|" .. Level_1_Text]='{branchname="' .. DataKeyText .. '"},'
+				end --if Not Level_0_Table(Level_0_Text) Then
+			end --if i>1 then
+			--test with: if i>3 then break end
+		end --for line in io.lines("C:\\Temp\\testDaten.csv") do
+		outputfile1:close()
+
+		--Schnelles Importieren:
+		outputfile2=io.open("c:\\temp\\testDatenSQLite_Import.txt","w+")
+outputfile2:write([[
+DELETE FROM DataForTrees;
+.mode csv
+.separator ";"
+.import c:/temp/testDaten.txt DataForTrees
+]])
+		outputfile2:close()
+		--In die SQLite-Datenbank Importieren
+		os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite ".read c:/temp/testDatenSQLite_Import.txt"')
+
+
+		outputfile3=io.open("C:\\Temp\\Testdaten_Trees.txt","w")
+
+		PrintText = ""
+
+		treeMax=0
+		p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Max(Tree_ID) AS Tree_Max from treeTable"')
+		for line in p:lines() do treeMax=line end
+		print(treeMax)
+		Tree_ID=math.tointeger(tonumber(treeMax)) or 0
+		for k,v in pairs(Level_0_Table) do
+			Tree_ID=Tree_ID+1
+			PrintText = Tree_ID .. ';Tree={branchname="' .. k .. '",'
+
+			for arrayField in (Level_0_Table[k] ):gmatch("([^,]*),") do
+				--test with: print(Level_0_Table[k])
+				--test with: print(arrayField)
+				arrayDouble = arrayField:match("[^|]*|([^|]*)")
+				--print(arrayDouble)
+				if arrayField ~= "" then
+				PrintText = PrintText .. '{branchname="' .. arrayDouble .. '",' --only second part after | to take
+				--test with: print(PrintText)
+				PrintText = PrintText .. "" .. Level_0_1_Table[arrayField] .. "},"
+				end --if not arrayField == "" then
+				
+			end --for arrayField in (Level_0_Table[Key] .. ","):gmatch("([^,]*),") do
+			outputfile3:write(PrintText .. "};\n")
+
+
+		end --for k,v in pairs(Level_0_Table) do
+		outputfile3:close()
+
+		--Schnelles Importieren:
+outputfile4=io.open("c:\\temp\\testDatenSQLite_Import_Tree.txt","w+")
+outputfile4:write([[
+.mode csv
+.separator ";"
+.import c:/temp/Testdaten_Trees.txt treeTable
+]])
+outputfile4:close()
+		--In die SQLite-Datenbank Importieren
+		os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite ".read c:/temp/testDatenSQLite_Import_Tree.txt"')
+
+		iup.Message("Die Daten wurden mit den folgenden Werten importiert",
+				textbox1.value .. "/" ..
+				textbox2.value .. "/" ..
+				textbox3.value .. "/" ..
+				textbox4.value .. "/" ..
+				textbox5.value .. "/" ..
+				textbox6.value .. "/" ..
+				textbox7.value .. "/" ..
+				textbox8.value .. "/" ..
+				textbox9.value .. "/" ..
+				textbox10.value )
+	elseif DataTable[tree['title' .. i]] 
+		and textbox1.value~="" 
+		and textbox2.value=="" 
+		and textbox3.value=="" 
+		and textbox4.value=="" 
+		and textbox5.value=="" 
+		and textbox6.value=="" 
+		and textbox7.value=="" 
+		and textbox8.value=="" 
+		and textbox9.value=="" 
+		and textbox10.value=="" 
+		then
+outputfile4=io.open("c:\\temp\\testDatenSQLite_Import_Tree.txt","w+")
+outputfile4:write([[
+.mode csv
+.separator ";"
+.import ]] .. textbox1.value:gsub("\\","/") .. [[ treeTable
+]])
+outputfile4:close()
+		--In die SQLite-Datenbank Importieren
+		os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite ".read c:/temp/testDatenSQLite_Import_Tree.txt"')
+		iup.Message("Die Daten wurden mit den folgenden Werten importiert",
+				textbox1.value .. "/" ..
+				textbox2.value .. "/" ..
+				textbox3.value .. "/" ..
+				textbox4.value .. "/" ..
+				textbox5.value .. "/" ..
+				textbox6.value .. "/" ..
+				textbox7.value .. "/" ..
+				textbox8.value .. "/" ..
+				textbox9.value .. "/" ..
+				textbox10.value )
+	end --if DataTable[tree['title' .. i]] then
 end --function start_import:action()
 
---5.1.11 put the menu items together in the menu for tree
+--5.1.12 start export from the data base
+start_export = iup.item {title = "Starten des Datenexports"}
+function start_export:action() 
+	i=tree.value
+	if DataTable[tree['title' .. i]] 
+		and textbox1.value~="" 
+		and textbox2.value=="" 
+		and textbox3.value=="" 
+		and textbox4.value=="" 
+		and textbox5.value=="" 
+		and textbox6.value=="" 
+		and textbox7.value=="" 
+		and textbox8.value=="" 
+		and textbox9.value=="" 
+		and textbox10.value=="" 
+		then
+outputfile4=io.open("c:\\temp\\testDatenSQLite_Export_Tree.txt","w+")
+outputfile4:write([[
+.headers off
+.mode csv
+.separator ";"
+.output ]] .. textbox1.value:gsub("\\","/"):gsub("(.*)%.([^%.]+)$","%1_roh.%2") .. [[
+
+SELECT Tree_ID, Tree from TreeTable;
+.quit
+]])
+outputfile4:close()
+		--In die SQLite-Datenbank Importieren
+		os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite ".read c:/temp/testDatenSQLite_Export_Tree.txt"')
+		iup.Message("Die Daten wurden mit den folgenden Werten exportiert",
+				textbox1.value .. "/" ..
+				textbox2.value .. "/" ..
+				textbox3.value .. "/" ..
+				textbox4.value .. "/" ..
+				textbox5.value .. "/" ..
+				textbox6.value .. "/" ..
+				textbox7.value .. "/" ..
+				textbox8.value .. "/" ..
+				textbox9.value .. "/" ..
+				textbox10.value )
+	end --if DataTable[tree['title' .. i]] then
+	outputfile5=io.open(textbox1.value,"w")
+	local inputfile_Text=textbox1.value:gsub("(.*)%.([^%.]+)$","%1_roh.%2")
+	for line in io.lines(inputfile_Text) do
+		outputfile5:write(line:gsub('""','~~'):gsub('"',''):gsub('~~','"') .. "\n")
+	end --for line in io.lines(inputfile_Text) do
+	outputfile5:close()
+end --function start_export:action()
+
+--5.1.13 put the menu items together in the menu for tree
 menu = iup.menu{
 		startcopy,
 		renamenode, 
@@ -708,8 +905,13 @@ menu = iup.menu{
 		addleaf_fromclipboard,
 		startversion,
 		menu_new_data_in_dataform, 
+		iup.separator{},
+		startnode_delete_database_trees, 
+		iup.separator{},
 		menu_goto_dataform, 
 		start_import, 
+		start_export, 
+		iup.separator{},
 		startnode, 
 		}
 --5.1 menu of tree end
@@ -720,45 +922,45 @@ menu = iup.menu{
 --6 buttons
 --6.1 logo image definition and button with logo
 img_logo = iup.image{
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,1,1,1,4,4,4,4,4,3,3,4,4,4,4,1,3,3,1,1,1,1,1,1,1,4,4,4,4 },
   { 4,1,1,1,1,1,1,1,4,4,4,4,3,3,3,3,3,3,4,4,4,3,1,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,4,3,4,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,1,1,1,1,1,1,4,4,4 },
-  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 }, 
-  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 }, 
-  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },  
-  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },  
-  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }  
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 },
+  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 },
+  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 },
+  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },
+  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },
+  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraﬂe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for saving DataTable and the programm of the graphical user interface
@@ -799,10 +1001,16 @@ function button_save_dataform:flat_action()
 	DataTable[tree['title' .. i]][10]=textbox10.value
 end --function button_save_dataform:flat_action()
 
---6.5 button with second logo
+--6.5 button for opening the trees of the data base
+button_open_tree_from_database=iup.flatbutton{title="Baumansichten zur \nDatenbank √∂ffnen", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_open_tree_from_database:flat_action()
+	os.execute('start "GUI" "C:\\Tree\\simpleDocTree\\simple_documentation_tree_sqlite_with_import_data.lua"')
+end --function button_open_tree_from_database:flat_action()
+
+--6.6 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraﬂe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --7 Main Dialog
@@ -871,24 +1079,26 @@ maindlg = iup.dialog {
 			button_search,
 			button_expand_collapse_dialog,
 			iup.fill{},
+			button_open_tree_from_database,
+			iup.label{size="10x",},
 			button_save_dataform,
 			button_logo2,
 		}, --iup.hbox{
 		iup.hbox{iup.frame{title="Manuelle Zuordnung als Baum",tree,},
-			iup.frame{title="Datenformular zum ausgew‰hlten Knoten im Baum",iup.vbox{
+			iup.frame{title="Datenformular zum ausgew√§hlten Knoten im Baum",iup.vbox{
 				iup.label{title="Datei",},
 				textbox1,
 				iup.label{title="Tabelle bei Excel",},
 				textbox2,
-				iup.label{title="Pr‰fix oberste Ebene",},
+				iup.label{title="Pr√§fix oberste Ebene",},
 				textbox3,
 				iup.label{title="Spalte oberste Ebene",},
 				textbox4,
-				iup.label{title="Pr‰fix mittlere Ebene",},
+				iup.label{title="Pr√§fix mittlere Ebene",},
 				textbox5,
 				iup.label{title="Spalte mittlere Ebene",},
 				textbox6,
-				iup.label{title="Pr‰fix Detailebene",},
+				iup.label{title="Pr√§fix Detailebene",},
 				textbox7,
 				iup.label{title="Spalte Detailebene",},
 				textbox8,
