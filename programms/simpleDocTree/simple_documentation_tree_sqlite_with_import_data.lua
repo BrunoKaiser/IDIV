@@ -13,15 +13,15 @@ clipboard=iup.clipboard{}
 --2.1.1 color of the console associated with the graphical user interface if started with lua54.exe and not wlua54.exe
 os.execute('color 71')
 
---2.1.2 Beckmann und Partner colors
-color_red_bpc="135 31 28"
-color_light_color_grey_bpc="196 197 199"
-color_grey_bpc="162 163 165"
-color_blue_bpc="18 32 86"
+--2.1.2 colors
+color_red="135 131 28"
+color_light_color_grey="96 197 199"
+color_grey="162 163 165"
+color_blue="18 132 86"
 
 --2.1.3 color definitions
-color_background=color_light_color_grey_bpc
-color_buttons=color_blue_bpc -- works only for flat buttons, "18 32 86" is the blue of BPC
+color_background=color_light_color_grey
+color_buttons=color_blue -- works only for flat buttons
 color_button_text="255 255 255"
 color_background_tree="246 246 246"
 
@@ -33,10 +33,14 @@ thisfilename=arg[0]:match("\\([^\\]+)$")
 --test with: print(arg[0])
 --test with: print(thisfilename)
 
+--2.3 current tree ID
+currentTreeID=0
 
 --3 functions
 
 --3.1 general Lua functions
+
+if math.tointeger==nil then function math.tointeger(a) return a end end 
 
 --3.1.1 function checking if file exits
 function file_exists(name)
@@ -157,6 +161,7 @@ end --function save_tree_to_lua_database(tree, outputfile_path)
 
 --3.2.5 define recursive function (use recursive function writeTreeTableRecursive(Tree,"Tree="))
 function writeTreeTableRecursive(TreeTable,StartText)
+	--print(outputText)
 	outputText=outputText .. StartText .. '{branchname="' .. TreeTable.branchname:gsub("\\", "\\\\"):gsub("\"", "\\\""):gsub("\'", "\\\'"):gsub("\n", "\\n"):gsub("\r", "\\n") .. '"'
 	for i,v in ipairs(TreeTable) do
 		if type(v)=="table" then
@@ -574,49 +579,49 @@ menu2 = iup.menu{
 --6 buttons
 --6.1 logo image definition and button with logo
 img_logo = iup.image{
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 }, 
-  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 }, 
-  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 }, 
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,3,1,1,1,3,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,3,3,1,1,3,1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,4,4,3,1,1,1,1,3,3,3,3,1,1,1,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,4,4,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,1,1,1,3,1,1,1,3,1,1,3,1,1,1,1,1,4,4,4 },
+  { 4,1,1,3,3,3,3,3,3,3,3,1,1,1,3,3,3,3,1,1,3,1,3,1,1,1,3,1,3,1,1,4,4,4 },
+  { 4,1,1,1,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,3,1,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,1,3,1,3,3,1,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,1,1,3,3,1,3,1,3,1,1,1,1,1,1,4,4,4 },
+  { 4,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,1,1,3,3,1,3,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,1,1,1,4,4,4,4,4,3,3,4,4,4,4,1,3,3,1,1,1,1,1,1,1,4,4,4,4 },
   { 4,1,1,1,1,1,1,1,4,4,4,4,3,3,3,3,3,3,4,4,4,3,1,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,4,3,4,1,1,1,1,1,1,1,1,4,4,4 },
   { 4,1,1,1,1,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,1,1,1,1,1,1,4,4,4 },
-  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 }, 
-  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 }, 
-  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 }, 
-  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },  
-  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },  
-  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },  
-  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }  
-  ; colors = { color_grey_bpc, color_light_color_grey_bpc, color_blue_bpc, "255 255 255" }
+  { 4,1,1,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,1,1,1,4,4,4 },
+  { 4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,1,1,4,4,4 },
+  { 4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,4,4,4 },
+  { 4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4 },
+  { 4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4 },
+  { 4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3 },
+  { 4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+  { 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 }
+  ; colors = { "255 255 255", color_light_color_grey, color_blue, "255 255 255" }
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6.2 button for saving tree
-button_save_lua_table=iup.flatbutton{title="Baum als Text speichern \n(Strg+P)", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_save_lua_table=iup.flatbutton{title="Baum als Text speichern \n(Strg+P)", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_lua_table:flat_action()
 		printtree()
 end --function button_save_lua_table:flat_action()
@@ -637,7 +642,7 @@ function button_expand_collapse_dialog:flat_action()
 end --function button_expand_collapse_dialog:flat_action()
 
 --6.5 button for alphabetic sort of the tree
-button_alphabetic_sort=iup.flatbutton{title="Alphabetisch sortieren\n(Strg+T)", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_alphabetic_sort=iup.flatbutton{title="Alphabetisch \nsortieren(Strg+T)", size="65x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_alphabetic_sort:flat_action()
 	alphabetic_tree_sort(tree)
 end --function button_alphabetic_sort:flat_action()
@@ -736,8 +741,8 @@ function button_load_previous_tree_ID_from_database:flat_action()
 	end --if textbox1.value+1<=treeMax then
 end --function button_load_previous_tree_ID_from_database:flat_action()
 
---6.6.4 button for loading tree from Tree_ID of chosen node
-button_load_tree_ID_from_node_from_database=iup.flatbutton{title="Baum des Knotens aus \nder Datenbank laden", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.6.4.1 button for loading tree from Tree_ID of chosen node
+button_load_tree_ID_from_node_from_database=iup.flatbutton{title="Baum des Knotens \naus der Datenbank", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_load_tree_ID_from_node_from_database:flat_action()
 	i=tree2.value
 	nodeChosen=tree2['title' .. i]
@@ -745,7 +750,7 @@ function button_load_tree_ID_from_node_from_database:flat_action()
 	--test with: 
 print(nodeChosen)
 	--test with: print([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree LIKE 'Tree={branchname=\"]] .. nodeChosen .. [[\"%'"]])
-	p=io.popen([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree LIKE 'Tree={branchname=\"]] .. nodeChosen .. [[\"%'"]])
+	p=io.popen([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree LIKE 'Tree={branchname=\"]] .. nodeChosen .. [[\"%' OR Tree LIKE 'Tree={ branchname=\"]] .. nodeChosen .. [[\"%'"]])
 	j=1
 	for line in p:lines() do textbox1.value=line j=j+1 end
 	--test with: print(j)
@@ -759,8 +764,156 @@ print(nodeChosen)
 	end --if j>1 and i>0 then
 end --function button_load_tree_ID_from_node_from_database:flat_action()
 
---6.7 button for saving tree in data base
-button_saving_tree_in_database=iup.flatbutton{title="Baum in Datenbank \nspeichern", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.6.4.2 button for loading tree from Tree_ID of search text
+button_load_tree_ID_from_search_from_database=iup.flatbutton{title="Suche Baum \nin der Datenbank", size="65x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_load_tree_ID_from_search_from_database:flat_action()
+	nodeChosen=textbox2.value
+	--test with: print([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree LIKE 'Tree={%branchname=\"%]] .. nodeChosen .. [[%\"%';"]])
+	p=io.popen([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree LIKE 'Tree={%branchname=\"%]] .. nodeChosen .. [[%\"%';"]])
+	j=1
+	foundTreeIDTable={}
+	for line in p:lines() do foundTreeIDTable[#foundTreeIDTable+1]=line j=j+1 end
+	--test with: print(j,i)
+	--j==2 corresponds to one founded tree
+	if j==2 then
+		textbox1.value=foundTreeIDTable[1]
+		button_load_tree_from_database_from_textbox1:flat_action()
+	elseif j>2 then
+		iup.Message("Anzahl gefundener Bäume:",j-1 .. " zum Knoten " .. nodeChosen)
+		--go to the next tree
+		oldCurrentTreeID=currentTreeID
+		for i,v in ipairs(foundTreeIDTable) do
+			if math.tointeger(tonumber(v))>math.tointeger(tonumber(currentTreeID)) then 
+				currentTreeID=v 
+				textbox1.value=v 
+				break
+			end --if v>currentTreeID then 
+		end --for i,v in ipairs(foundTreeIDTable) do
+		--if currentTreeID not higher than founded trees then take the first one and rebegin again
+		if oldCurrentTreeID==currentTreeID then 
+			currentTreeID=foundTreeIDTable[1] 
+			textbox1.value=foundTreeIDTable[1] 
+		end --if oldCurrentTreeID==currentTreeID then 
+		button_load_tree_from_database_from_textbox1:flat_action()
+	else
+		iup.Message("Baum nicht gefunden","Baum " .. nodeChosen .. " nicht gefunden")
+	end --if j>1 and i>0 then
+	print(currentTreeID)
+--[====[	for line in p:lines() do textbox1.value=line j=j+1 end
+	--test with: 
+print(j)
+	if j>1 then
+		button_load_tree_from_database_from_textbox1:flat_action()
+	else
+		iup.Message("Baum nicht gefunden","Baum " .. nodeChosen .. " nicht gefunden")
+	end --if j>1 and i>0 then
+--]====]
+	--unmark all nodes
+	for i=0, tree.count - 1 do
+			tree["color" .. i]="0 0 0"
+	end --for i=0, tree.count - 1 do
+	--unmark all nodes end
+	--unmark all nodes
+	for i=0, tree2.count - 1 do
+			tree2["color" .. i]="0 0 0"
+	end --for i=0, tree2.count - 1 do
+	--unmark all nodes end
+	if j>=2 then
+		--mark all nodes
+		for i=0, tree.count - 1 do
+			if tree["title" .. i]:upper():match(textbox2.value:upper())~= nil then
+				iup.TreeSetAncestorsAttributes(tree,i,{color="255 0 0",})
+				iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})
+				iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"})
+			end --if tree["title" .. i]:upper():match(textbox2.value:upper())~= nil then
+		end --for i=0, tree.count - 1 do
+		--mark all nodes end
+		--mark all nodes
+		for i=0, tree2.count - 1 do
+			if tree2["title" .. i]:upper():match(textbox2.value:upper())~= nil then
+				iup.TreeSetAncestorsAttributes(tree2,i,{color="255 0 0",})
+				iup.TreeSetNodeAttributes(tree2,i,{color="0 0 250",})
+				iup.TreeSetDescendantsAttributes(tree2,i,{color="90 195 0"})
+			end --if tree2["title" .. i]:upper():match(textbox2.value:upper())~= nil then
+		end --for i=0, tree2.count - 1 do
+		--mark all nodes end
+	end --if j>=2 then
+end --function button_load_tree_ID_from_search_from_database:flat_action()
+
+--6.6.4.3 button for loading tree from Tree_ID containing chosen node, i.e. not in the root node
+button_load_tree_ID_containing_node_from_database=iup.flatbutton{title="Nächsten Baum mit Knoten \naus der Datenbank", size="100x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_load_tree_ID_containing_node_from_database:flat_action()
+	i=tree2.value
+	nodeChosen=tree2['title' .. i]
+	if nodeChosen:match("[^;]*;") then nodeChosen=nodeChosen:match("([^;]*);"):gsub(" *$","") end
+	--test with: print(nodeChosen)
+	--test with: print([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree NOT LIKE 'Tree={branchname=\"]] .. nodeChosen .. [[\"%' AND Tree LIKE '%\"]] .. nodeChosen .. [[\"%' ;"]])
+	p=io.popen([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "select Tree_ID from treeTable WHERE Tree NOT LIKE 'Tree={branchname=\"]] .. nodeChosen .. [[\"%' AND  Tree NOT LIKE 'Tree={ branchname=\"]] .. nodeChosen .. [[\"%' AND Tree LIKE '%\"]] .. nodeChosen .. [[\"%' ;"]])
+	j=1
+	foundTreeIDTable={}
+	for line in p:lines() do foundTreeIDTable[#foundTreeIDTable+1]=line j=j+1 end
+	--test with: print(j,i)
+	--j==2 corresponds to one founded tree
+	if j==2 then
+		textbox2.value=tree2['title' .. 0]
+		textbox1.value=foundTreeIDTable[1]
+		button_load_tree_from_database_from_textbox1:flat_action()
+	elseif j>2 then
+		iup.Message("Anzahl gefundener Bäume:",j-1 .. " zum Knoten " .. nodeChosen)
+		--go to the next tree
+		oldCurrentTreeID=currentTreeID
+		for i,v in ipairs(foundTreeIDTable) do
+			if math.tointeger(tonumber(v))>math.tointeger(tonumber(currentTreeID)) then 
+				currentTreeID=v 
+				textbox1.value=v 
+				break
+			end --if v>currentTreeID then 
+		end --for i,v in ipairs(foundTreeIDTable) do
+		--if currentTreeID not higher than founded trees then take the first one and rebegin again
+		if oldCurrentTreeID==currentTreeID then 
+			currentTreeID=foundTreeIDTable[1] 
+			textbox1.value=foundTreeIDTable[1] 
+		end --if oldCurrentTreeID==currentTreeID then 
+		textbox2.value=tree2['title' .. 0]
+		button_load_tree_from_database_from_textbox1:flat_action()
+	else
+		textbox2.value="Baum nicht gefunden"
+	end --if j>1 and i>0 then
+	print(currentTreeID)
+	--unmark all nodes
+	for i=0, tree.count - 1 do
+			tree["color" .. i]="0 0 0"
+	end --for i=0, tree.count - 1 do
+	--unmark all nodes end
+	--unmark all nodes
+	for i=0, tree2.count - 1 do
+			tree2["color" .. i]="0 0 0"
+	end --for i=0, tree2.count - 1 do
+	--unmark all nodes end
+	if j>=2 then
+		--mark all nodes
+		for i=0, tree.count - 1 do
+			if tree["title" .. i]:upper():match(nodeChosen:upper())~= nil then
+				iup.TreeSetAncestorsAttributes(tree,i,{color="255 0 0",})
+				iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})
+				iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"})
+			end --if tree["title" .. i]:upper():match(nodeChosen:upper())~= nil then
+		end --for i=0, tree.count - 1 do
+		--mark all nodes end
+		--mark all nodes
+		for i=0, tree2.count - 1 do
+			if tree2["title" .. i]:upper():match(nodeChosen:upper())~= nil then
+				iup.TreeSetAncestorsAttributes(tree2,i,{color="255 0 0",})
+				iup.TreeSetNodeAttributes(tree2,i,{color="0 0 250",})
+				iup.TreeSetDescendantsAttributes(tree2,i,{color="90 195 0"})
+			end --if tree2["title" .. i]:upper():match(nodeChosen:upper())~= nil then
+		end --for i=0, tree2.count - 1 do
+		--mark all nodes end
+	end --if j>=2 then
+end --function button_load_tree_ID_containing_node_from_database:flat_action()
+
+--6.7.1 button for saving tree in data base
+button_saving_tree_in_database=iup.flatbutton{title="Baum in Datenbank \nspeichern", size="12x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_saving_tree_in_database:flat_action()
 	treeMax=0
 	treeText=save_tree_to_lua_database(tree)
@@ -772,8 +925,30 @@ function button_saving_tree_in_database:flat_action()
 	os.execute([[C:\sqlite3\sqlite3.exe c:\Temp\test.sqlite "INSERT INTO treeTable (Tree_ID,Tree) VALUES (]] .. treeMax+1 .. [[,']] .. treeText .. [[');"]])
 end --function button_saving_tree_in_database:flat_action()
 
+--6.7.2 button for updating tree in data base
+button_updating_tree_in_database=iup.flatbutton{title="Baum in Datenbank \naktualisieren", size="72x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_updating_tree_in_database:flat_action()
+	treeText=save_tree_to_lua_database(tree)
+	--not needed here: treeText=string.escape_forbidden_char(treeText) --:gsub("\"","\\\"") etc...
+	print(treeText)
+
+	outputfile1=io.open("C:\\Temp\\Testdaten_Trees_update.txt","w")
+	outputfile1:write(textbox1.value .. "|" .. treeText .. "\n")
+	outputfile1:close()
+
+outputfile2=io.open("c:\\temp\\Testdaten_Trees_updateSQLite_Import.txt","w+")
+outputfile2:write([[
+DELETE FROM Tree_update;
+.separator "|"
+.import c:/temp/Testdaten_Trees_update.txt Tree_update
+UPDATE treeTable SET Tree = (SELECT Tree_update FROM Tree_update WHERE Tree_ID = ]] .. textbox1.value .. [[ ) WHERE Tree_ID = ]] .. textbox1.value .. [[;
+]])
+outputfile2:close()
+	os.execute('c:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite ".read c:/temp/Testdaten_Trees_updateSQLite_Import.txt"')
+end --function button_updating_tree_in_database:flat_action()
+
 --6.8.1.1 button for saving tree result in data base
-button_compute_results_in_database=iup.flatbutton{title="Ergebnisse in der \nDatenbank berechnen", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_compute_results_in_database=iup.flatbutton{title="Ergebnisse in der \nDatenbank berechnen", size="83x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_compute_results_in_database:flat_action()
 	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select DataKey, DataValue, DataValue_compare from DataForTrees;"')
 	ValueTable={}
@@ -822,6 +997,7 @@ function button_compute_results_in_database:flat_action()
 			end --if line:match('=')~= nil then 
 			TreeText=TreeText .. line
 		end --for line in io.lines(path_documentation_tree) do
+		--print(TreeText)
 		--save table in the variable actualtree
 		--Lua 5.1 has the function loadstring() - in later versions, this is replaced by load(), hence we detect this here
 		if _VERSION=='Lua 5.1' then
@@ -858,7 +1034,7 @@ outputfile2:close()
 end --function button_compute_results_in_database:flat_action()
 
 --6.8.1.2 button for computing tree result in data base with subtotals
-button_compute_results_in_tree=iup.flatbutton{title="Ergebnisse im \nBaum berechnen", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_compute_results_in_tree=iup.flatbutton{title="Ergebnisse im \nBaum berechnen", size="65x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_compute_results_in_tree:flat_action()
 	--collect IDs in Lua table
 	p=io.popen('C:\\sqlite3\\sqlite3.exe c:\\Temp\\test.sqlite "select Tree_ID from treeTable;"')
@@ -1053,7 +1229,7 @@ function button_compute_results_in_GUI1:flat_action()
 end --function button_compute_results_in_GUI1:flat_action()
 
 --6.8.2.2 button for computing tree result in graphical user interface
-button_compute_results_in_GUI2=iup.flatbutton{title="Ergebnisse in der \nOberfläche berechnen 2", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_compute_results_in_GUI2=iup.flatbutton{title="Ergebnisse in der \nOberfläche berechnen 2", size="12x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_compute_results_in_GUI2:flat_action()
 	for i=tree2.count-1,0,-1 do
 		if tree2["KIND" .. i]=="BRANCH" and tree2["depth" .. i]>="0" and tree2["TITLE" .. i]:match(":")==nil then
@@ -1064,7 +1240,7 @@ function button_compute_results_in_GUI2:flat_action()
 				if tree2["parent" .. i1]==tostring(i) then
 					local saldoNumber=tonumber(tree2["TITLE" .. i1]:match(": *([^:]*)$"))
 					local compareNumber=tonumber(tree2["TITLE" .. i1]:match("; *(%d*[^:]*): *[^:]*$"))
-					--test with: print(tree2["TITLE" .. i1], tostring(saldoNumber))
+					--test with: print(tree2["TITLE" .. i1] .. tostring(saldoNumber))
 					totalSaldo=totalSaldo+(saldoNumber or 0)
 					compareSaldo=compareSaldo+(compareNumber or 0)
 				end --if tree2["title" .. i1]:match("#")==nil then
@@ -1082,13 +1258,13 @@ end --function button_compute_results_in_GUI2:flat_action()
 --6.9 button for the import of the data
 button_import_data=iup.flatbutton{title="Daten \nimportieren", size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_import_data:flat_action()
-	os.execute("C:\\Tree\\reflexiveDocTree\\reflexive_documentation_tree_with_dataform.lua")
+	os.execute('start "GUI" "C:\\Tree\\reflexiveDocTree\\reflexive_documentation_tree_with_dataform.lua"')
 end --function button_import_data:flat_action()
 
 --6.10 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
 --6 buttons end
@@ -1111,6 +1287,7 @@ for line in p:lines() do
 	TreeText=TreeText .. line
 end --for line in io.lines(path_documentation_tree) do
 --save table in the variable actualtree
+--test with: print(TreeText)
 --Lua 5.1 has the function loadstring() - in later versions, this is replaced by load(), hence we detect this here
 if _VERSION=='Lua 5.1' then
 	loadstring(TreeText)()
@@ -1229,11 +1406,14 @@ maindlg = iup.dialog{
 			button_load_next_tree_ID_from_database,
 			button_load_tree_ID_from_node_from_database,
 			textbox2,
+			button_load_tree_ID_from_search_from_database,
+			button_load_tree_ID_containing_node_from_database,
 			iup.label{size="1x",},
+			button_updating_tree_in_database,
 			button_saving_tree_in_database,
-			button_compute_results_in_tree,
-			iup.label{size="1x",},
 			button_compute_results_in_database,
+			iup.label{size="1x",},
+			button_compute_results_in_tree,
 			button_compute_results_in_GUI1,
 			button_compute_results_in_GUI2,
 			iup.fill{},
