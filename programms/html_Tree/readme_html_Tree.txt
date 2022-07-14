@@ -53,3 +53,6 @@ Example tree for the script html_build_node_content.lua.
 
 This skript converts a Lua tree in a html page with tree with relative paths. This is especially helpful on mobile devices as the iPhone where such apps as Touch Lua cannot save directly on the target path. The result is stored in a file with extension .lua which can be transfered by copy and paste in a html file on the target path.
 
+9. Tree_DB_localStorage.html
+
+This Html file contains a localStorage data base in which trees are stored to be shown in the browser. It is possible to search for trees containing a search text or having a root beginning with the search text.
