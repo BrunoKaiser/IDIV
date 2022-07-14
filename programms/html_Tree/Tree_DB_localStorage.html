@@ -1,0 +1,143 @@
+
+
+<html>
+<script>
+
+function Tree(){
+	document.getElementById("tree").innerHTML="";
+	var idText="imgfolder.1";
+	var levelNumber=0;
+	var isLeaf="no";
+
+	//get ID of tree from formular Tree_ID
+	textTree_ID=localStorage.getItem(document.Formular.Tree_ID.value);
+	//standardize tree
+	textTree_ID=textTree_ID.replaceAll('","','",{leaf="').replaceAll('},"','},{leaf="').replaceAll('}','"}"').replaceAll('{ ','{').replaceAll(', "',',"');
+	arrayNodes=textTree_ID.split('"');
+
+	//go throught the Lua table to build the tree
+	for (var i=0;i<arrayNodes.length;i++){
+		//test with: document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+arrayNodes[i]+'<br>';
+		if(arrayNodes[i]=='Tree={branchname='){
+			document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<p id="'+idText+'">Tree '+document.Formular.Tree_ID.value+'</p>'+arrayNodes[i+1].replaceAll('&quot;','"')+'<br>';
+		}else if(arrayNodes[i]==',{branchname=' && isLeaf=="yes"){
+			isLeaf="no";
+			for (var j=0;j<levelNumber;j++){document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'&nbsp;&nbsp;&nbsp;&nbsp;';}
+			document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+arrayNodes[i+1].replaceAll('&quot;','"')+'<br>';
+		}else if(arrayNodes[i]==',{branchname='){
+			levelNumber=levelNumber+1;
+			for (var j=0;j<levelNumber;j++){document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'&nbsp;&nbsp;&nbsp;&nbsp;';}
+			document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+arrayNodes[i+1].replaceAll('&quot;','"')+'<br>';
+		}else if(arrayNodes[i]=='}' && isLeaf=="yes"){
+			levelNumber=levelNumber-2;
+			isLeaf="no";
+		}else if(arrayNodes[i]=='}'){
+			levelNumber=levelNumber-1;
+			isLeaf="no";
+		}else if(arrayNodes[i]==',{leaf=' && isLeaf=="yes"){
+			for (var j=0;j<levelNumber;j++){document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'&nbsp;&nbsp;&nbsp;&nbsp;';}
+			document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+arrayNodes[i+1].replaceAll('&quot;','"')+'<br>';
+		}else if(arrayNodes[i]==',{leaf='){
+			levelNumber=levelNumber+1;
+			isLeaf="yes";
+			for (var j=0;j<levelNumber;j++){document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'&nbsp;&nbsp;&nbsp;&nbsp;';}
+			document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+arrayNodes[i+1].replaceAll('&quot;','"')+'<br>';
+		} //if(arrayNodes[i]=='Tree={branchname='){
+	} //for (var i=0;i<arrayNodes.length;i++){
+}//function Tree(){
+
+
+function nextTree(){
+	if (localStorage.getItem(parseInt(document.Formular.Tree_ID.value)+1)){
+		document.Formular.Tree_ID.value=parseInt(document.Formular.Tree_ID.value)+1;
+	}else{
+		document.Formular.Tree_ID.value=1;
+	} //if (localStorage.getItem(parseInt(document.Formular.Tree_ID.value)+1)){
+} //function nextTree(){
+
+function Tree_search_root(){
+	var textSearch="";
+	var textAllSearch="";
+	//go throught whole localStorage to find tree with search text
+	for (var i=0;i<localStorage.length;i++){
+		if (document.Formular.SearchText.value!="" && localStorage.getItem(localStorage.key(i)).search('Tree={ *branchname="'+document.Formular.SearchText.value)>=0){
+			textAllSearch=textAllSearch+"/"+localStorage.key(i);
+			textSearch=localStorage.key(i);
+		} //if (document.Formular.SearchText.value!="" && localStorage.getItem(localStorage.key(i)).search(document.Formular.SearchText.value)>0){
+	} //for (var i=0;i<localStorage.length;i++){
+	document.Formular.Tree_ID.value=textSearch;
+	document.Formular.Tree_IDAllSearch.value=textAllSearch;
+} //function Tree_search_root(){
+
+function Tree_search(){
+	var textSearch="";
+	var textAllSearch="";
+	//go throught whole localStorage to find tree with search text
+	for (var i=0;i<localStorage.length;i++){
+		if (document.Formular.SearchText.value!="" && localStorage.getItem(localStorage.key(i)).search(document.Formular.SearchText.value)>0){
+			textAllSearch=textAllSearch+"/"+localStorage.key(i);
+			textSearch=localStorage.key(i);
+		} //if (document.Formular.SearchText.value!="" && localStorage.getItem(localStorage.key(i)).search(document.Formular.SearchText.value)>0){
+	} //for (var i=0;i<localStorage.length;i++){
+	document.Formular.Tree_ID.value=textSearch;
+	document.Formular.Tree_IDAllSearch.value=textAllSearch;
+} //function Tree_search(){
+
+function nextSearchTree(){
+	document.Formular.Tree_ID.value=document.Formular.Tree_IDAllSearch.value.substring(document.Formular.Tree_IDAllSearch.value.lastIndexOf("/")+1);
+	document.Formular.Tree_IDAllSearch.value=document.Formular.Tree_IDAllSearch.value.substring(0,document.Formular.Tree_IDAllSearch.value.lastIndexOf("/"));
+} //function nextSearchTree(){
+
+function onloadFunction(){
+var TreeText="";
+var Tree_ID_number=0;
+TreeText='Tree={branchname="Stamm",{branchname="Ast","Blatt01","Blatt02",{branchname="Ast3","Blatt3"},},{branchname="Ast1","Blatt1","Blatt1.1","Blatt1.2","Blatt1.3",},}'; Tree_ID_number=Tree_ID_number+1; localStorage.setItem(Tree_ID_number,TreeText);
+
+var TreeText='Tree={branchname="Stamm 2",{branchname="Ast 22222","Blatt01","Blatt02",{branchname="Ast3","Blatt3"},},{branchname="Ast1","Blatt1","Blatt1.1","Blatt1.2","Blatt1.3",},}'; Tree_ID_number=Tree_ID_number+1; localStorage.setItem(Tree_ID_number,TreeText);
+
+var TreeText='Tree={branchname="Stamm 3",{branchname="Ast 22222","Blatt01","Blatt02",{branchname="Ast3","Blatt3"},},{branchname="Ast1","Blatt1","Blatt1.1","Blatt1.2","Blatt1.3",},}'; Tree_ID_number=Tree_ID_number+1; localStorage.setItem(Tree_ID_number,TreeText);
+
+
+}//function onloadFunction(){
+
+
+
+</script>
+
+<body onload="onloadFunction()">
+
+
+
+
+<h1>Tree</h1>
+
+<form name="Formular">
+Baum-Nummer:<br>
+<input value="1" name="Tree_ID" type="text">
+<ul><li>
+<input value="Baum bilden" onclick="Tree()" type="button">
+<br>
+<input value="N&auml;chste Baumnummer laden" onclick="nextTree()" type="button">
+<br>
+</li></ul>
+Suche in den B&auml;men von:<br>
+<input value="" name="SearchText" type="text">
+<ul><li>
+<input value="Baum mit Stamm beginnend suchen" onclick="Tree_search_root()" type="button">
+<br>
+<input value="Baum suchen" onclick="Tree_search()" type="button">
+<br>
+<input value="N&auml;chste gefundene Baumnummer laden" onclick="nextSearchTree()" type="button">
+<br>
+<ul><li>
+<input value="" name="Tree_IDAllSearch" type="text">
+</li></ul>
+</li></ul>
+</form>
+
+<div id="tree"></div>
+
+
+</body>
+
+</html>
