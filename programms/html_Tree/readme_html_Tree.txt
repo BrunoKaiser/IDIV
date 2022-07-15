@@ -14,7 +14,7 @@ This repository contains a html for Tree with two frames. Parts are taken from W
 
 4. html_fengari
 
-This repository contains a html for Tree with Lua realized by Fengari https://fengari.io/ https://github.com/fengari-lua/fengari.io.
+This repository contains a html for Tree with Lua realized by Fengari https://fengari.io/ https://github.com/fengari-lua/fengari.io. The file fengari-web.js is needed to be imported as a modul to execute Lua in the Html file.
 
 5. Tree_html_frame_build.lua
 
@@ -56,3 +56,7 @@ This skript converts a Lua tree in a html page with tree with relative paths. Th
 9. Tree_DB_localStorage.html
 
 This Html file contains a localStorage data base in which trees are stored to be shown in the browser. It is possible to search for trees containing a search text or having a root beginning with the search text.
+
+10. simple_fengari_tree.html
+
+This Html file contains a tree that has functionalities from javascript. It is dynamically build from a Lua script execute via fengari. Fengari is a modul that can be downloaded on the internet sites https://github.com/fengari-lua/fengari.io. The file fengari-web.js is needed to be imported as a modul to execute Lua in the Html file.
