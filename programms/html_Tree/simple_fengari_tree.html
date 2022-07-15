@@ -169,6 +169,40 @@
 </head>
 
 
+<body style="margin: 2px; background-color: #F1F1F1"  onload="showStartPage()">
+
+<form name="G">
+<img alt="Expand All Nodes" src="wb_img/showall.png" onclick="showAllFolders()" onmouseover="this.src='wb_img/showall_over.png'" onmouseout="this.src='wb_img/showall.png'">
+
+<img alt="Contract All Nodes" src="wb_img/hideall.png" onclick="hideAllFolders()" onmouseover="this.src='wb_img/hideall_over.png'" onmouseout="this.src='wb_img/hideall.png'">
+
+<br>
+Suche von:
+<br>
+<input value="" name="Q" size="54" type="text">
+<br>
+<input value="Markieren aller Fundstellen und Ausklappen" onclick="searchInTree()" type="button">
+<br>
+<input value="Markieren der weiteren Fundstelle" onclick="searchInTreeNext()" type="button">
+<br>
+Bei Bedarf auf IDIV klicken.
+<br>
+Ergebnis:
+<br>
+<input value="" name="R" size="54" type="text">
+<br>
+Fundstellennummer:
+<br>
+<input value="0" name="NR" size="54" type="text">
+<br>
+Anzahl Knoten:
+<br>
+<input value="0" name="AR" size="54" type="text">
+<br>
+
+<!--test with: input value="0" name="PR" size="54" type="text"-->
+</form>
+
 <title>Fengari-Tree</title>
 
 
@@ -211,6 +245,7 @@ SOFTWARE.]],
 },
 }
 
+--[====[
 document:getElementById("tree").innerHTML="Stamm"
 document:getElementById("tree").innerHTML=document:getElementById("tree").innerHTML .. '<p style="margin: 0px 0px 5px 30px"> Das ist ein Test</p>'
 document:getElementById("tree").innerHTML=document:getElementById("tree").innerHTML .. [[	<p style="margin: 0px 0px 5px ]] .. 30*12 .. [[px"><img name="imgfolder.1.1" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder.1.1')"><a name="link2folder.1.1" href="">Fragen</a></p>]]
@@ -224,6 +259,7 @@ for i=1,4 do
 document:getElementById("tree").innerHTML=document:getElementById("tree").innerHTML .. [[	<p style="margin: 0px 0px 5px ]] .. 30*i .. [[px"><img name="imgfolder.1.1" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder.1.1')"><a name="link2folder.1.1" href="">]] .. string.rep("a",i) .. [[</a></p>]]
 
 end --for i=1,12 do
+--]====]
 
 
 
