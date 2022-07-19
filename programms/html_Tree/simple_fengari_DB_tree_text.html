@@ -69,7 +69,7 @@
 
 
   function hideFolder(folder, id) {
-    var imageNode = document.images["img" + id];
+    var imageNode = document.images["img1" + id];
     if (imageNode != null) {
       var len = imageNode.src.length;
       if (imageNode.src.substring(len-8,len-4) == "last")
@@ -82,7 +82,7 @@
   } //function hideFolder(folder, id) {
 
   function showFolder(folder, id) {
-    var imageNode = document.images["img" + id];
+    var imageNode = document.images["img1" + id];
     if (imageNode != null) {
       var len = imageNode.src.length;
       if (imageNode.src.substring(len-8,len-4) == "last")
@@ -166,18 +166,18 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 	
 	if TreeTable[1]==nil then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	--collapsed does function with the onload function for the body
 	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	else
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	end --if state=="COLLAPSED" then
