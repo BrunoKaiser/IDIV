@@ -69,7 +69,7 @@
 
 
   function hideFolder(folder, id) {
-    var imageNode = document.images["img1" + id];
+    var imageNode = document.images["img" + id];
     if (imageNode != null) {
       var len = imageNode.src.length;
       if (imageNode.src.substring(len-8,len-4) == "last")
@@ -82,7 +82,7 @@
   } //function hideFolder(folder, id) {
 
   function showFolder(folder, id) {
-    var imageNode = document.images["img1" + id];
+    var imageNode = document.images["img" + id];
     if (imageNode != null) {
       var len = imageNode.src.length;
       if (imageNode.src.substring(len-8,len-4) == "last")
@@ -166,20 +166,20 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 	
 	if TreeTable[1]==nil then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
+		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["im1folder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["im1folder]] .. levelFolder .. [["]=true]]
 	--collapsed does function with the onload function for the body
 	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
+		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["im1folder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["im1folder]] .. levelFolder .. [["]=true]]
 	else
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
+		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["im1folder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["im1folder]] .. levelFolder .. [["]=true]]
 	end --if state=="COLLAPSED" then
 	if TreeTable.branchname:match('"([^"]*)">')~=nil and tostring(TreeTable.branchname):match("http") then
 		LinkText='<a href='
@@ -279,7 +279,8 @@ end --readTreetohtmlRecursiveLinksText(TreeTable)
 
 --load Tree data base as a NoSQL Lua table
 DBTable={ 
-'Tree={branchname="DB",{branchname="Fragen","Test","Blatt"},}',
+'Tree={branchname="Test 1",{branchname="Ast1",{branchname="Ast2","Blatt",},"Blatt",},{branchname="Ast3","Blatt",{branchname="Ast4","Blatt",},},}',
+'Tree={branchname="DB",state="COLLAPSED",{branchname="Fragen","Test","Blatt"},}',
 'Tree={branchname="Ein anderer Baum",{branchname="Fragen","Test","Blatt"},}',
 }
 
@@ -522,7 +523,7 @@ Markieren von:
 				--test with: window:alert(k) 
 					divText = document:getElementById(k)
 					divText.style="margin: " .. divText.style.margin .. ";color:#000"
-				end --for k,v in pairs(searchTable) do
+				end --for k,v in pairs(unmarkTable) do
 			</div>
 		</div>
 	</div>
