@@ -66,6 +66,10 @@ These Html files contain a tree that has functionalities from javascript. It is 
 
 This file contains a simple tree with mark functionalities with nodes as Hyperlinks.
 
-11. simple_fengari_DB_tree_link.html
+10.2 simple_fengari_DB_tree_link.html
 
 This file contains a simple NoSQL data base as a Lua table of trees with mark functionalities with nodes as Hyperlinks.
+
+10.3 simple_fengari_DB_tree_text.html
+
+This file contains a simple NoSQL data base as a Lua table of trees with mark functionalities with nodes as texts. The texts can contain hyperlink or other html tags. Therefore this file has flexibility.
