@@ -166,18 +166,18 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 	
 	if TreeTable[1]==nil then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	--collapsed does function with the onload function for the body
 	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	else
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	end --if state=="COLLAPSED" then
