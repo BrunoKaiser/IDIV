@@ -361,7 +361,7 @@ function funktionSuche(divTextFolder) {
 	//test with: alert(divTextFolder);
 	if (divText!=null){
 		if (divText.innerText.toLowerCase().search(document.InputForm.searchText.value.toLowerCase())>=0){
-			//alert(row.cells[j].innerText.replaceAll("_",""));
+			//alert(divText.innerText);
 			divText.style="margin: "+divText.style.margin+";color:#090";
 			//test with: alert(divText);
 			var testText=divTextFolder;//"imgfolder.1.1.1.1";
@@ -767,20 +767,20 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px"'
 	if TreeTable[1]==nil then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. [[");]]
+		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("im1folder]] .. levelFolder .. [[");]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("im1folder]] .. levelFolder .. [[");]]
 	--collapsed does function with the onload function for the body
 	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. [[");]]
+		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("im1folder]] .. levelFolder .. [[");]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("im1folder]] .. levelFolder .. [[");]]
 	else
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [["><img  src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. [[");]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. [[");]]
+		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("im1folder]] .. levelFolder .. [[");]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("im1folder]] .. levelFolder .. [[");]]
 	end --if state=="COLLAPSED" then
 	if TreeTable.branchname:match('"([^"]*)">')~=nil and tostring(TreeTable.branchname):match("http") then
 		LinkText='<a href='
@@ -826,7 +826,7 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 				LinkText=""
 			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
 			----[====[with distinct lines and leafs can start at any key:
-			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. '>' ..  
+			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="im1folder' .. levelFolder .. "." .. i .. '"' .. '>' ..  
 			v
 			:gsub("Ã¤","&auml;")
 			:gsub("Ã„","&Auml;")
@@ -836,13 +836,11 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 			:gsub("Ãœ","&Uuml;")
 			:gsub("ÃŸ","&szlig;")
 			.. "</p>\n"
-			textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
-			textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
 			--]====]
 			--
 			--[====[with one text for all leafs when all leafs starts at key = 1
 			if i==1 then
-				textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. '>' ..  
+				textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="im1folder' .. levelFolder .. "." .. i .. '"' .. '>' ..  
 				v
 				:gsub("Ã¤","&auml;")
 				:gsub("Ã„","&Auml;")
@@ -851,8 +849,6 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 				:gsub("Ã¼","&uuml;")
 				:gsub("Ãœ","&Uuml;")
 				:gsub("ÃŸ","&szlig;")
-				textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
-				textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("imgfolder]] .. levelFolder .. "." .. i .. [[");]]
 			else
 				textforHTML = textforHTML .. " " .. 
 				v
@@ -866,6 +862,8 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 				--not necessary, but difficult to set so omit:			.. "</p>\n"
 			end --if i==1 then
 			--]====]
+			textforOnLoad=textforOnLoad .. "\n" .. [[  funktionSuche("im1folder]] .. levelFolder .. "." .. i .. [[");]]
+			textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  funktionEntMarkieren("im1folder]] .. levelFolder .. "." .. i .. [[");]]
 		end --if type(v)=="table" then
 	end --for i, v in ipairs(TreeTable) do
 	--test with: print("  " .. levelFolder)
