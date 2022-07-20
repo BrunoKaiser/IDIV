@@ -76,5 +76,5 @@ This file contains a simple NoSQL data base as a Lua table of trees with mark fu
 
 10.4 reflexive_fengari_tree_checklists.html
 
-This file contains in addition to simple_fengari_DB_tree_text.html the possibility to tick nodes that are done. It is a hierarchical todo list or checklist within the nodes can be added by a tick. This tick is stored in a localStorage. The ticks can all be cleared or deletede for individual nodes.
+This file contains in addition to simple_fengari_DB_tree_text.html the possibility to tick nodes that are done. This is done for each tree in the file. So, these are  hierarchical todo lists or checklists within the nodes can be added by a tick. This tick is stored in a localStorage and is valid for all nodes having the same definition, for leafs all leafs are ticked in each tree, but all branches are treated indivdually. The ticks can all be cleared or deletede for individual nodes.
 
