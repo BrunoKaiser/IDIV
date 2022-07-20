@@ -69,7 +69,9 @@
 
 
   function hideFolder(folder, id) {
-    var imageNode = document.images["img" + id];
+    //test with: alert(folder+" -- "+id);
+    var imageNode = document.images["img1" + id];
+    //test with: alert(imageNode);
     if (imageNode != null) {
       var len = imageNode.src.length;
       if (imageNode.src.substring(len-8,len-4) == "last")
@@ -82,7 +84,7 @@
   } //function hideFolder(folder, id) {
 
   function showFolder(folder, id) {
-    var imageNode = document.images["img" + id];
+    var imageNode = document.images["img1" + id];
     if (imageNode != null) {
       var len = imageNode.src.length;
       if (imageNode.src.substring(len-8,len-4) == "last")
@@ -166,20 +168,20 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 	
 	if TreeTable[1]==nil then
 		textforHTML = textforHTML ..
-		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="° " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["im1folder]] .. levelFolder .. [["]=true]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["im1folder]] .. levelFolder .. [["]=true]]
+		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="~ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	--collapsed does function with the onload function for the body
 	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
-		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["im1folder]] .. levelFolder .. [["]=true]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["im1folder]] .. levelFolder .. [["]=true]]
+		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	else
 		textforHTML = textforHTML ..
-		[[ id="im1folder]] .. levelFolder .. [["><img  id="imgfolder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
-		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["im1folder]] .. levelFolder .. [["]=true]]
-		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["im1folder]] .. levelFolder .. [["]=true]]
+		[[ id="imgfolder]] .. levelFolder .. [["><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	end --if state=="COLLAPSED" then
 	if TreeTable.branchname:match('"([^"]*)">')~=nil and tostring(TreeTable.branchname):match("http") then
 		LinkText='<a href='
@@ -360,7 +362,7 @@ Baum-Nummer:<br>
 <br>
 
 <form name="FormularSearch">
-Suche in den B&auml;men von:<br>
+Suche in den B&auml;umen von:<br>
 <input value="" name="SearchText" size="54" type="text">
 </form>
 
