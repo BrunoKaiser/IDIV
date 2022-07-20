@@ -25,7 +25,10 @@
         imageNode.src = "wb_img/plusnodelast.png";
       else if (imageNode.src.substring(len-8,len-4) == "node")
         {imageNode.src = "wb_img/plusnode.png";
-        imageNode.alt = "+ ";}
+        //alert(imageNode.src)
+        imageNode.alt = "+ ";
+        //alert(imageNode.alt)
+        }
     } //if (imageNode != null) {
     folder.style.display = "none";
   } //function hideFolder(folder, id) {
@@ -60,17 +63,17 @@
 
   function toggletick(id) {
     var folder = document.getElementById(id);
-    if (folder.innerHTML.search(": ")>=0){
+    if (folder.innerHTML.search(" : ")>=0){
       folder.innerHTML=folder.innerHTML;
     }else{
 	var toTick=confirm("Ist die Aufgabe wirklich erledigt?\n"+folder.innerHTML.substring(folder.innerHTML.lastIndexOf(">")+1))
 	if (toTick==true) {
 	      localStorage.setItem(folder.innerHTML,folder.innerHTML);
-	      folder.innerHTML="&#10004;: "+folder.innerHTML;
+	      folder.innerHTML="&#10004; : "+folder.innerHTML;
 	}else{
 	      localStorage.removeItem(folder.innerHTML);
 	} //if (toTick==true) {
-    } //if (folder.innerHTML.search(": ")>=0){
+    } //if (folder.innerHTML.search(" : ")>=0){
   } //function toggletick(id) {
 
 	function retrieveTicks(){
@@ -83,7 +86,7 @@
 				//alert(">"+el.id);
 				//test with: testText=localStorage.getItem(elfolder.innerHTML); alert(testText);
 				if (localStorage.getItem(elfolder.innerHTML)){
-					elfolder.innerHTML="&#10004;: "+elfolder.innerHTML;
+					elfolder.innerHTML="&#10004; : "+elfolder.innerHTML;
 				}else{
 					elfolder.innerHTML=elfolder.innerHTML;
 				}//if (localStorage.getItem(elfolder.innerHTML){
@@ -337,6 +340,40 @@ Markieren von:<br>
 		if divText then
 			--test with: window:alert(divText.innerText:lower())
 			if divText.innerText:lower():match(document.InputForm.searchText.value:lower()) then
+				--test with: window:alert(divText.innerText)
+						divText.style="margin: " .. divText.style.margin .. ";color:#090";
+						--test with: window:alert(divText);
+						testText=k --"imgfolder.1.1.1.1";
+						--test with: window:alert(#testText)
+						for i = #testText,10,-1 do
+							--test with: window:alert(testText:sub(1,i))
+							if testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
+								--test with: window:alert(testText:sub(1,i))
+								divText = document:getElementById(testText:sub(1,i))
+								if divText then
+									divText.style="margin: " .. divText.style.margin .. ";color:#f90"
+								end --if divText then
+							end -- testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
+						end --for i = #testText,10,-1 do
+			end --if divText.innerText:lower():match(document.InputForm.searchText.value.lower()) then
+		end --if divText then
+	end --for k,v in pairs(searchTable) do
+</div></div></div></div><br><br>
+
+<div class="snippet"><div class="snippet__actions"><div class="snippet__actions__action" data-action="run">Nicht erledigte Knoten markieren<div class="snippet__source" data-lang="lua"> js = require "js" window = js.global
+	--test with: window:alert(textforOnLoad)
+	searchTable={}
+	load(textforOnLoad)()
+	for k,v in pairs(searchTable) do
+		--test with: window:alert(k) 
+		divText = document:getElementById(k)
+		--first unmark each node
+		divText.style="margin: " .. divText.style.margin .. ";color:#000"
+		--test with: window:alert(divText)
+		--test with: window:alert(divText.innerText)
+		if divText then
+			--test with: window:alert(divText.innerText:lower())
+			if divText.innerText:lower():match("^[^:]+ : ")==nil then
 				--test with: window:alert(divText.innerText)
 						divText.style="margin: " .. divText.style.margin .. ";color:#090";
 						--test with: window:alert(divText);
