@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Trees in a database manner in pure JavaScript</title>
+		
+	<script>
+
+		function hideFolder(folder, id) {
+		//alert(id)
+		var imageNode = document.images["img" + id.substring(id.search("folder"))];
+		//alert(imageNode);
+		if (imageNode != null) {
+		  var len = imageNode.src.length;
+		  if (imageNode.src.substring(len-8,len-4) == "last")
+			imageNode.src = "wb_img/plusnodelast.png";
+		  else if (imageNode.src.substring(len-8,len-4) == "node")
+			{imageNode.src = "wb_img/plusnode.png";
+			//alert(imageNode.src)
+			imageNode.alt = "+ ";
+			//alert(imageNode.alt)
+			}
+		} //if (imageNode != null) {
+		folder.style.display = "none";
+		} //function hideFolder(folder, id) {
+
+		function showFolder(folder, id) {
+		var imageNode = document.images["img" + id.substring(id.search("folder"))];
+		if (imageNode != null) {
+		  var len = imageNode.src.length;
+		  if (imageNode.src.substring(len-8,len-4) == "last")
+			imageNode.src = "wb_img/minusnodelast.png";
+		  else if (imageNode.src.substring(len-8,len-4) == "node")
+			{imageNode.src = "wb_img/minusnode.png";
+			imageNode.alt = "- ";}
+			} //if (imageNode.src.substring(len-8,len-4) == "last")
+		folder.style.display = "block";
+		} //function showFolder(folder, id) {
+
+		function toggleFolder(id) {
+		//alert(id)
+		var folder = document.getElementById(id);
+		var nextfolder = document.getElementById(id+".1");
+		if (nextfolder.style.display == "block"){
+			showFlag="yes";
+		}else{
+			showFlag="no";
+		} //if (nextfolder.style.display == "block"){
+		var allElements = document.getElementsByTagName("*");
+		for (var i = 0; i < allElements.length; ++i) {
+			var el = allElements[i];
+			//geht nicht: lastNumberOfPointID=parseInt(id.replace(/[0-9]/g, "").lastIndexOf("."));
+			//geht nicht: lastNumberOfPointELID=parseInt(el.id.replace(/[0-9]/g, "").lastIndexOf("."));
+			//geht nicht: && lastNumberOfPointELID-lastNumberOfPointID==1
+			if (el.id.search("im1folder.")>=0 && el.id.search(id)>=0 &&  el.id.search("im1folder.")!=id ) { 
+			//alert(id+": "+id.replace(/[0-9]/g, "").lastIndexOf(".") +"-"+el.id+": "+el.id.replace(/[0-9]/g, "").lastIndexOf("."))
+			//alert(lastNumberOfPointELID-lastNumberOfPointID)
+				var elfolder = document.getElementById(el.id);
+				//alert(">"+el.id)
+				if (showFlag=="yes"){
+					hideFolder(elfolder, el.id);
+				}else{
+					showFolder(elfolder, el.id);
+				}//if (elfolder.style.display == "block"){
+			} 
+		} //for (var i = 0; i < allElements.length; ++i) {
+		folder.style.display = "block"; //showFolder(folder, id);
+		} //function toggleFolder(id) {
+
+		function setFoldersAtLevel(level, show) {
+		var i = 1;
+		do {
+		  var folder_id = level + "." + i;
+		  var id = "im1folder" + folder_id;
+		  var folder = document.getElementById(id);
+		  if (folder != null) {
+			setFoldersAtLevel(folder_id, show);
+			if (show)
+			  showFolder(folder, id);
+			else
+			  hideFolder(folder, id);
+		  } //if (folder != null) {
+		  i++;
+		} while(folder != null);
+		} //function setFoldersAtLevel(level, show) {
+
+		function showAllFolders() {setFoldersAtLevel("", true); }
+		function hideAllFolders() {
+			setFoldersAtLevel(".1", false);
+			imageNode = document.images["imgfolder.1"];
+			imageNode.alt = "+ ";
+			} //function hideAllFolders() {
+
+		function Tree(){
+			var numberCOLLAPSED=0;
+			var arrayCOLLAPSED=[];
+			//test with: alert(arr[1]);
+			//test with: alert(arr[parseInt(document.Formular.Tree_ID.value)]);
+			document.getElementById("tree").innerHTML="";
+			var levelNumberTable=[];
+			//levelNumberTable[1]=2
+			//alert(levelNumberTable[1])
+			var idText="im1folder";
+			document.Formular.searchText.value="";
+			var levelNumber=0;
+			var isLeaf="no";
+			//get ID of tree from formular Tree_ID
+			textTree_ID=arr[parseInt(document.Formular.Tree_ID.value)];
+			//test with: alert(textTree_ID);
+			//standardize tree
+			textTree_ID=textTree_ID.replaceAll('","','",{leaf="').replaceAll('},"','},{leaf="').replaceAll('}','"}"').replaceAll('{ ','{').replaceAll(', "',',"');
+			arrayNodes=textTree_ID.split('"');
+			//go throught the Lua table to build the tree
+			for (var i=0;i<arrayNodes.length;i++){
+				//alert(arrayNodes[i]);
+				//test with: document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+arrayNodes[i]+": "+levelNumber+": "+isLeaf+'<br>';
+				if(arrayNodes[i]=='Tree={branchname='){
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<p id="'+idText+'">Tree '+document.Formular.Tree_ID.value+'</p>';
+					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"Tree"+document.Formular.Tree_ID.value+": "+idText;
+					if (levelNumberTable[levelNumber]) {
+										levelNumberTable[levelNumber]=levelNumberTable[levelNumber]+1;
+										}else{
+										levelNumberTable[levelNumber]=1;
+					}
+					idTextNumbers="";
+					for (var k=0;k<=levelNumber;k++){idTextNumbers=idTextNumbers+"."+levelNumberTable[k];}
+					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": im1folder"+idTextNumbers;
+					idText="im1folder"+idTextNumbers;
+					idImageText="imgfolder"+idTextNumbers;
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<div id="'+idText+'">'+'<img  id="'+idImageText+'" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder(\''+idText+'\')">'+arrayNodes[i+1].replaceAll('&quot;','"')+'<br>';
+					if (arrayNodes[i+3] && arrayNodes[i+2]==",state=" && arrayNodes[i+3]=="COLLAPSED") {
+						numberCOLLAPSED=numberCOLLAPSED+1;
+						arrayCOLLAPSED[numberCOLLAPSED]=idText
+					} //if (arrayNodes[i+2]==",state=" && arrayNodes[i+3]=="COLLAPSED") {
+				}else if(arrayNodes[i]==',{branchname=' && isLeaf=="yes"){
+					isLeaf="no";
+					if (levelNumberTable[levelNumber]) {
+										levelNumberTable[levelNumber]=levelNumberTable[levelNumber]+1;
+										}else{
+										levelNumberTable[levelNumber]=1;
+					}
+					//test with: alert(levelNumber +":"+levelNumberTable[levelNumber]);
+					idTextNumbers="";
+					for (var k=0;k<=levelNumber;k++){idTextNumbers=idTextNumbers+"."+levelNumberTable[k];}
+					levelPoints=levelNumber*30
+					idText="im1folder"+idTextNumbers;
+					idImageText="imgfolder"+idTextNumbers;
+					//alert(idImageText);
+					//test with: alert(idText+" von "+"im1folder"+idTextNumbers)
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<div id="'+idText+'">'+'<p style="margin: 0px 0px 5px '+levelPoints+'px">'+'<img  id="'+idImageText+'" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder(\''+idText+'\')">'+arrayNodes[i+1].replaceAll('&quot;','"')+'</p>';
+					//document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": "+idText;
+					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": im1folder"+idTextNumbers;
+					if (arrayNodes[i+3] && arrayNodes[i+2]==",state=" && arrayNodes[i+3]=="COLLAPSED") {
+						numberCOLLAPSED=numberCOLLAPSED+1;
+						arrayCOLLAPSED[numberCOLLAPSED]=idText
+					} //if (arrayNodes[i+2]==",state=" && arrayNodes[i+3]=="COLLAPSED") {
+				}else if(arrayNodes[i]==',{branchname='){
+					levelNumber=levelNumber+1;
+					if (levelNumberTable[levelNumber]) {
+										levelNumberTable[levelNumber]=levelNumberTable[levelNumber]+1;
+										}else{
+										levelNumberTable[levelNumber]=1;
+					}
+					//test with: alert(levelNumber +":"+levelNumberTable[levelNumber]);
+					idTextNumbers="";
+					for (var k=0;k<=levelNumber;k++){idTextNumbers=idTextNumbers+"."+levelNumberTable[k];}
+					levelPoints=levelNumber*30
+					idText="im1folder"+idTextNumbers;
+					idImageText="imgfolder"+idTextNumbers;
+					//alert(idImageText);
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<div id="'+idText+'">'+'<p style="margin: 0px 0px 5px '+levelPoints+'px">'+'<img  id="'+idImageText+'"  src="wb_img/minusnode.png" alt="- " onclick="toggleFolder(\''+idText+'\')">'+arrayNodes[i+1].replaceAll('&quot;','"')+'</p>';
+					//document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": "+idText;
+					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": im1folder"+idTextNumbers;
+					if (arrayNodes[i+3] && arrayNodes[i+2]==",state=" && arrayNodes[i+3]=="COLLAPSED") {
+						numberCOLLAPSED=numberCOLLAPSED+1;
+						arrayCOLLAPSED[numberCOLLAPSED]=idText
+					} //if (arrayNodes[i+2]==",state=" && arrayNodes[i+3]=="COLLAPSED") {
+				}else if(arrayNodes[i]=='}' && isLeaf=="yes"){
+					levelNumberTable[levelNumber]=0;
+					levelNumber=levelNumber-2;
+					isLeaf="no";
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'</div></div>';
+				}else if(arrayNodes[i]=='}'){
+					levelNumberTable[levelNumber]=0;
+					levelNumber=levelNumber-1;
+					isLeaf="no";
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'</div>'
+				}else if(arrayNodes[i]==',{leaf=' && isLeaf=="yes"){
+					if (levelNumberTable[levelNumber]) {
+										levelNumberTable[levelNumber]=levelNumberTable[levelNumber]+1;
+										}else{
+										levelNumberTable[levelNumber]=1;
+					}
+					idTextNumbers="";
+					for (var k=0;k<=levelNumber;k++){idTextNumbers=idTextNumbers+"."+levelNumberTable[k];}
+					levelPoints=levelNumber*30
+					idText="im1folder"+idTextNumbers;
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<div id="'+idText+'">'+'<p style="margin: 0px 0px 5px '+levelPoints+'px">'+arrayNodes[i+1].replaceAll('&quot;','"')+'</p>';
+					//document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": "+idText;
+					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": im1folder"+idTextNumbers;
+				}else if(arrayNodes[i]==',{leaf='){
+					levelNumber=levelNumber+1;
+					if (levelNumberTable[levelNumber]) {
+										levelNumberTable[levelNumber]=levelNumberTable[levelNumber]+1;
+										}else{
+										levelNumberTable[levelNumber]=1;
+					}
+					isLeaf="yes";
+					idTextNumbers="";
+					for (var k=0;k<=levelNumber;k++){idTextNumbers=idTextNumbers+"."+levelNumberTable[k];}
+					levelPoints=levelNumber*30
+					idText="im1folder"+idTextNumbers;
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<div id="'+idText+'">'+'<p style="margin: 0px 0px 5px '+levelPoints+'px">'+arrayNodes[i+1].replaceAll('&quot;','"')+'</p>';
+					//document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": "+idText;
+					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": im1folder"+idTextNumbers;
+				} //if(arrayNodes[i]=='Tree={branchname='){
+			} //for (var i=0;i<arrayNodes.length;i++){
+			for (n1=1;n1<=numberCOLLAPSED;n1++){
+				toggleFolder(arrayCOLLAPSED[n1]);
+				toggleFolder(arrayCOLLAPSED[n1]);
+			} //for (n1=1;n1<=numberCOLLAPSED;n1++){
+		}//function Tree(){
+
+		function funktionMarkieren(divTextFolder) {
+			var divText = document.getElementById(divTextFolder);
+			//alert(divTextFolder+": "+divText.innerHTML);
+			divText.style="color:#f90";
+		}//function funktionMarkieren(divTextFolder) {
+
+		function funktionEntMarkieren(divTextFolder) {
+			var divText = document.getElementById(divTextFolder);
+			divText.style="color:#000";
+		}//function funktionEntMarkieren(divTextFolder) {
+
+		function funktionSuche(divTextFolder) {
+			var divText = document.getElementById(divTextFolder);
+			//test with: alert(divTextFolder);
+			if (divText!=null){
+				if (divText.innerText.toLowerCase().search(document.InputForm.markText.value.toLowerCase())>=0){
+					//alert(row.cells[j].innerText.replaceAll("_",""));
+					divText.style="margin: "+divText.style.margin+";color:#090";
+					//test with: alert(divText);
+					var testText=divTextFolder;//"im1folder.1.1.1.1";
+					//			alert(testText.length);
+					for (var i = 10; i <=testText.length; i++){
+						//test with: alert(testText.substring(0,i));
+						if (testText.substring(i-1,i)!="." && testText.substring(i,i+1)=="."){
+							//test with: alert("->"+testText.substring(0,i));
+							funktionMarkieren(testText.substring(0,i)); //Tabellen, die in der Hierarchie darüber sind: Problem gelöschte Tabellen
+						} //if (testText.substring(i,i)+="."){
+					}//for (var i = 0; i < testText.length; i++){
+					//testText=testText.substring(1,testText.length-1);
+					//alert(testText);
+				} //if (divText.innerText.toLowerCase().search(document.InputForm.markText.value.toLowerCase())>=0){
+			} //if (divText!=null){
+		} //function funktionSuche()
+
+		function nodes_mark() {
+			//	var folder = document.getElementById("im1folder.1.2.1");
+				//alert(folder.innerHTML);
+			//	folder.style.color="#090";
+			//https://stackoverflow.com/questions/7115022/how-do-i-enumerate-all-of-the-html-ids-in-a-document-with-javascript
+			var allElements = document.getElementsByTagName("*");
+			//var allIds = [];
+			for (var i = 0, n = allElements.length; i < n; ++i) {
+				var el = allElements[i];
+				//  if (el.id.search("im1folder.")>=0) { allIds.push(el.id); alert(el.id)}
+				//  
+				if (el.id.search("im1folder.")>=0) { funktionEntMarkieren(el.id);} 
+			} //for (var i = 0, n = allElements.length; i < n; ++i) {
+			for (var i = 0, n = allElements.length; i < n; ++i) {
+				var el = allElements[i];
+				//  if (el.id.search("im1folder.")>=0) { allIds.push(el.id); alert(el.id)}
+				//  
+				if (el.id.search("im1folder.")>=0) { funktionSuche(el.id);} 
+			} //for (var i = 0, n = allElements.length; i < n; ++i) {
+			//funktionSuche("im1folder.1.2.2");
+		} //function nodes_mark()
+
+		function nodes_unmark() {
+			//	var folder = document.getElementById("im1folder.1.2.1");
+				//alert(folder.innerHTML);
+			//	folder.style.color="#090";
+			//https://stackoverflow.com/questions/7115022/how-do-i-enumerate-all-of-the-html-ids-in-a-document-with-javascript
+			var allElements = document.getElementsByTagName("*");
+			//var allIds = [];
+			for (var i = 0, n = allElements.length; i < n; ++i) {
+				var el = allElements[i];
+				//  if (el.id.search("im1folder.")>=0) { allIds.push(el.id); alert(el.id)}
+				//  
+				if (el.id.search("im1folder.")>=0) { funktionEntMarkieren(el.id);} 
+			} //for (var i = 0, n = allElements.length; i < n; ++i) {
+			//funktionSuche("im1folder.1.2.2");
+		} //function nodes_unmark()
+
+		function nextTree(){
+			if (arr[parseInt(document.Formular.Tree_ID.value)+1]){
+				document.Formular.Tree_ID.value=parseInt(document.Formular.Tree_ID.value)+1;
+			}else{
+				document.Formular.Tree_ID.value=0;
+			} //if (arr[parseInt(document.Formular.Tree_ID.value)+1]){
+		} //function nextTree(){
+
+		function Tree_search_root(){
+			var textSearch="";
+			var textAllSearch="";
+			//go throught whole arr to find tree with search text
+			for (var i=0;i<arr.length;i++){
+				if (document.Formular.searchText.value!="" && arr[i].search('Tree={ *branchname="[^"]*'+document.Formular.searchText.value)>=0){
+					textAllSearch=textAllSearch+"/"+i;
+					textSearch=i;
+				} //if (document.Formular.searchText.value!="" && arr[i].search(document.Formular.searchText.value)>0){
+			} //for (var i=0;i<arr.length;i++){
+			document.Formular.Tree_ID.value=textSearch;
+			if (textAllSearch=="") {
+				alert("Kein Baum zum Suchbegriff gefunden!")
+			}else{
+				document.Formular.Tree_IDAllSearch.value=textAllSearch;
+			} //if (textAllSearch=="") {
+		} //function Tree_search_root(){
+
+		function Tree_search(){
+			var textSearch="";
+			var textAllSearch="";
+			//go throught whole arr to find tree with search text
+			for (var i=0;i<arr.length;i++){
+				if (document.Formular.searchText.value!="" && arr[i].search(document.Formular.searchText.value)>0){
+					textAllSearch=textAllSearch+"/"+i;
+					textSearch=i;
+				} //if (document.Formular.searchText.value!="" && arr[i].search(document.Formular.searchText.value)>0){
+			} //for (var i=0;i<arr.length;i++){
+			document.Formular.Tree_ID.value=textSearch;
+			if (textAllSearch=="") {
+				alert("Kein Baum zum Suchbegriff gefunden!")
+			}else{
+				document.Formular.Tree_IDAllSearch.value=textAllSearch;
+			} //if (textAllSearch=="") {
+		} //function Tree_search(){
+
+		function nextSearchTree(){
+			document.Formular.Tree_ID.value=document.Formular.Tree_IDAllSearch.value.substring(document.Formular.Tree_IDAllSearch.value.lastIndexOf("/")+1);
+			document.Formular.Tree_IDAllSearch.value=document.Formular.Tree_IDAllSearch.value.substring(0,document.Formular.Tree_IDAllSearch.value.lastIndexOf("/"));
+		} //function nextSearchTree(){
+
+	</script>
+
+	</head>
+    <body>
+	
+<h1>Tree</h1>
+
+<form name="Formular">
+Baum-Nummer:<br>
+<input value="0" name="Tree_ID" type="text"><br>
+<input value="Baum bilden" onclick="Tree()" type="button"><br>
+<input value="N&auml;chste Baumnummer laden" onclick="nextTree()" type="button"><br>
+<br><br><br>
+
+Suche in den B&auml;men von:<br>
+<input value="" name="searchText" size="150" type="text"><br>
+<input value="Baum mit Stamm suchen" onclick="Tree_search_root()" type="button"><br>
+<input value="Baum suchen" onclick="Tree_search()" type="button"><br>
+<input value="N&auml;chste gefundene Baumnummer laden" onclick="nextSearchTree()" type="button"><br>
+<ul><li>
+Gefundene Baumnummern:<br>
+<input value="" name="Tree_IDAllSearch" type="text"><br>
+</li></ul>
+</form>
+
+<form name="InputForm">
+Markieren von:<br>
+<input value="" name="markText" size="54" type="text"><br>
+<input value="Baum markieren" onclick="nodes_mark()" type="button"><br>
+<input type="button" value="Entmarkieren" onclick='nodes_unmark()'>
+</form>
+
+<form name="ButtonForm">
+<input type="button" value="Alles Einklappen" onclick='hideAllFolders()'> 
+<input type="button" value="Alles Ausklappen" onclick='showAllFolders()'> 
+</form>
+
+		<div id="tree"></div>
+
+    </body>
+	<script id="demo" type="text/javascript">
+			// our array of objects for some data to play with
+			var arr = [
+				'Tree={branchname="Test 1",{branchname="Ast1",{branchname="Ast2","Blatt",},"Blatt",},{branchname="Ast3","Blatt",{branchname="Ast4","Blatt",},},}',
+				'Tree={branchname="DB",state="COLLAPSED",{branchname="Fragen","Test","Blatt"},}',
+				'Tree={branchname="Ein anderer Baum",{branchname="Fragen","Test","Blatt"},}',
+			]
+
+	</script>
+</html>
