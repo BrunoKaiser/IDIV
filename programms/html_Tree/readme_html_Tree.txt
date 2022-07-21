@@ -74,11 +74,15 @@ This file contains a simple NoSQL data base as a Lua table of trees with mark fu
 
 This file contains a simple NoSQL data base as a Lua table of trees with mark functionalities with nodes as texts. The texts can contain hyperlink or other html tags. Therefore this file has flexibility.
 
-10.4 reflexive_fengari_tree_checklists.html
+10.4.1 reflexive_fengari_tree_checklists.html
 
 This file contains in addition to simple_fengari_DB_tree_text.html the possibility to tick nodes that are done. This is done for each tree in the file. So, these are  hierarchical todo lists or checklists within the nodes can be added by a tick. This tick is stored in a localStorage and is valid for all nodes having the same definition, for leafs all leafs are ticked in each tree, but all branches are treated indivdually. The ticks can all be cleared or deletede for individual nodes.
 
 Caveat: this file does not function in every browser. Only in Firefox it is functioning.
+
+10.4.2 reflexive_fengari_tree_functional_checklists.html
+
+This file contains the same programm as reflexive_fengari_tree_checklists.html but with functional definitions of buttons as in pure Javascript. Therefore it is possible to execute it also in other browser than Firefox.
 
 11. simple_pure_Javascript_DB_tree.html
 
