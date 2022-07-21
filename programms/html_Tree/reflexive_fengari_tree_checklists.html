@@ -156,18 +156,18 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 	
 	if TreeTable[1]==nil then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [[" onclick="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="~ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[ id="imgfolder]] .. levelFolder .. [[" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="~ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	--collapsed does function with the onload function for the body
 	elseif TreeTable.state=="COLLAPSED" then
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [[" onclick="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[ id="imgfolder]] .. levelFolder .. [[" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	else
 		textforHTML = textforHTML ..
-		[[ id="imgfolder]] .. levelFolder .. [[" onclick="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		[[ id="imgfolder]] .. levelFolder .. [[" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
 		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
 		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
 	end --if state=="COLLAPSED" then
@@ -184,9 +184,9 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 	textforHTML = textforHTML ..
 	LinkText .. tostring(TreeTable.branchname) .. LinkText_1 .. "</p>\n"
 	if TreeTable.state=="COLLAPSED" then
-		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. [[" style="display:none" onclick="toggletick('imgfolder]] .. levelFolder .. [[')">]] ..'\n'
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. [[" style="display:none" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')">]] ..'\n'
 	else
-		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. [[" style="display:block" onclick="toggletick('imgfolder]] .. levelFolder .. [[')">]] ..'\n'
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. [[" style="display:block" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')">]] ..'\n'
 	end --if state=="COLLAPSED" then
 	for i,v in ipairs(TreeTable) do
 		linkNumber=linkNumber+1
@@ -207,7 +207,7 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 				LinkText=""
 			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
 			----[====[with distinct lines and leafs can start at any key:
-			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. [[ onclick="toggletick('imgfolder]] .. levelFolder .. "." .. i .. [[')">]] ..  v .. "</p>\n"
+			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. [[ oncontextmenu="toggletick('imgfolder]] .. levelFolder .. "." .. i .. [[')">]] ..  v .. "</p>\n"
 			textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. "." .. i .. [["]=true]]
 			textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. "." .. i .. [["]=true]]
 			--]====]
