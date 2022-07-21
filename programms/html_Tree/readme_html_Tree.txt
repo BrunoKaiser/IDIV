@@ -78,6 +78,7 @@ This file contains a simple NoSQL data base as a Lua table of trees with mark fu
 
 This file contains in addition to simple_fengari_DB_tree_text.html the possibility to tick nodes that are done. This is done for each tree in the file. So, these are  hierarchical todo lists or checklists within the nodes can be added by a tick. This tick is stored in a localStorage and is valid for all nodes having the same definition, for leafs all leafs are ticked in each tree, but all branches are treated indivdually. The ticks can all be cleared or deletede for individual nodes.
 
+Caveat: this file does not function in every browser. Only in Firefox it is functioning.
 
 11. simple_pure_Javascript_DB_tree.html
 
