@@ -153,7 +153,7 @@ function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,
 		AusgabeTabelle[TreeTable.branchname]=true
 	end --if TreeTable.branchname:match('"([^"]*)">') then
 	--build the branches
-	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px"'
+	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px;background-color:#1c87c9;"'
 	
 	if TreeTable[1]==nil then
 		textforHTML = textforHTML ..
@@ -316,14 +316,14 @@ DBTable={
 			--test with: window:alert(k) 
 			divText = document:getElementById(k)
 			--first unmark each node
-			divText.style="margin: " .. divText.style.margin .. ";color:#000"
+			divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#000"
 			--test with: window:alert(divText)
 			--test with: window:alert(divText.innerText)
 			if divText then
 				--test with: window:alert(divText.innerText:lower())
 				if divText.innerText:lower():match(document.InputForm.markText.value:lower()) then
 					--test with: window:alert(divText.innerText)
-							divText.style="margin: " .. divText.style.margin .. ";color:#090";
+							divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#090";
 							--test with: window:alert(divText);
 							testText=k --"imgfolder.1.1.1.1";
 							--test with: window:alert(#testText)
@@ -333,7 +333,7 @@ DBTable={
 									--test with: window:alert(testText:sub(1,i))
 									divText = document:getElementById(testText:sub(1,i))
 									if divText then
-										divText.style="margin: " .. divText.style.margin .. ";color:#f90"
+										divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#f90"
 									end --if divText then
 								end -- testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
 							end --for i = #testText,10,-1 do
@@ -351,14 +351,14 @@ DBTable={
 			--test with: window:alert(k) 
 			divText = document:getElementById(k)
 			--first unmark each node
-			divText.style="margin: " .. divText.style.margin .. ";color:#000"
+			divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#000"
 			--test with: window:alert(divText)
 			--test with: window:alert(divText.innerText)
 			if divText then
 				--test with: window:alert(divText.innerText:lower())
 				if divText.innerText:lower():match("^[^:]+ : ")==nil then
 					--test with: window:alert(divText.innerText)
-							divText.style="margin: " .. divText.style.margin .. ";color:#090";
+							divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#090";
 							--test with: window:alert(divText);
 							testText=k --"imgfolder.1.1.1.1";
 							--test with: window:alert(#testText)
@@ -368,7 +368,7 @@ DBTable={
 									--test with: window:alert(testText:sub(1,i))
 									divText = document:getElementById(testText:sub(1,i))
 									if divText then
-										divText.style="margin: " .. divText.style.margin .. ";color:#f90"
+										divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#f90"
 									end --if divText then
 								end -- testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
 							end --for i = #testText,10,-1 do
@@ -385,7 +385,7 @@ DBTable={
 		for k,v in pairs(unmarkTable) do
 		--test with: window:alert(k) 
 			divText = document:getElementById(k)
-			divText.style="margin: " .. divText.style.margin .. ";color:#000"
+			divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#000"
 		end --for k,v in pairs(unmarkTable) do
 	end --function global.nodes_unmark()
 
