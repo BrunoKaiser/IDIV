@@ -79,7 +79,7 @@
 	} //for (var i=0;i<localStorage.length;i++){
   } //function clearChosenTicks() {
 
-		function clearAllTicks() {
+  function clearAllTicks() {
 	var toClear=confirm("Wollen Sie wirklich alle Ticks entfernen?")
 	if (toClear==true) {
 		localStorage.clear();
@@ -170,7 +170,7 @@
 				//alert(arrayNodes[i]);
 				//test with: document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+arrayNodes[i]+": "+levelNumber+": "+isLeaf+'<br>';
 				if(arrayNodes[i]=='Tree={branchname='){
-					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<p id="'+idText+'" oncontextmenu="toggletick(\''+idText+'\')">Tree '+document.Formular.Tree_ID.value+'</p>';
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<p id="'+idText+'">Tree '+document.Formular.Tree_ID.value+'</p>';
 					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"Tree"+document.Formular.Tree_ID.value+": "+idText;
 					if (levelNumberTable[levelNumber]) {
 										levelNumberTable[levelNumber]=levelNumberTable[levelNumber]+1;
@@ -182,7 +182,7 @@
 					//test with: document.Formular.searchText.value=document.Formular.searchText.value+"/"+arrayNodes[i+1]+": im1folder"+idTextNumbers;
 					idText="im1folder"+idTextNumbers;
 					idImageText="imgfolder"+idTextNumbers;
-					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<div id="'+idText+'">'+'<img  id="'+idImageText+'" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder(\''+idText+'\')">'+arrayNodes[i+1].replaceAll('&quot;','"')+'<br>';
+					document.getElementById("tree").innerHTML = document.getElementById("tree").innerHTML+'<div id="'+idText+'" oncontextmenu="toggletick(\''+idText+'\')">'+'<p style="margin: 0px 0px 5px 0px">'+'<img  id="'+idImageText+'" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder(\''+idText+'\')">'+arrayNodes[i+1].replaceAll('&quot;','"')+'</p>';
 					if (arrayNodes[i+3] && arrayNodes[i+2]==",state=" && arrayNodes[i+3]=="COLLAPSED") {
 						numberCOLLAPSED=numberCOLLAPSED+1;
 						arrayCOLLAPSED[numberCOLLAPSED]=idText
@@ -275,6 +275,14 @@
 				toggleFolder(arrayCOLLAPSED[n1]);
 			} //for (n1=1;n1<=numberCOLLAPSED;n1++){
 		}//function Tree(){
+
+		function nextTree(){
+			if (arr[parseInt(document.Formular.Tree_ID.value)+1]){
+				document.Formular.Tree_ID.value=parseInt(document.Formular.Tree_ID.value)+1;
+			}else{
+				document.Formular.Tree_ID.value=0;
+			} //if (arr[parseInt(document.Formular.Tree_ID.value)+1]){
+		} //function nextTree(){
 
 		function funktionMarkieren(divTextFolder) {
 			var divText = document.getElementById(divTextFolder);
@@ -393,14 +401,6 @@
 			//funktionSuche("im1folder.1.2.2");
 		} //function nodes_unmark()
 
-		function nextTree(){
-			if (arr[parseInt(document.Formular.Tree_ID.value)+1]){
-				document.Formular.Tree_ID.value=parseInt(document.Formular.Tree_ID.value)+1;
-			}else{
-				document.Formular.Tree_ID.value=0;
-			} //if (arr[parseInt(document.Formular.Tree_ID.value)+1]){
-		} //function nextTree(){
-
 		function Tree_search_root(){
 			var textSearch="";
 			var textAllSearch="";
@@ -442,10 +442,10 @@
 			document.Formular.Tree_IDAllSearch.value=document.Formular.Tree_IDAllSearch.value.substring(0,document.Formular.Tree_IDAllSearch.value.lastIndexOf("/"));
 		} //function nextSearchTree(){
 
-	</script>
+</script>
 
-	</head>
-    <body>
+</head>
+<body>
 	
 <h1>B&auml;ume&uuml;bersicht</h1>
 <table>
@@ -455,7 +455,7 @@
 
 <form name="Formular">
 Baum-Nummer:<br>
-<input value="0" name="Tree_ID" type="text"><br>
+<input value="0" name="Tree_ID" size="54" type="text"><br><br>
 <input value="Baum bilden" onclick="Tree()" type="button"><br>
 <input value="N&auml;chste Baumnummer laden" onclick="nextTree()" type="button"><br>
 <br><br><br>
@@ -487,9 +487,9 @@ Markieren von:<br>
 <input type="button" value="Alle H&auml;kchen l&ouml;schen" onclick='clearAllTicks()'> 
 </form>
 
-		<div id="tree"></div>
+<div id="tree"></div>
 
-    </body>
+</body>
 	<script id="demo" type="text/javascript">
 			// our array of objects for some data to play with
 			var arr = [
