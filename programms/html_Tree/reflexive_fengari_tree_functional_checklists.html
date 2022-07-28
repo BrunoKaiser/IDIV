@@ -240,6 +240,11 @@ DBTable={
 'Tree={branchname="Ein anderer Baum",{branchname="Fragen","Test","Blatt"},}',
 }
 
+textareaText=""
+for i,v in ipairs(DBTable) do
+	textareaText=textareaText .. i .. ": " .. v:match('Tree={branchname="([^"]*)"') .. "\n"
+end --for i,v in ipairs(DBTable) do
+document:getElementById("textarea1").value=textareaText
 
 	function global.Tree()
 		--test with: global:alert(DBTable[math.tointeger(tonumber(document.Formular.Tree_ID.value))])
@@ -395,6 +400,14 @@ DBTable={
 	
 </head>
 <body>
+
+<h1>B&auml;ume&uuml;bersicht</h1>
+<table>
+<tr><td>
+
+<textarea id="textarea1" style="overflow-y: scroll;height: 100px;width: 400px;resize: none;"></textarea>
+
+
 <form name="Formular">
 Baum-Nummer:<br>
 <input value="1" name="Tree_ID" size="54" type="text"><br><br>
