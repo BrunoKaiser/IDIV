@@ -50,8 +50,11 @@ This script opens a graphical user interface acting as a front end of a SQLite d
 
 This script opens a graphical user interface acting as a front end of a SQLite database with the table treeTable with the fields Tree_ID, Tree and Tree_result and combines the trees stored in the field Tree with the data stored in a table DataForTrees with the fields DataKey, DataValue and DataValue_compare. The aggregation of the data is done in the graphical user interface.
 
-10 scintilla_datapart.lua
+10.1 scintilla_datapart.lua
 
 This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists.html is taken into a scintilla editor textfield. The code before the data part and after it is taken into variables so that after changing the data part in the scintilla editor it can be saved with the changes.
 
+10.2 simple_datapart_tree.lua
+
+This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists.html is taken into a be shown as a tree. The code before the data part and after it is taken into variables so that after changing the data part in the tree it can be saved with the changes.
 
