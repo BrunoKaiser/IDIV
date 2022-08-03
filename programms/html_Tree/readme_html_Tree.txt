@@ -84,6 +84,16 @@ Caveat: this file does not function in every browser. Only in Firefox it is func
 
 This file contains the same programm as reflexive_fengari_tree_checklists.html but with functional definitions of buttons as in pure Javascript. Therefore it is possible to execute it also in other browser than Firefox.
 
+10.4.3 reflexive_fengari_tree_functional_checklists_persistent.html
+
+Due to the fact that localStorage can be deleted by the user (delete the cache or the histors in the browser) this Html side contains different checklists as trees where there can be ticked nodes of these trees.
+
+By using a simple_datapart_tree.lua the Html content of the trees can be modified.
+
+By using a scintilla_datapart.lua with 	if line:match("^DBTable=") then changed to 	if line:match("^TickTable=") then and 	if line:match("} %-%-DBTable=") then
+changed to 	if line:match("%-%-TickTable=") then
+the ticks can be made persistent. The restriction is that nodes does not have german Umlaute.
+
 11. simple_pure_Javascript_DB_tree.html
 
 This html file contains a programm with little differences in the functionality compared with simple_fengari_DB_tree_text.html, but written in pure Javascript.
