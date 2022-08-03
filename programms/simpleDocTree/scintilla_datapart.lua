@@ -2,7 +2,7 @@
 
 --1. basic data
 
-Datei="C:\\Tree\\html_Tree\\html_fengari\\reflexive_fengari_tree_functional_checklists.html"
+Datei="C:\\Tree\\html_Tree\\html_fengari\\reflexive_fengari_tree_functional_checklists_persistent.html"
 
 --1.1 libraries and clipboard
 --1.1.1 libraries
@@ -126,7 +126,7 @@ end --function search_in_textfield1:flat_action()
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{search_in_textfield1,},
 
 			}; 
@@ -165,7 +165,7 @@ dlg_search_replace =iup.dialog{
 					iup.hbox{search_label_replace,searchtext_replace},
 					iup.hbox{replace_label_replace,replacetext_replace},
 					iup.hbox{search_replace, cancel_replace,},
-					iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+					iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 				}; 
 				title="Suchen und Ersetzen",
 				size="420x100",
@@ -219,7 +219,7 @@ img_logo = iup.image{
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraÃŸe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
 end --function button_logo:flat_action()
 
 --6.2 button for saving tree
@@ -245,7 +245,7 @@ end --function button_replace:flat_action()
 --6.5 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraÃŸe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
 end --function button_logo:flat_action()
 
 --6 buttons end
@@ -261,7 +261,8 @@ codeBeforeText=""
 dataPartText=""
 codeAfterText=""
 for line in io.lines(textbox1.value) do
-	if line:match("^DBTable=") then
+	--if line:match("^DBTable=") then
+	if line:match("^TickTable=") then
 		codeFlag="dataPartText"
 	end --if line:match("^DBTable=") then
 	if codeFlag=="codeBeforeText" then
@@ -271,7 +272,8 @@ for line in io.lines(textbox1.value) do
 	elseif codeFlag=="codeAfterText" then
 		codeAfterText=codeAfterText .. line .. "\n"
 	end --if codeBeforeFlag=="yes" then
-	if line:match("} %-%-DBTable=") then
+	--if line:match("} %-%-DBTable=") then
+	if line:match("%-%-TickTable=") then
 		codeFlag="codeAfterText"
 	end --if line:match("} %-%-DBTable=") then
 end --for line in io.lines(textbox1.value) do
