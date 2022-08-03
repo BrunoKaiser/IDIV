@@ -226,7 +226,7 @@ end --function button_logo:flat_action()
 button_save_code_with_datapart=iup.flatbutton{title="Code speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_code_with_datapart:flat_action()
 	outputfile1=io.open(textbox1.value,"w")
-	outputfile1:write(codeBeforeText .. "\n" .. textfield1.value .. "\n" .. codeAfterText)
+	outputfile1:write(codeBeforeText .. textfield1.value .. codeAfterText)
 	outputfile1:close()
 end --function button_save_code_with_datapart:flat_action()
 
