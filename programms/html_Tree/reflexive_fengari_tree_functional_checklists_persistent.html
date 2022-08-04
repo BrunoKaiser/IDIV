@@ -53,7 +53,7 @@
 		//go throught whole localStorage to find tree with search text
 		for (var i=0;i<localStorage.length;i++){
 			if (document.InputForm.markText.value!="" && localStorage.getItem(localStorage.key(i)).search(document.InputForm.markText.value)>=0){
-				toClear=confirm("Wollen Sie wirklich den ausgewählten Ticks entfernen?\n"+localStorage.getItem(localStorage.key(i)))
+				toClear=confirm("Wollen Sie wirklich den Tick entfernen?\n"+localStorage.getItem(localStorage.key(i)))
 				if (toClear==true) {
 					localStorage.removeItem(localStorage.getItem(localStorage.key(i)));
 				} //if (toClear==true) {
@@ -77,9 +77,10 @@
 			if (folder.innerHTML.search(" : ")>=0){
 			  folder.innerHTML=folder.innerHTML;
 			}else{
+			folderInnerHTMLReplaced=folder.innerHTML.replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","") //replace from umlauts: Ü "\u00dc", ü "\u00fc", Ä "\u00c4", ä "\u00e4", Ö "\u00d6", ö "\u00f6", ß "\u00df", like in Lua :gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}","")
 			var toTick=confirm("Ist die Aufgabe wirklich erledigt?\n"+folder.innerHTML.substring(folder.innerHTML.lastIndexOf(">")+1))
 			if (toTick==true) {
-				  localStorage.setItem(folder.innerHTML,folder.innerHTML);
+				  localStorage.setItem(folderInnerHTMLReplaced,folder.innerHTML);
 				  folder.innerHTML="&#10004; : "+folder.innerHTML;
 			}else{
 				  //localStorage.removeItem(folder.innerHTML);
@@ -175,16 +176,18 @@ tickText=[[Test]] TickTable[tickText]=true
 		load(textforOnLoad)()
 		for k,v in pairs(searchTable) do
 			divText = document:getElementById(k).innerHTML
+			divText = divText:gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}","")
+			--like in Javascript: .replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","")
 			--test with: global:alert(">" .. k )
 			--global:alert(">>" .. document:getElementById(k).innerHTML )
 			--geht nicht: testText=global.localStorage:getItem(divText) global:alert(">>>>" .. testText);
 			if TickTable[divText] then
-				document:getElementById(k).innerHTML="&#10004; : " .. divText
+				document:getElementById(k).innerHTML="&#10004; : " .. document:getElementById(k).innerHTML
 			else
-				document:getElementById(k).innerHTML=divText
+				document:getElementById(k).innerHTML=document:getElementById(k).innerHTML
 			end --if (localStorage:getItem(divText)) then
 		end --for k,v in pairs(searchTable) do
-	end --function retrieveTicks(){
+	end --function retrieveTicks2(){
 
 
 --//5.1 function to build the tree with the Lua table as input
@@ -489,12 +492,12 @@ Suche:<br>
 <!--input type="button" value="Alles Ausklappen" onclick='showAllFolders()'--> 
 <!--input type="button" value="H&auml;kchen anzeigen" onclick='retrieveTicks()'--> 
 <input type="button" value="L&ouml;schen von H&auml;kchen nach Suchbegriff" onclick='clearChosenTicks()'> <br><br>
-<!--input type="button" value="Alle H&auml;kchen l&ouml;schen" onclick='clearAllTicks()'--> 
 </form>
 Erkl&auml;rung: Rechte Maustaste, um H&auml;kchen zu setzen
 <br>
 </td><td>
 <!--input value="H&auml;kchen zeigen pure Javascript" onclick="showRetrievedTicks()" type="button"><br><br-->
+<input type="button" value="Alle H&auml;kchen in local Storage l&ouml;schen" onclick='clearAllTicks()'> <br><br>
 <input value="Neue H&auml;kchen f&uuml;r die Persistenz zeigen" onclick="showRetrievedTicks2()" type="button"><br><br>
 
 <textarea id="textarea2" style="overflow-y: scroll;height: 100px;width: 400px;resize: none;"></textarea>
