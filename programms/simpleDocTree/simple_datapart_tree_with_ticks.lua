@@ -353,16 +353,9 @@ dlg_search =iup.dialog{
 
 --4.3 replace dialog
 
---cancel button for search dialog
+--cancel button for replace dialog
 cancel_replace = iup.flatbutton{title = "Abbrechen",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function cancel_replace:flat_action()
-	--make everything black again
-	for i=0, tree.count - 1 do
-		tree["color" .. i]="0 0 0"
-	end --for i=0, tree.count - 1 do
-	for i=0, tree2.count - 1 do
-		tree2["color" .. i]="0 0 0"
-	end --for i=0, tree2.count - 1 do
 	return iup.CLOSE
 end --function cancel_replace:flat_action()
 
@@ -502,7 +495,7 @@ function button_logo:action()
 	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
 end --function button_logo:flat_action()
 
---6.2 button for saving tree
+--6.2.1 button for saving tree
 button_save_code_with_datapart=iup.flatbutton{title="Code speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_code_with_datapart:flat_action()
 	outputfile1=io.open(textbox1.value,"w")
@@ -520,6 +513,20 @@ function button_save_code_with_datapart:flat_action()
 	outputfile1:write("\n" .. codeAfterText)
 	outputfile1:close()
 end --function button_save_code_with_datapart:flat_action()
+
+--6.2.2 button for saving tree
+button_save_ticks=iup.flatbutton{title="Häkchen \nspeichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_save_ticks:flat_action()
+	outputfile1=io.open(textbox1.value,"w")
+	outputfile1:write(codeBeforeText_Tick)
+	outputfile1:write("TickTable={}\n")
+	for k,v in pairs(TickTable) do
+		outputfile1:write("tickText=[[" .. k .. "]] TickTable[tickText]=true\n")
+	end --for k,v in pairs(TickTable) do
+	outputfile1:write("--TickTable={}\n")
+	outputfile1:write(codeAfterText_Tick)
+	outputfile1:close()
+end --function button_save_ticks:flat_action()
 
 --6.3 button for search in tree, tree2 and tree3
 button_search=iup.flatbutton{title="Suchen", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
@@ -552,15 +559,15 @@ function button_load_tree:flat_action()
 	end --if math.tointeger(tonumber(textbox0.value))<=DBTable then
 	--tick the nodes
 	for i=0,tree.count-1 do --loop for all nodes
-		if TickTable[tree['title' ..i]] then
+		if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
 			tree['image' .. i]=img_tick_leaf
 			tree['imageexpanded' .. i]=img_tick_leaf
-		end --if tree['title' ..i]=="zu Hause" then
+		end --if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
 	end --for i=0,tree.count-1 do --loop for all nodes
 end --function button_load_tree:flat_action()
 
 --6.6 button for replacing in tree
-button_new_tree=iup.flatbutton{title="Neuen Baum anlegen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_new_tree=iup.flatbutton{title="Neuen Baum \nanlegen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_new_tree:flat_action()
 	textbox0.value=#DBTable+1
 	DBTable[#DBTable+1]='Tree={branchname="new"}'
@@ -569,8 +576,77 @@ function button_new_tree:flat_action()
 	tree:AddNodes(Tree)
 end --function button_new_tree:flat_action()
 
---6.7 button for replacing in tree
-button_delete_tree=iup.flatbutton{title="Baum löschen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.7 button for organising ticks in tree
+button_ticks_organise=iup.flatbutton{title="Häkchen \nverwalten", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_ticks_organise:flat_action()
+	i=tree.value
+	toggleTable={}
+	toggleTable[1]=iup.toggle{title=tree['title' .. i],value="OFF"}
+	if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
+		toggleTable[1].value="ON"
+	end --if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
+	while true do
+		if tree['parent' .. i]==nil then break end
+		toggleTable[#toggleTable+1]=iup.toggle{title=tree['title' .. tree['parent' .. i]],value="OFF"}
+		if TickTable[tree['title' ..tree['parent' .. i]]:gsub("&[^&]*;","")] then
+			toggleTable[#toggleTable].value="ON"
+		end --if tree['title' ..tree['parent' .. i]]=="zu Hause" then
+		i=tree['parent' .. i]
+	end --while true do
+	--4.4 ticks dialog
+	cancel_ticks = iup.flatbutton{title = "Abbrechen",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+	function cancel_ticks:flat_action()
+		return iup.CLOSE
+	end --function cancel_ticks:flat_action()
+	--search in upward direction
+	ticks_set   = iup.flatbutton{title = "Häkchen setzen",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+	function ticks_set:flat_action()
+		for i,v in ipairs(toggleTable) do
+			if toggleTable[i].value=="OFF" then
+				TickTable[toggleTable[i].title:gsub("&[^&]*;","")]=nil
+			else
+				TickTable[toggleTable[i].title:gsub("&[^&]*;","")]=true
+			end --if toggleTable[i].value=="OFF" then
+		end --for i,v in ipairs(toggleTable) do
+		--go through the whole tree to set the right images
+		for i=0,tree.count-1 do --loop for all nodes
+			if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
+				tree['image' .. i]=img_tick_leaf
+				tree['imageexpanded' .. i]=img_tick_leaf
+			else
+				tree['image' .. i]=0
+				tree['imageexpanded' .. i]=0
+			end --if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
+		end --for i=0,tree.count-1 do --loop for all nodes
+	end --function ticks_set:flat_action()
+	ticks_label=iup.label{title= "Häkchen bis zur 12. Ebene verwalten:    "} --label for textfield
+	--put above together in a search dialog
+	dlg_ticks =iup.dialog{
+					iup.vbox{
+						iup.hbox{ticks_label},
+						iup.hbox{toggleTable[12]},
+						iup.hbox{toggleTable[11]},
+						iup.hbox{toggleTable[10]},
+						iup.hbox{toggleTable[9]},
+						iup.hbox{toggleTable[8]},
+						iup.hbox{toggleTable[7]},
+						iup.hbox{toggleTable[6]},
+						iup.hbox{toggleTable[5]},
+						iup.hbox{toggleTable[4]},
+						iup.hbox{toggleTable[3]},
+						iup.hbox{toggleTable[2]},
+						iup.hbox{toggleTable[1]},
+						iup.hbox{ticks_set, cancel_ticks,},
+					}; 
+					title="Häkchen verwalten",
+					size="920x100",
+					}
+	--4.4 ticks dialog end
+	dlg_ticks:popup(iup.ANYWHERE, iup.ANYWHERE)
+end --function button_ticks_organise:flat_action()
+
+--6.8 button for deleting tree
+button_delete_tree=iup.flatbutton{title="Baum \nlöschen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete_tree:flat_action()
 	LoeschAlarm=iup.Alarm("Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Löschen","Nicht Löschen")
 	if LoeschAlarm==1 then
@@ -591,7 +667,7 @@ function button_delete_tree:flat_action()
 	end --if LoeschAlarm==1 then 
 end --function button_delete_tree:flat_action()
 
---6.8 button with second logo
+--6.9 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
 	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
@@ -733,6 +809,8 @@ maindlg = iup.dialog{
 			button_load_tree,
 			iup.fill{},
 			textbox1,
+			button_ticks_organise,
+			button_save_ticks,
 			iup.label{size="5x",},
 			button_delete_tree,
 			button_logo2,
@@ -766,7 +844,7 @@ for line in io.lines(textbox1.value) do
 		codeFlag_Tick="dataPartText"
 	end --if line:match("^DBTable=") then
 	if codeFlag_Tick=="codeBeforeText" then
-		codeBeforeText_Tick=codeBeforeText .. line .. "\n"
+		codeBeforeText_Tick=codeBeforeText_Tick .. line .. "\n"
 	elseif codeFlag_Tick=="dataPartText" then
 		dataPartText_Tick=dataPartText_Tick .. line .. "\n"
 	elseif codeFlag_Tick=="codeAfterText" then
@@ -786,18 +864,23 @@ else
 	load(dataPartText_Tick)() --now TickTable is the table.
 end --if _VERSION=='Lua 5.1' then
 
+--7.5.3 add nodes with no html tags
+TickTableAddTable={}
 for k,v in pairs(TickTable) do
 	if k:match(">([^>]*)") then
-		TickTable[k:match(">([^>]*)")]=true
+		TickTableAddTable[k:match(">([^>]*)")]=true
 	end --if k:match(">([^>]*)") then
 end --for k,v in pairs(TickTable) do
+for k,v in pairs(TickTableAddTable) do
+	TickTable[k]=true
+end --for k,v in pairs(TickTableAddTable) do
 
---7.5.3 tick the nodes
+--7.5.4 tick the nodes
 for i=0,tree.count-1 do --loop for all nodes
 	if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
 		tree['image' .. i]=img_tick_leaf
 		tree['imageexpanded' .. i]=img_tick_leaf
-	end --if tree['title' ..i]=="zu Hause" then
+	end --if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
 end --for i=0,tree.count-1 do --loop for all nodes
 
 
