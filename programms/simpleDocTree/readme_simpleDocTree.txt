@@ -52,9 +52,14 @@ This script opens a graphical user interface acting as a front end of a SQLite d
 
 10.1 scintilla_datapart.lua
 
-This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists.html is taken into a scintilla editor textfield. The code before the data part and after it is taken into variables so that after changing the data part in the scintilla editor it can be saved with the changes.
+This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists_persistent.html is taken into a scintilla editor textfield. The code before the data part and after it is taken into variables so that after changing the data part in the scintilla editor it can be saved with the changes.
 
 10.2 simple_datapart_tree.lua
 
-This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists.html is taken into a be shown as a tree. The code before the data part and after it is taken into variables so that after changing the data part in the tree it can be saved with the changes.
+This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists_persistent.html is taken into a be shown as a tree. The code before the data part and after it is taken into variables so that after changing the data part in the tree it can be saved with the changes.
+
+
+10.3 simple_datapart_tree_with_ticks.lua
+
+This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists_persistent.html is taken into a be shown as a tree. The code before the data part and after it is taken into variables so that after changing the data part in the tree it can be saved with the changes. The ticks of the checklists that are persistent are shown in the graphical user interface.
 
