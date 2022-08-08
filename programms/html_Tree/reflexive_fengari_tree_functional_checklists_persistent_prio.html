@@ -1,0 +1,545 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>Trees in a database manner in Fengari JavaScript</title>
+
+<script>
+
+//1.1 function hide folder
+		function hideFolder(folder, id) {
+			//test with: alert(folder+" -- "+id);
+			var imageNode = document.images["img1" + id];
+			//test with: alert(imageNode);
+			if (imageNode != null) {
+			  var len = imageNode.src.length;
+			  if (imageNode.src.substring(len-8,len-4) == "last")
+				imageNode.src = "wb_img/plusnodelast.png";
+			  else if (imageNode.src.substring(len-8,len-4) == "node")
+				{imageNode.src = "wb_img/plusnode.png";
+				//alert(imageNode.src)
+				imageNode.alt = "+ ";
+				//alert(imageNode.alt)
+				}
+			} //if (imageNode != null) {
+			folder.style.display = "none";
+		} //function hideFolder(folder, id) {
+
+//1.2 function show folder
+		function showFolder(folder, id) {
+			var imageNode = document.images["img1" + id];
+			if (imageNode != null) {
+			  var len = imageNode.src.length;
+			  if (imageNode.src.substring(len-8,len-4) == "last")
+				imageNode.src = "wb_img/minusnodelast.png";
+			  else if (imageNode.src.substring(len-8,len-4) == "node")
+				{imageNode.src = "wb_img/minusnode.png";
+				imageNode.alt = "- ";}
+				} //if (imageNode.src.substring(len-8,len-4) == "last")
+			folder.style.display = "block";
+		} //function showFolder(folder, id) {
+
+//2. function toggle folder
+		function toggleFolder(id) {
+			var folder = document.getElementById(id);
+			if (folder.style.display == "block")
+			  hideFolder(folder, id);
+			else
+			  showFolder(folder, id);
+		} //function toggleFolder(id) {
+
+//3.1 function clear chosen ticks
+	function clearChosenTicks() {
+		//go throught whole localStorage to find tree with search text
+		for (var i=0;i<localStorage.length;i++){
+			if (document.InputForm.markText.value!="" && localStorage.getItem(localStorage.key(i)).search(document.InputForm.markText.value)>=0){
+				toClear=confirm("Wollen Sie wirklich den Tick entfernen?\n"+localStorage.getItem(localStorage.key(i)))
+				if (toClear==true) {
+					localStorage.removeItem(localStorage.getItem(localStorage.key(i)));
+				} //if (toClear==true) {
+			} //if (document.InputForm.markText.value!="" && localStorage.getItem(localStorage.key(i)).search(document.InputForm.markText.value)>0){
+		} //for (var i=0;i<localStorage.length;i++){
+	} //function clearChosenTicks() {
+
+//3.2 function clear all ticks
+	function clearAllTicks() {
+		var toClear=confirm("Wollen Sie wirklich alle Ticks entfernen?")
+		if (toClear==true) {
+			localStorage.clear();
+		} //if (toClear==true) {
+	} //function clearAllTicks() {
+
+//3.3 function toggle tick
+	function toggletick(id) {
+			//alert(id)
+			var folder = document.getElementById(id);
+			//alert(folder.innerHTML+" : "+folder.innerHTML.search(" : "))
+			if (folder.innerHTML.search(" : ")>=0){
+			  folder.innerHTML=folder.innerHTML;
+			}else{
+			folderInnerHTMLReplaced=folder.innerHTML.replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","").replaceAll("\u0022","") //replace from umlauts: Ü "\u00dc", ü "\u00fc", Ä "\u00c4", ä "\u00e4", Ö "\u00d6", ö "\u00f6", ß "\u00df", " "\u0022", like in Lua :gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}",""):gsub("\u{0022}","")
+			var toTick=confirm("Ist die Aufgabe wirklich erledigt?\n"+folder.innerHTML.substring(folder.innerHTML.lastIndexOf(">")+1))
+			if (toTick==true) {
+				  localStorage.setItem(folderInnerHTMLReplaced,folder.innerHTML);
+				  folder.innerHTML="&#10004; : "+folder.innerHTML;
+			}else{
+				  //localStorage.removeItem(folder.innerHTML);
+			} //if (toTick==true) {
+			} //if (folder.innerHTML.search(" : ")>=0){
+	} //function toggletick(id) {
+
+//3.4 function retrieve ticks
+	function retrieveTicks(){
+		var allElements = document.getElementsByTagName("*");
+		for (var i = 0; i < allElements.length; ++i) {
+			var el = allElements[i];
+			if (el.id.search("imgfolder.")>=0) { 
+				//test with: alert(i)
+				var elfolder = document.getElementById(el.id);
+				//alert(">"+el.id);
+				//test with: testText=localStorage.getItem(elfolder.innerHTML); alert(testText);
+				if (localStorage.getItem(elfolder.innerHTML)){
+					elfolder.innerHTML="&#10004; : "+elfolder.innerHTML;
+				}else{
+					elfolder.innerHTML=elfolder.innerHTML;
+				}//if (localStorage.getItem(elfolder.innerHTML){
+			} //if (el.id.search("imgfolder.")>=0) {
+		} //for (var i = 0; i < allElements.length; ++i) {
+	} //function retrieveTicks(){
+
+//3.5 function retrieve ticks in Lua table
+	function showRetrievedTicks(){
+		tickText=""
+		for (var i = 0; i < localStorage.length; ++i) {
+			tickText=tickText+"\ntickText=[["+localStorage.key(i)+']] TickTable[tickText]="tick"'
+		} //for (var i = 0; i < localStorage.length; ++i) {
+		document.getElementById("textarea2").value=tickText
+	} //function showRetrievedTicks(){
+
+//4.1 function set folder at level
+		function setFoldersAtLevel(level, show) {
+			var i = 1;
+			do {
+			  var folder_id = level + "." + i;
+			  var id = "folder" + folder_id;
+			  var folder = document.getElementById(id);
+			  if (folder != null) {
+				setFoldersAtLevel(folder_id, show);
+				if (show)
+				  showFolder(folder, id);
+				else
+				  hideFolder(folder, id);
+			  } //if (folder != null) {
+			  i++;
+			} while(folder != null);
+		} //function setFoldersAtLevel(level, show) {
+
+//4.2 function show all folders
+		function showAllFolders() {setFoldersAtLevel("", true); }
+
+//4.3 function show all folders
+		function hideAllFolders() {setFoldersAtLevel("", false);}
+
+</script>
+
+<script src="https://fengari.io/static/js/fengari-web.js" type="text/javascript"></script>
+<script type="application/lua">
+js = require "js" global = js.global document = global.document window = js.global
+
+--//3.5 function retrieve ticks in Lua table only if not in persistent table
+	function global.showRetrievedTicks2()
+		tickText=""
+		for i = 0,global.localStorage.length-1 do
+			if TickTable[global.localStorage:key(i)]==nil then
+				tickText=tickText .. "\ntickText=[[" .. global.localStorage:key(i) .. ']] TickTable[tickText]="tick"'
+			end --if TickTable[global.localStorage:key(i)]==nil then
+		end --for i = 0,global.localStorage.length-1 do
+		document:getElementById("textarea2").value=tickText
+	end --function showRetrievedTicks2()
+
+TickTable={}
+
+tickText=[[Test]] TickTable[tickText]=true
+
+--TickTable={}
+
+
+--//3.4 function retrieve ticks
+	function global.retrieveTicks2()
+		tickText=""
+		for i = 0,global.localStorage.length-1 do
+			tickText=tickText .. "\ntickText=[[" .. global.localStorage:key(i) .. ']] TickTable[tickText]="tick"'
+		end --for i = 0,global.localStorage.length-1 do
+		load(tickText)() --append to the TickTable if not yet in this Lua table
+		searchTable={}
+		--test with: global:alert(":" .. textforOnLoad )
+		load(textforOnLoad)()
+		for k,v in pairs(searchTable) do
+			divText = document:getElementById(k).innerHTML
+			divText = divText:gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}",""):gsub("\u{0022}","")
+			--like in Javascript: .replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","").replaceAll("\u0022","")
+			--test with: global:alert(">" .. k )
+			--global:alert(">>" .. document:getElementById(k).innerHTML )
+			--geht nicht: testText=global.localStorage:getItem(divText) global:alert(">>>>" .. testText);
+			if TickTable[divText]=="tick" or (divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")]=="tick") then
+				document:getElementById(k).innerHTML="&#10004; : " .. document:getElementById(k).innerHTML
+			elseif TickTable[divText]=="prio1" or (divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")]=="prio1") then
+				document:getElementById(k).innerHTML="Prio 1 : " .. document:getElementById(k).innerHTML
+			elseif TickTable[divText]=="prio2" or (divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")]=="prio2") then
+				document:getElementById(k).innerHTML="Prio 2 : " .. document:getElementById(k).innerHTML
+			elseif TickTable[divText]=="prio3" or (divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")]=="prio3") then
+				document:getElementById(k).innerHTML="Prio 3 : " .. document:getElementById(k).innerHTML
+			elseif TickTable[divText]=="prio1_tick" or (divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")]=="prio1_tick") then
+				document:getElementById(k).innerHTML="Prio 1 &#10004; : " .. document:getElementById(k).innerHTML
+			elseif TickTable[divText]=="prio2_tick" or (divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")]=="prio2_tick") then
+				document:getElementById(k).innerHTML="Prio 2 &#10004; : " .. document:getElementById(k).innerHTML
+			elseif TickTable[divText]=="prio3_tick" or (divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")]=="prio3_tick") then
+				document:getElementById(k).innerHTML="Prio 3 &#10004; : " .. document:getElementById(k).innerHTML
+			else
+				document:getElementById(k).innerHTML=document:getElementById(k).innerHTML
+			end --if (localStorage:getItem(divText)) then
+		end --for k,v in pairs(searchTable) do
+	end --function retrieveTicks2(){
+
+
+--//5.1 function to build the tree with the Lua table as input
+
+--3.6.1.3 function to build recursively the tree with text
+function readTreetohtmlRecursiveLinksText(TreeTable,levelStart,levelFolderStart,iStart,linkNumberStart)
+	--test with: window:alert(TreeTable)
+	linkNumber=linkNumberStart or 1
+	iNumber= iStart or 1
+	levelFolder = (levelFolderStart or "") .. "." .. iNumber --string.rep(".x",level+1)
+	--test with: print(" >" .. levelFolder)
+	level = levelStart or 0
+	if TreeTable.branchname:match('"([^"]*)">') then
+		AusgabeTabelle[TreeTable.branchname:match('"([^"]*)">')]=true
+	else
+		AusgabeTabelle[TreeTable.branchname]=true
+	end --if TreeTable.branchname:match('"([^"]*)">') then
+	--build the branches
+	textforHTML = textforHTML .. string.rep("\t",level) .. '<p style="margin: 0px 0px 5px ' .. level*30  .. 'px;background-color:#1c87c9;"'
+	
+	if TreeTable[1]==nil then
+		textforHTML = textforHTML ..
+		[[ id="imgfolder]] .. levelFolder .. [[" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="~ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
+	--collapsed does func-tion with the onload func-tion for the body
+	elseif TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML ..
+		[[ id="imgfolder]] .. levelFolder .. [[" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/plusnode.png" alt="+ " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
+	else
+		textforHTML = textforHTML ..
+		[[ id="imgfolder]] .. levelFolder .. [[" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')"><img  id="img1folder]] .. levelFolder .. [[" src="wb_img/minusnode.png" alt="- " onclick="toggleFolder('folder]] .. levelFolder .. [[')">]]
+		textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. [["]=true]]
+		textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. [["]=true]]
+	end --if state=="COLLAPSED" then
+	if TreeTable.branchname:match('"([^"]*)">')~=nil and tostring(TreeTable.branchname):match("http") then
+		LinkText='<a href='
+		LinkText_1='</a>'
+	elseif TreeTable.branchname:match('"([^"]*)">')==nil then
+		LinkText=''
+		LinkText_1=""
+	else
+		LinkText=""
+		LinkText_1=""
+	end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+	textforHTML = textforHTML ..
+	LinkText .. tostring(TreeTable.branchname) .. LinkText_1 .. "</p>\n"
+	if TreeTable.state=="COLLAPSED" then
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. [[" style="display:none" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')">]] ..'\n'
+	else
+		textforHTML = textforHTML .. string.rep("\t",level) .. '<div id="folder' .. levelFolder .. [[" style="display:block" oncontextmenu="toggletick('imgfolder]] .. levelFolder .. [[')">]] ..'\n'
+	end --if state=="COLLAPSED" then
+	for i,v in ipairs(TreeTable) do
+		linkNumber=linkNumber+1
+		if type(v)=="table" then
+			level = level +1
+			readTreetohtmlRecursiveLinksText(v,level,levelFolder,i,linkNumber)
+		else
+			if v:match('"([^"]*)">') then
+				AusgabeTabelle[v:match('"([^"]*)">')]=true
+			else
+				AusgabeTabelle[v]=true
+			end --if v:match('"([^"]*)">') then
+			if v:match('"([^"]*)">')==nil and tostring(v):match("http") then
+				LinkText='"' .. tostring(v) .. '">'
+			elseif v:match('"([^"]*)">')==nil then
+				LinkText='"">' --start html itself and not Tree_html_frame_home.html
+			else
+				LinkText=""
+			end --if TreeTable.branchname:match('"([^"]*)">')==nil and tostring(TreeTable.branchname):match("http") then
+			----[====[with distinct lines and leafs can start at any key:
+			textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. [[ oncontextmenu="toggletick('imgfolder]] .. levelFolder .. "." .. i .. [[')">]] ..  v .. "</p>\n"
+			textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. "." .. i .. [["]=true]]
+			textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. "." .. i .. [["]=true]]
+			--]====]
+			--
+			--[====[with one text for all leafs when all leafs starts at key = 1
+			if i==1 then
+				textforHTML = textforHTML .. string.rep("\t",level+1) .. '<p style="margin: 0px 0px 5px ' .. (level+1)*30  .. 'px"'  .. ' id="imgfolder' .. levelFolder .. "." .. i .. '"' .. '>' ..  v
+				textforOnLoad=textforOnLoad .. "\n" .. [[  searchTable["imgfolder]] .. levelFolder .. "." .. i .. [["]=true]]
+				textforOnLoad_2=textforOnLoad_2 .. "\n" .. [[  unmarkTable["imgfolder]] .. levelFolder .. "." .. i .. [["]=true]]
+			else
+				textforHTML = textforHTML .. " " .. v
+				.. '<br>\n'
+				--<br> better. Not necessary, but difficult to set so omit, is:	.. "</p>\n"
+			end --if i==1 then
+			--]====]
+		end --if type(v)=="table" then
+	end --for i, v in ipairs(TreeTable) do
+	--test with: print("  " .. levelFolder)
+	levelFolder=levelFolder:match("(.*)%.%d+$")
+	--test with: print("->" .. levelFolder)
+	textforHTML = textforHTML .. string.rep("\t",level) .. "</div>\n"
+	level = level - 1
+end --readTreetohtmlRecursiveLinksText(TreeTable)
+
+--load Tree data base as a NoSQL Lua table
+
+DBTable={
+'Tree={branchname="Test 1",{branchname="Ast 1",{branchname="Schritt 1","Test","Test 1",}}}',
+'Tree={branchname="Test 2",{branchname="Ast 2",{branchname="Schritt 2","Test","Test 2",},}}',
+} --DBTable={
+
+
+	function global.Tree()
+		--test with: global:alert(DBTable[math.tointeger(tonumber(document.Formular.Tree_ID.value))])
+		document:getElementById("tree").innerHTML=""
+		document:getElementById("tree").innerHTML=document:getElementById("tree").innerHTML .. "Checkliste " .. document.Formular.Tree_ID.value
+		--load current tree
+		load(DBTable[math.tointeger(tonumber(document.Formular.Tree_ID.value))])()
+		--test with: document:getElementById("tree").innerHTML=document:getElementById("tree").innerHTML .. Tree.branchname
+		textforHTML=""
+		AusgabeTabelle={}
+		--
+		textforOnLoad=""
+		textforOnLoad_2=""
+		readTreetohtmlRecursiveLinksText(Tree)
+		document:getElementById("tree").innerHTML=document:getElementById("tree").innerHTML .. textforHTML:gsub(";quot;",'"')
+		--global.retrieveTicks() is now with fengari: global.retrieveTicks2()
+		global.retrieveTicks2()
+	end --function global.Tree()
+
+--//5.2 function next tree
+	function global.nextTree()
+		if DBTable[math.tointeger(tonumber(document.Formular.Tree_ID.value))+1] then
+			document.Formular.Tree_ID.value=math.tointeger(tonumber(document.Formular.Tree_ID.value))+1
+		else
+			document.Formular.Tree_ID.value=1
+		end --if DBTable[math.tointeger(tonumber(document.Formular.Tree_ID.value))+1] then
+	end --function nextTree()
+
+--//6.1 function tree search root
+	function global.Tree_search_root()
+		searchFound=""
+		--test with: window:alert(document.FormularSearch.SearchText.value)
+		for i,v in ipairs(DBTable) do
+			if document.FormularSearch.SearchText.value~="" and v:match('Tree={branchname="[^"]*' .. document.FormularSearch.SearchText.value .. '[^"]*"') then
+				document.Formular.Tree_ID.value=i
+				searchFound=searchFound .. "/" .. i
+			end --if v:match('Tree={branchname="[^"]*' .. "ander" .. '[^"]*"') then
+		end --for i,v in ipairs(DBTable) do
+		if searchFound=="" then
+			window:alert("Kein Baum zum Suchbegriff gefunden!")
+		else
+			document.FormularSearch.Tree_IDAllSearch.value=searchFound
+		end --if searchFound=="" then
+	end --function Tree_search_root()
+
+--//6.2 function tree search
+	function global.Tree_search()
+		searchFound=""
+		--test with: window:alert(document.FormularSearch.SearchText.value)
+		for i,v in ipairs(DBTable) do
+			if document.FormularSearch.SearchText.value~="" and v:lower():match(document.FormularSearch.SearchText.value:lower()) then
+				document.Formular.Tree_ID.value=i
+				searchFound=searchFound .. "/" .. i
+			end --if v:match('Tree={branchname="[^"]*' .. "ander" .. '[^"]*"') then
+		end --for i,v in ipairs(DBTable) do
+		if searchFound=="" then
+			window:alert("Kein Baum zum Suchbegriff gefunden!")
+		else
+			document.FormularSearch.Tree_IDAllSearch.value=searchFound
+		end --if searchFound=="" then
+	end --function global.Tree_search()
+
+--//6.3 function next search tree
+	function global.nextSearchTree()
+		js = require "js" window = js.global
+		document.Formular.Tree_ID.value=document.FormularSearch.Tree_IDAllSearch.value:match("/(%d+)$")
+		document.FormularSearch.Tree_IDAllSearch.value=document.FormularSearch.Tree_IDAllSearch.value:match("(.*)/%d+$")
+	end --function global.nextSearchTree()
+
+--//7. function nodes mark
+	function global.nodes_mark()
+		--test with: window:alert(textforOnLoad)
+		searchTable={}
+		load(textforOnLoad)()
+		for k,v in pairs(searchTable) do
+			--test with: window:alert(k) 
+			divText = document:getElementById(k)
+			--first unmark each node
+			divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#000"
+			--test with: window:alert(divText)
+			--test with: window:alert(divText.innerText)
+			if divText then
+				--test with: window:alert(divText.innerText:lower())
+				if divText.innerText:lower():match(document.InputForm.markText.value:lower()) then
+					--test with: window:alert(divText.innerText)
+							divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#090";
+							--test with: window:alert(divText);
+							testText=k --"imgfolder.1.1.1.1";
+							--test with: window:alert(#testText)
+							for i = #testText,10,-1 do
+								--test with: window:alert(testText:sub(1,i))
+								if testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
+									--test with: window:alert(testText:sub(1,i))
+									divText = document:getElementById(testText:sub(1,i))
+									if divText then
+										divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#f90"
+									end --if divText then
+								end -- testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
+							end --for i = #testText,10,-1 do
+				end --if divText.innerText:lower():match(document.InputForm.markText.value.lower()) then
+			end --if divText then
+		end --for k,v in pairs(searchTable) do
+	end --function global.nodes_mark()
+
+--//8.1 function nodes mark not done
+	function global.nodes_mark_not_done()
+		--test with: window:alert(textforOnLoad)
+		searchTable={}
+		load(textforOnLoad)()
+		for k,v in pairs(searchTable) do
+			--test with: window:alert(k) 
+			divText = document:getElementById(k)
+			--first unmark each node
+			divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#000"
+			--test with: window:alert(divText)
+			--test with: window:alert(divText.innerText)
+			if divText then
+				--test with: window:alert(divText.innerText:lower())
+				if divText.innerText:lower():match("^[^:]+ : ")==nil then
+					--test with: window:alert(divText.innerText)
+							divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#090";
+							--test with: window:alert(divText);
+							testText=k --"imgfolder.1.1.1.1";
+							--test with: window:alert(#testText)
+							for i = #testText,10,-1 do
+								--test with: window:alert(testText:sub(1,i))
+								if testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
+									--test with: window:alert(testText:sub(1,i))
+									divText = document:getElementById(testText:sub(1,i))
+									if divText then
+										divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#f90"
+									end --if divText then
+								end -- testText:sub(1,i):match(".%d+$") and testText:sub(1,i)~=k then
+							end --for i = #testText,10,-1 do
+				end --if divText.innerText:lower():match(document.InputForm.markText.value.lower()) then
+			end --if divText then
+		end --for k,v in pairs(searchTable) do
+	end --function global.nodes_mark_not_done()
+
+--//8.3 function nodes unmark
+	function global.nodes_unmark()
+		--test with: window:alert(textforOnLoad_2)
+		unmarkTable={}
+		load(textforOnLoad_2)()
+		for k,v in pairs(unmarkTable) do
+		--test with: window:alert(k) 
+			divText = document:getElementById(k)
+			divText.style="margin: " .. divText.style.margin .. ";background-color: " .. divText.style["background-color"] .. ";color:#000"
+		end --for k,v in pairs(unmarkTable) do
+	end --function global.nodes_unmark()
+
+
+
+</script>
+	
+</head>
+<body>
+
+<h1>Checklisten&uuml;bersicht</h1>
+<table>
+<tr><td>
+
+<textarea id="textarea1" style="overflow-y: scroll;height: 100px;width: 400px;resize: none;"></textarea>
+
+
+<form name="Formular">
+Checkliste:<br>
+<input value="1" name="Tree_ID" size="54" type="text"><br><br>
+<input value="Checkliste ausw&auml;hlen" onclick="Tree()" type="button"><br>
+<!--input value="N&auml;chste Baumnummer laden" onclick="nextTree()" type="button"--><br>
+</form>
+<br><br>
+
+<!--form name="FormularSearch">
+Suche in den B&auml;umen von:<br>
+<input value="" name="SearchText" size="54" type="text"><br>
+<input value="Baum mit Stamm suchen" onclick="Tree_search_root()" type="button"><br>
+<input value="Baum suchen" onclick="Tree_search()" type="button"><br>
+<input value="N&auml;chste gefundene Baumnummer laden" onclick="nextSearchTree()" type="button"><br>
+<ul><li>
+Gefundene Baumnummern:<br>
+<input value="" name="Tree_IDAllSearch" size="54" type="text"><br>
+</li></ul>
+</form-->
+
+</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="vertical-align:top;">
+<form name="InputForm">
+Suche:<br>
+<input value="" name="markText" size="54" type="text"><br><br>
+<input value="Suchbegriff in der Checkliste markieren" onclick="nodes_mark()" type="button"><br><br>
+<input value="Offene Punkte in der Checkliste anzeigen" onclick="nodes_mark_not_done()" type="button"><br><br>
+<!--input type="button" value="Entmarkieren" onclick='nodes_unmark()'-->
+</form>
+
+<form name="ButtonForm">
+<!--input type="button" value="Alles Einklappen" onclick='hideAllFolders()'--> 
+<!--input type="button" value="Alles Ausklappen" onclick='showAllFolders()'--> 
+<!--input type="button" value="H&auml;kchen anzeigen" onclick='retrieveTicks()'--> 
+<input type="button" value="L&ouml;schen von H&auml;kchen nach Suchbegriff" onclick='clearChosenTicks()'> <br><br>
+</form>
+Erkl&auml;rung: Rechte Maustaste, um H&auml;kchen zu setzen
+<br>
+</td><td>
+<!--input value="H&auml;kchen zeigen pure Javascript" onclick="showRetrievedTicks()" type="button"><br><br-->
+<input type="button" value="Alle H&auml;kchen in local Storage l&ouml;schen" onclick='clearAllTicks()'> <br><br>
+<input value="Neue H&auml;kchen f&uuml;r die Persistenz zeigen" onclick="showRetrievedTicks2()" type="button"><br><br>
+
+<textarea id="textarea2" style="overflow-y: scroll;height: 100px;width: 400px;resize: none;"></textarea>
+
+</td></tr>
+</table>
+
+<div id="tree"></div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+<script src="https://fengari.io/static/js/fengari-web.js" type="text/javascript"></script>
+<script type="application/lua">
+js = require "js" global = js.global document = global.document window = js.global
+
+textareaText=""
+for i,v in ipairs(DBTable) do
+	textareaText=textareaText .. i .. ": " .. v:match('Tree={branchname="([^"]*)"') .. "\n"
+end --for i,v in ipairs(DBTable) do
+document:getElementById("textarea1").value=textareaText
+</script>
+
+</body>
+</html>
