@@ -94,6 +94,10 @@ By using a scintilla_datapart.lua with 	if line:match("^DBTable=") then changed 
 changed to 	if line:match("%-%-TickTable=") then
 the ticks can be made persistent. The restriction is that nodes does not have german Umlaute.
 
+10.4.4 reflexive_fengari_tree_functional_checklists_persistent_prio.html
+
+In this checklists the priority of a node can also be set in addition to the other functionalities of reflexive_fengari_tree_functional_checklists_persistent.html.
+
 11. simple_pure_Javascript_DB_tree.html
 
 This html file contains a programm with little differences in the functionality compared with simple_fengari_DB_tree_text.html, but written in pure Javascript.
