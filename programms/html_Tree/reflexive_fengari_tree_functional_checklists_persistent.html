@@ -77,7 +77,7 @@
 			if (folder.innerHTML.search(" : ")>=0){
 			  folder.innerHTML=folder.innerHTML;
 			}else{
-			folderInnerHTMLReplaced=folder.innerHTML.replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","") //replace from umlauts: Ü "\u00dc", ü "\u00fc", Ä "\u00c4", ä "\u00e4", Ö "\u00d6", ö "\u00f6", ß "\u00df", like in Lua :gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}","")
+			folderInnerHTMLReplaced=folder.innerHTML.replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","").replaceAll("\u0022","") //replace from umlauts: Ü "\u00dc", ü "\u00fc", Ä "\u00c4", ä "\u00e4", Ö "\u00d6", ö "\u00f6", ß "\u00df", " "\u0022", like in Lua :gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}",""):gsub("\u{0022}","")
 			var toTick=confirm("Ist die Aufgabe wirklich erledigt?\n"+folder.innerHTML.substring(folder.innerHTML.lastIndexOf(">")+1))
 			if (toTick==true) {
 				  localStorage.setItem(folderInnerHTMLReplaced,folder.innerHTML);
@@ -111,7 +111,7 @@
 	function showRetrievedTicks(){
 		tickText=""
 		for (var i = 0; i < localStorage.length; ++i) {
-			tickText=tickText+"\ntickText=[["+localStorage.key(i)+"]] TickTable[tickText]=true"
+			tickText=tickText+"\ntickText=[["+localStorage.key(i)+']] TickTable[tickText]="tick"'
 		} //for (var i = 0; i < localStorage.length; ++i) {
 		document.getElementById("textarea2").value=tickText
 	} //function showRetrievedTicks(){
@@ -151,7 +151,7 @@ js = require "js" global = js.global document = global.document window = js.glob
 		tickText=""
 		for i = 0,global.localStorage.length-1 do
 			if TickTable[global.localStorage:key(i)]==nil then
-				tickText=tickText .. "\ntickText=[[" .. global.localStorage:key(i) .. "]] TickTable[tickText]=true"
+				tickText=tickText .. "\ntickText=[[" .. global.localStorage:key(i) .. ']] TickTable[tickText]="tick"'
 			end --if TickTable[global.localStorage:key(i)]==nil then
 		end --for i = 0,global.localStorage.length-1 do
 		document:getElementById("textarea2").value=tickText
@@ -168,7 +168,7 @@ tickText=[[Test]] TickTable[tickText]=true
 	function global.retrieveTicks2()
 		tickText=""
 		for i = 0,global.localStorage.length-1 do
-			tickText=tickText .. "\ntickText=[[" .. global.localStorage:key(i) .. "]] TickTable[tickText]=true"
+			tickText=tickText .. "\ntickText=[[" .. global.localStorage:key(i) .. ']] TickTable[tickText]="tick"'
 		end --for i = 0,global.localStorage.length-1 do
 		load(tickText)() --append to the TickTable if not yet in this Lua table
 		searchTable={}
@@ -176,12 +176,14 @@ tickText=[[Test]] TickTable[tickText]=true
 		load(textforOnLoad)()
 		for k,v in pairs(searchTable) do
 			divText = document:getElementById(k).innerHTML
-			divText = divText:gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}","")
-			--like in Javascript: .replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","")
+			divText = divText:gsub("\u{00DC}",""):gsub("\u{00FC}",""):gsub("\u{00C4}",""):gsub("\u{00E4}",""):gsub("\u{00D6}",""):gsub("\u{00F6}",""):gsub("\u{00DF}",""):gsub("\u{0022}","")
+			--like in Javascript: .replaceAll("\u00dc","").replaceAll("\u00fc","").replaceAll("\u00c4","").replaceAll("\u00e4", "").replaceAll("\u00d6","").replaceAll("\u00f6","").replaceAll("\u00df","").replaceAll("\u0022","")
 			--test with: global:alert(">" .. k )
 			--global:alert(">>" .. document:getElementById(k).innerHTML )
 			--geht nicht: testText=global.localStorage:getItem(divText) global:alert(">>>>" .. testText);
 			if TickTable[divText] then
+				document:getElementById(k).innerHTML="&#10004; : " .. document:getElementById(k).innerHTML
+			elseif divText:match(">([^>]*)$") and TickTable[divText:match(">([^>]*)$")] then
 				document:getElementById(k).innerHTML="&#10004; : " .. document:getElementById(k).innerHTML
 			else
 				document:getElementById(k).innerHTML=document:getElementById(k).innerHTML
