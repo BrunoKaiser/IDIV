@@ -895,11 +895,11 @@ end --if _VERSION=='Lua 5.1' then
 TickTableAddTable={}
 for k,v in pairs(TickTable) do
 	if k:match(">([^>]*)") then
-		TickTableAddTable[k:match(">([^>]*)")]="tick"
+		TickTableAddTable[k:match(">([^>]*)")]=v --"tick"
 	end --if k:match(">([^>]*)") then
 end --for k,v in pairs(TickTable) do
 for k,v in pairs(TickTableAddTable) do
-	TickTable[k]="tick"
+	TickTable[k]=v --"tick"
 end --for k,v in pairs(TickTableAddTable) do
 
 --7.5.4 tick the nodes
