@@ -63,3 +63,7 @@ This script is a graphical user interface with which the data part of the code o
 
 This script is a graphical user interface with which the data part of the code of a tree reflexive_fengari_tree_functional_checklists_persistent.html is taken into a be shown as a tree. The code before the data part and after it is taken into variables so that after changing the data part in the tree it can be saved with the changes. The ticks of the checklists that are persistent are shown in the graphical user interface.
 
+
+10.4 simple_datapart_tree_with_ticks_prio.lua
+
+This script has also the possibility to set priorities for the nodes in addition to the functionalities of simple_datapart_tree_with_ticks.lua.
