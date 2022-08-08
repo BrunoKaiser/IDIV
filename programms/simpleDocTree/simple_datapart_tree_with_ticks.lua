@@ -512,6 +512,33 @@ function button_save_code_with_datapart:flat_action()
 	outputfile1:write("} --DBTable={")
 	outputfile1:write("\n" .. codeAfterText)
 	outputfile1:close()
+	--update datapart after saving code takes the new tree in the graphical user interface
+	--take only datapart in tree but save code text before and after it in variables
+	codeFlag="codeBeforeText"
+	codeBeforeText=""
+	dataPartText=""
+	codeAfterText=""
+	for line in io.lines(textbox1.value) do
+		if line:match("^DBTable=") then
+			codeFlag="dataPartText"
+		end --if line:match("^DBTable=") then
+		if codeFlag=="codeBeforeText" then
+			codeBeforeText=codeBeforeText .. line .. "\n"
+		elseif codeFlag=="dataPartText" then
+			dataPartText=dataPartText .. line .. "\n"
+		elseif codeFlag=="codeAfterText" then
+			codeAfterText=codeAfterText .. line .. "\n"
+		end --if codeBeforeFlag=="yes" then
+		if line:match("} %-%-DBTable=") then
+			codeFlag="codeAfterText"
+		end --if line:match("} %-%-DBTable=") then
+	end --for line in io.lines(textbox1.value) do
+	--load tree from file
+	if _VERSION=='Lua 5.1' then
+		loadstring(dataPartText)()
+	else
+		load(dataPartText)() --now DBTable is the table.
+	end --if _VERSION=='Lua 5.1' then
 end --function button_save_code_with_datapart:flat_action()
 
 --6.2.2 button for saving tree
@@ -704,7 +731,7 @@ img_tick_leaf= iup.image{
 textbox0 = iup.text{value="1",size="50x20"}
 textbox1 = iup.multiline{value=Datei,size="350x20",WORDWRAP="YES",READONLY="YES"}
 
---take only datapart in scintilla but save code text before and after it in variables
+--take only datapart in tree but save code text before and after it in variables
 codeFlag="codeBeforeText"
 codeBeforeText=""
 dataPartText=""
@@ -833,7 +860,7 @@ maindlg = iup.dialog{
 maindlg:show()
 
 
---7.5.1 take only datapart in scintilla but save code text before and after it in variables
+--7.5.1 take only datapart for ticks but save code text before and after it in variables
 codeFlag_Tick="codeBeforeText"
 codeBeforeText_Tick=""
 dataPartText_Tick=""
