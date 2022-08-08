@@ -548,7 +548,7 @@ function button_save_ticks:flat_action()
 	outputfile1:write(codeBeforeText_Tick)
 	outputfile1:write("TickTable={}\n")
 	for k,v in pairs(TickTable) do
-		outputfile1:write("tickText=[[" .. k .. "]] TickTable[tickText]=true\n")
+		outputfile1:write("tickText=[[" .. k .. ']] TickTable[tickText]="' .. v .. '"\n') --"tick"
 	end --for k,v in pairs(TickTable) do
 	outputfile1:write("--TickTable={}\n")
 	outputfile1:write(codeAfterText_Tick)
@@ -632,7 +632,7 @@ function button_ticks_organise:flat_action()
 			if toggleTable[i].value=="OFF" then
 				TickTable[toggleTable[i].title:gsub("&[^&]*;","")]=nil
 			else
-				TickTable[toggleTable[i].title:gsub("&[^&]*;","")]=true
+				TickTable[toggleTable[i].title:gsub("&[^&]*;","")]="tick"
 			end --if toggleTable[i].value=="OFF" then
 		end --for i,v in ipairs(toggleTable) do
 		--go through the whole tree to set the right images
@@ -895,11 +895,11 @@ end --if _VERSION=='Lua 5.1' then
 TickTableAddTable={}
 for k,v in pairs(TickTable) do
 	if k:match(">([^>]*)") then
-		TickTableAddTable[k:match(">([^>]*)")]=true
+		TickTableAddTable[k:match(">([^>]*)")]="tick"
 	end --if k:match(">([^>]*)") then
 end --for k,v in pairs(TickTable) do
 for k,v in pairs(TickTableAddTable) do
-	TickTable[k]=true
+	TickTable[k]="tick"
 end --for k,v in pairs(TickTableAddTable) do
 
 --7.5.4 tick the nodes
