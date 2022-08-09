@@ -2,9 +2,7 @@
 
 --1. basic data
 
---
 Datei="C:\\Tree\\html_Tree\\html_fengari\\reflexive_fengari_tree_functional_checklists_persistent_prio.html"
---Datei="C:\\Temp\\reflexive_fengari_tree_functional_checklists_Ehrenkodex.html"
 
 --1.1 libraries and clipboard
 --1.1.1 libraries
@@ -189,7 +187,7 @@ end --function save_tree_to_lua_text(tree)
 
 --4. dialogs
 
---4.1 rename dialog
+--4.1.1 rename dialog
 --ok button
 ok = iup.flatbutton{title = "OK",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function ok:flat_action()
@@ -214,14 +212,50 @@ dlg_rename = iup.dialog{
 	startfocus=text,
 	}
 
---4.1 rename dialog end
+--4.1.1 rename dialog end
+
+--4.1.2 rename calendar dialog
+--ok button
+ok_calendar = iup.flatbutton{title = "OK",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function ok_calendar:flat_action()
+	tree.title = text_calendar_date.value .. ": " .. text_calendar_title.value
+	return iup.CLOSE
+end --function ok_calendar:flat_action()
+
+--cancel button
+cancel_calendar = iup.flatbutton{title = "Abbrechen",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function cancel_calendar:flat_action()
+	return iup.CLOSE
+end --function cancel_calendar:flat_action()
+
+text_calendar_date = iup.text{size="50x20",border="YES",expand="YES",wordwrap="NO"} --textfield
+text_calendar_title = iup.multiline{size="120x50",border="YES",expand="YES",wordwrap="YES"} --textfield
+label1_calendar = iup.label{title="Name:"}--label for textfield
+
+calendar1=iup.calendar{value=valueDate, weeknumbers = "YES"} 
+function calendar1:valuechanged_cb()
+	local yearText, monthText, dayText = calendar1.value:match("(%d%d+)/(%d+)/(%d+)")
+	dayText = ("0" .. dayText):sub(-2)
+	monthText = ("0" .. monthText):sub(-2)
+	text_calendar_date.value= dayText .. "." .. monthText .. "." .. yearText
+end --function calendar1:valuechanged_cb()
+
+--open the dialog for renaming branch/leaf
+dlg_rename_calendar = iup.dialog{
+	iup.vbox{label1_calendar, calendar1, text_calendar_date, text_calendar_title, iup.hbox{ok_calendar,cancel_calendar}}; 
+	title="Knoten mit Kalender bearbeiten",
+	size="QUARTER",
+	startfocus=text,
+	}
+
+--4.1.2 rename calendar dialog end
 
 
 --4.2 search dialog
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "AbwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	local help=false
 	--downward search
@@ -360,7 +394,7 @@ end --for i=0, tree.count - 1 do
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "AufwÃ¤rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	local help=false
 	--upward search
@@ -389,22 +423,22 @@ function searchup:flat_action()
 	end --if help==false then
 end --	function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="GroÃŸ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
 --put above together in a search dialog
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+			iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 			iup.hbox{searchmark,unmark,}, 
 			iup.hbox{searchmark_open,}, 
 			iup.hbox{searchmark_prio1,}, 
 			iup.hbox{searchmark_prio2,}, 
 			iup.hbox{searchmark_prio3,}, 
-			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: Ã¼bergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="grÃ¼n: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 
 			}; 
@@ -447,7 +481,7 @@ dlg_search_replace =iup.dialog{
 					iup.hbox{search_label_replace,searchtext_replace},
 					iup.hbox{replace_label_replace,replacetext_replace},
 					iup.hbox{search_replace, cancel_replace,},
-					iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
+					iup.label{title="Sonderzeichen: %. fÃ¼r ., %- fÃ¼r -, %+ fÃ¼r +, %% fÃ¼r %, %[ fÃ¼r [, %] fÃ¼r ], %( fÃ¼r (, %) fÃ¼r ), %^ fÃ¼r ^, %$ fÃ¼r $, %? fÃ¼r ?",},
 				}; 
 				title="Suchen und Ersetzen",
 				size="420x100",
@@ -467,7 +501,7 @@ function startcopy:action() --copy node
 	 clipboard.text = tree['title']
 end --function startcopy:action()
 
---5.1.2 rename node and rename action for other needs of tree
+--5.1.2.1 rename node and rename action for other needs of tree
 renamenode = iup.item {title = "Knoten bearbeiten"}
 function renamenode:action()
 	text.value = tree['title']
@@ -475,8 +509,37 @@ function renamenode:action()
 	iup.SetFocus(tree)
 end --function renamenode:action()
 
+--5.1.2.2 rename calendar node and rename action for other needs of tree
+renamenode_calendar = iup.item {title = "Knoten mit Kalender bearbeiten"}
+function renamenode_calendar:action()
+	dayText=""
+	monthText="" 
+	yearText=""
+	if tree['title']:match("^%d%d%.%d%d%.%d%d%d%d: ") then
+		dayText, monthText, yearText = tree['title']:match("^(%d%d)%.(%d%d)%.(%d%d%d%d): ")
+		valueDate = yearText .. "/" .. monthText .. "/" .. dayText
+		valueDateText=dayText .. "." .. monthText .. "." .. yearText
+		textTitle = tree['title']:gsub(dayText .. "." .. monthText .. "." .. yearText .. ": ","")
+	elseif tree['title']:match("%d%d%.%d%d%.%d%d%d%d") then
+		dayText, monthText, yearText = tree['title']:match("(%d%d)%.(%d%d)%.(%d%d%d%d)")
+		valueDate = yearText .. "/" .. monthText .. "/" .. dayText
+		valueDateText=dayText .. "." .. monthText .. "." .. yearText
+		textTitle = tree['title']:gsub(dayText .. "." .. monthText .. "." .. yearText,""):gsub("  "," ")
+	else
+		valueDate = os.date("%Y/%m/%d")
+		valueDateText = os.date("%d.%m.%Y")
+		textTitle = tree['title']
+	end --if tree['title']:match("%d%d%.%d%d%.%d%d%d%d") then
+	--take the right date and title
+	text_calendar_date.value = valueDateText
+	text_calendar_title.value = textTitle
+	calendar1.value=valueDate
+	dlg_rename_calendar:popup(iup.CENTER, iup.CENTER) --popup rename dialog
+	iup.SetFocus(tree)
+end --function renamenode_calendar:action()
+
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzufügen"}
+addbranch = iup.item {title = "Ast hinzufÃ¼gen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -491,7 +554,7 @@ function addbranch_fromclipboard:action()
 end --function addbranch_fromclipboard:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzufügen"}
+addleaf = iup.item {title = "Blatt hinzufÃ¼gen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -509,6 +572,7 @@ end --function addleaf_fromclipboard:action()
 menu = iup.menu{
 		startcopy,
 		renamenode, 
+		renamenode_calendar, 
 		addbranch, 
 		addbranch_fromclipboard, 
 		addleaf,
@@ -558,7 +622,7 @@ img_logo = iup.image{
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraÃŸe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
 end --function button_logo:flat_action()
 
 --6.2.1 button for saving tree
@@ -608,7 +672,7 @@ function button_save_code_with_datapart:flat_action()
 end --function button_save_code_with_datapart:flat_action()
 
 --6.2.2 button for saving tree
-button_save_ticks=iup.flatbutton{title="Häkchen \nspeichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_save_ticks=iup.flatbutton{title="HÃ¤kchen \nspeichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_ticks:flat_action()
 	outputfile1=io.open(textbox1.value,"w")
 	outputfile1:write(codeBeforeText_Tick)
@@ -688,7 +752,7 @@ function button_new_tree:flat_action()
 end --function button_new_tree:flat_action()
 
 --6.7 button for organising ticks in tree
-button_ticks_organise=iup.flatbutton{title="Häkchen \nverwalten", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_ticks_organise=iup.flatbutton{title="HÃ¤kchen \nverwalten", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_ticks_organise:flat_action()
 	i=tree.value
 	prioTable={}
@@ -722,7 +786,7 @@ function button_ticks_organise:flat_action()
 		return iup.CLOSE
 	end --function cancel_ticks:flat_action()
 	--search in upward direction
-	ticks_set   = iup.flatbutton{title = "Häkchen setzen",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+	ticks_set   = iup.flatbutton{title = "HÃ¤kchen setzen",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 	function ticks_set:flat_action()
 		for i,v in ipairs(toggleTable) do
 			if toggleTable[i].value=="OFF" and prioTable[i].value=="" then
@@ -764,7 +828,7 @@ function button_ticks_organise:flat_action()
 			end --if TickTable[tree['title' ..i]:gsub("&[^&]*;","")] then
 		end --for i=0,tree.count-1 do --loop for all nodes
 	end --function ticks_set:flat_action()
-	ticks_label=iup.label{title= "Priorität:          Häkchen bis zur 12. Ebene verwalten:    "} --label for textfield
+	ticks_label=iup.label{title= "PrioritÃ¤t:          HÃ¤kchen bis zur 12. Ebene verwalten:    "} --label for textfield
 	--put above together in a search dialog
 	dlg_ticks =iup.dialog{
 					iup.vbox{
@@ -783,7 +847,7 @@ function button_ticks_organise:flat_action()
 						iup.hbox{prioTable[1],toggleTable[1]},
 						iup.hbox{ticks_set, cancel_ticks,},
 					}; 
-					title="Häkchen verwalten",
+					title="HÃ¤kchen verwalten",
 					size="920x100",
 					}
 	--4.4 ticks dialog end
@@ -791,9 +855,9 @@ function button_ticks_organise:flat_action()
 end --function button_ticks_organise:flat_action()
 
 --6.8 button for deleting tree
-button_delete_tree=iup.flatbutton{title="Baum \nlöschen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_delete_tree=iup.flatbutton{title="Baum \nlÃ¶schen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete_tree:flat_action()
-	LoeschAlarm=iup.Alarm("Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Löschen","Nicht Löschen")
+	LoeschAlarm=iup.Alarm("Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelÃ¶scht werden?","Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelÃ¶scht werden?","LÃ¶schen","Nicht LÃ¶schen")
 	if LoeschAlarm==1 then
 		print("Loeschen von " .. math.tointeger(tonumber(textbox0.value)))
 		table.move(DBTable,math.tointeger(tonumber(textbox0.value))+1,#DBTable,math.tointeger(tonumber(textbox0.value)))
@@ -815,7 +879,7 @@ end --function button_delete_tree:flat_action()
 --6.9 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
+	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraÃŸe 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
 end --function button_logo:flat_action()
 
 --6 buttons end
@@ -1043,7 +1107,7 @@ function tree:k_any(c)
 	end --if c == iup.K_DEL then
 end --function tree:k_any(c)
 
-treeContent={branchname="Checklisenübersicht"}
+treeContent={branchname="ChecklisenÃ¼bersicht"}
 for i,v in ipairs(DBTable) do
 	treeContent[#treeContent+1]=i .. ": " .. tostring(v:match('^Tree={branchname="([^"]*)"'))
 end --for i,v in ipairs(DBTable) do
@@ -1088,7 +1152,7 @@ maindlg = iup.dialog{
 		},
 		
 		iup.hbox{
-			iup.frame{title="Checklistenübersicht",tree1,},
+			iup.frame{title="ChecklistenÃ¼bersicht",tree1,},
 			iup.frame{title="Datenbereich im Skript",tree,},
 			},
 
