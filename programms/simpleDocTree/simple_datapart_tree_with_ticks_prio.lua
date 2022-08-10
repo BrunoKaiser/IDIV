@@ -299,7 +299,7 @@ function searchmark:flat_action()
 			iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})
 			iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"})
 		end --if tree["title" .. i]:upper():match(searchtext.value:upper())~= nil then
-	end --for i=0, tree2.count - 1 do
+	end --for i=0, tree.count - 1 do
 	--mark all nodes end
 end --function searchmark:flat_action()
 
@@ -626,7 +626,7 @@ function button_logo:action()
 end --function button_logo:flat_action()
 
 --6.2.1 button for saving tree
-button_save_code_with_datapart=iup.flatbutton{title="Code speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_save_code_with_datapart=iup.flatbutton{title="Code \nspeichern", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_code_with_datapart:flat_action()
 	outputfile1=io.open(textbox1.value,"w")
 	outputfile1:write(codeBeforeText)
@@ -672,7 +672,7 @@ function button_save_code_with_datapart:flat_action()
 end --function button_save_code_with_datapart:flat_action()
 
 --6.2.2 button for saving tree
-button_save_ticks=iup.flatbutton{title="Häkchen \nspeichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_save_ticks=iup.flatbutton{title="Häkchen \nspeichern", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_ticks:flat_action()
 	outputfile1=io.open(textbox1.value,"w")
 	outputfile1:write(codeBeforeText_Tick)
@@ -685,8 +685,8 @@ function button_save_ticks:flat_action()
 	outputfile1:close()
 end --function button_save_ticks:flat_action()
 
---6.3 button for search in tree, tree2 and tree3
-button_search=iup.flatbutton{title="Suchen", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.3 button for search in tree
+button_search=iup.flatbutton{title="Suchen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_search:flat_action()
 	searchtext.value=tree.title
 	searchtext.SELECTION="ALL"
@@ -701,8 +701,131 @@ function button_replace:flat_action()
 	dlg_search_replace:popup(iup.ANYWHERE, iup.ANYWHERE)
 end --function button_replace:flat_action()
 
---6.5 button for replacing in tree
-button_load_tree=iup.flatbutton{title="Baum laden", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+--6.5 button for showing calendar and history tree
+button_calendar_history=iup.flatbutton{title="Kalender und Chronik \nanzeigen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_calendar_history:flat_action()
+	--table for weekdays in local language
+	weekDayTable={}
+	weekDayTable["Sun"]="Sonntag_____________________"
+	weekDayTable["Mon"]="Montag"
+	weekDayTable["Tue"]="Dienstag"
+	weekDayTable["Wed"]="Mittwoch"
+	weekDayTable["Thu"]="Donnerstag"
+	weekDayTable["Fri"]="Freitag"
+	weekDayTable["Sat"]="Samstag"
+
+	dateEnd=os.date("%Y%m%d",os.time{year=os.date("%Y"),month=os.date("%m"),day=os.date("%d")+textbox0.value})
+	calendarTable={}
+	--for i=tonumber(os.date("%Y%m%d")), dateEnd do
+	for i=0,textbox0.value do
+	    calendarTable[#calendarTable+1]=os.date("%Y%m%d",os.time{year=os.date("%Y"),month=os.date("%m"),day=os.date("%d")+i}) .. ""
+	end --for i=tonumber(os.date("%Y%m%d")), dateEnd do
+	for i,v in pairs(DBTable) do
+	    --search for leafs with date
+	    for field in v:gmatch(',("[^"]*")') do
+		if field:match("%d+%.%d+%.%d+") then
+		    --print(field)
+		    local dayValue,monthValue,yearValue=field:match("(%d+)%.(%d+)%.(%d+)")
+		    --print(yearValue .. monthValue .. dayValue)
+		    if yearValue .. monthValue .. dayValue <= dateEnd then
+			calendarTable[#calendarTable+1]=yearValue .. monthValue .. dayValue .. "_" .. '{branchname="Checkliste ' .. i .. '",' .. field .. ',}'
+		    end --        if yearValue .. monthValue .. dayValue <= dateEnd then
+		end -- if field:match("%d+%.%d+%.%d+")
+	    end --for field in test:gmatch(',"[^"]*"') do
+	end --for i,v in pairs(DBTable) do
+	for i,v in pairs(DBTable) do
+	    --search for branches with date
+	    m=0
+	    while true do
+		m=v:find("{",m+1)
+		if m==nil then break end
+		field=v:sub(m):match("%b{}")
+		if field:match('^{branchname="%d+%.%d+%.%d+') then
+		    --print(test:sub(m):match("%b{}"))
+		    --print("")
+		    local dayValue,monthValue,yearValue=field:match("(%d+)%.(%d+)%.(%d+)")
+		    if yearValue .. monthValue .. dayValue <= dateEnd then
+			calendarTable[#calendarTable+1]=yearValue .. monthValue .. dayValue .. "_" .. '{branchname="Checkliste ' .. i .. '",' .. field .. ',}'
+		    end --if yearValue .. monthValue .. dayValue <= dateEnd then
+		end --if test:sub(m):match("%b{}"):match('{branchname="%d+%.%d+%.%d+') then
+	    end --while true do
+	end --for i,v in pairs(DBTable) do
+	table.sort(calendarTable,function(a,b) return a<b end)
+
+	--output of the calendar tree
+	calendarTree='calendarTree={branchname="Kalender mit Chronik",{branchname="Chronik",state="COLLAPSED",'
+	for i,v in pairs(calendarTable) do
+	    if v:match("^%d+$") then
+		local yearText,monthText,dayText=v:match("(%d%d%d%d)(%d%d)(%d%d)")
+		calendarTree=calendarTree .. '},\n{branchname="' .. dayText .. "." .. monthText .. "." .. yearText .. " " ..
+		weekDayTable[os.date("%a",os.time{year=yearText,month=monthText,day=dayText})] .. '",'
+	    else
+		calendarTree=calendarTree .. v:match("_(.*)") .. ','
+	    end --if v:match("^%d+$") then
+	end --for i,v in pairs(calendarTable) do
+	calendarTree=calendarTree ..'},}'
+
+	--test with: print(calendarTree)
+	load(calendarTree)()
+
+	--context menus (menus for right mouse click)
+
+	--menu of tree
+	--copy node of tree2
+	startcopy_calendar = iup.item {title = "Knoten des Kalenders kopieren"}
+	function startcopy_calendar:action() --copy node
+		 clipboard.text = tree2['title']
+	end --function startcopy_calendar:action()
+
+	--put the menu items together in the menu for tree
+	menu_calendar = iup.menu{
+			startcopy_calendar,
+			}
+	--menu of tree end
+
+	--build tree
+	tree2=iup.tree{
+	map_cb=function(self)
+	self:AddNodes(calendarTree)
+	end, --function(self)
+	SIZE="10x200",
+	showrename="YES",--F2 key active
+	markmode="SINGLE",--for Drag & Drop SINGLE not MULTIPLE
+	showdragdrop="NO",
+	}
+	-- Callback of the right mouse button click
+	function tree2:rightclick_cb(id)
+		tree2.value = id
+		menu_calendar:popup(iup.MOUSEPOS,iup.MOUSEPOS) --popup the defined menue
+	end --function tree:rightclick_cb(id)
+
+	--building the dialog and put buttons, trees and preview together
+	calendarTreedlg = iup.dialog{
+		--simply show a box with buttons
+		iup.vbox{
+			--first row of buttons
+			iup.hbox{
+			--for buttons
+			},
+			
+			iup.hbox{
+				iup.frame{title="Kalender und Chronik",tree2,},
+				},
+
+		},
+		icon = img_logo,
+		title = "Kalender und Chronik",
+		SIZE = 'HALFxFULL',
+		BACKGROUND=color_background
+	}
+
+	--show the calendar tree dialog
+	calendarTreedlg:showxy(iup.RIGHT,iup.CENTER)
+
+end --function button_calendar_history:flat_action()
+
+--6.6 button for replacing in tree
+button_load_tree=iup.flatbutton{title="Baum \nladen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_load_tree:flat_action()
 	print("#DBTable" .. #DBTable)
 	if math.tointeger(tonumber(textbox0.value))<=#DBTable then
@@ -741,7 +864,7 @@ function button_load_tree:flat_action()
 	end --for i=0,tree.count-1 do --loop for all nodes
 end --function button_load_tree:flat_action()
 
---6.6 button for replacing in tree
+--6.7 button for replacing in tree
 button_new_tree=iup.flatbutton{title="Neuen Baum \nanlegen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_new_tree:flat_action()
 	textbox0.value=#DBTable+1
@@ -751,7 +874,7 @@ function button_new_tree:flat_action()
 	tree:AddNodes(Tree)
 end --function button_new_tree:flat_action()
 
---6.7 button for organising ticks in tree
+--6.8 button for organising ticks in tree
 button_ticks_organise=iup.flatbutton{title="Häkchen \nverwalten", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_ticks_organise:flat_action()
 	i=tree.value
@@ -780,7 +903,7 @@ function button_ticks_organise:flat_action()
 		end --if TickTable[tree['title' ..tree['parent' .. i]]:gsub("&[^&]*;","")] and TickTable[tree['title' ..tree['parent' .. i]]:gsub("&[^&]*;","")]:match("tick") then
 		i=tree['parent' .. i]
 	end --while true do
-	--4.4 ticks dialog
+	--ticks dialog
 	cancel_ticks = iup.flatbutton{title = "Abbrechen",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 	function cancel_ticks:flat_action()
 		return iup.CLOSE
@@ -850,11 +973,11 @@ function button_ticks_organise:flat_action()
 					title="Häkchen verwalten",
 					size="920x100",
 					}
-	--4.4 ticks dialog end
+	--ticks dialog end
 	dlg_ticks:popup(iup.ANYWHERE, iup.ANYWHERE)
 end --function button_ticks_organise:flat_action()
 
---6.8 button for deleting tree
+--6.9 button for deleting tree
 button_delete_tree=iup.flatbutton{title="Baum \nlöschen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete_tree:flat_action()
 	LoeschAlarm=iup.Alarm("Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Löschen","Nicht Löschen")
@@ -876,7 +999,7 @@ function button_delete_tree:flat_action()
 	end --if LoeschAlarm==1 then 
 end --function button_delete_tree:flat_action()
 
---6.9 button with second logo
+--6.10 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
 	iup.Message("Beckmann & Partner CONSULT","BERATUNGSMANUFAKTUR\nMeisenstraße 79\n33607 Bielefeld\nDr. Bruno Kaiser\nLizenz Open Source")
@@ -1142,6 +1265,7 @@ maindlg = iup.dialog{
 			button_new_tree,
 			textbox0,
 			button_load_tree,
+			button_calendar_history,
 			iup.fill{},
 			textbox1,
 			button_ticks_organise,
