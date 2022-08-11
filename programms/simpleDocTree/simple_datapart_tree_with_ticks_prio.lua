@@ -182,6 +182,7 @@ function save_tree_to_lua_text(tree)
 		output_tree_text = output_tree_text .. "}" -- we need to close one more bracket if last node was a branch
 	end --if tree["KIND" .. tree.count-1]=="BRANCH" then
 	--output_tree_text=string.escape_forbidden_char(output_tree_text)
+	output_tree_text=output_tree_text:gsub("\\","\\\\"):gsub("ä","&auml;"):gsub("Ä","&Auml;"):gsub("ö","&ouml;"):gsub("Ö","&Ouml;"):gsub("ü","&uuml;"):gsub("Ü","&Uuml;"):gsub("ß","&szlig;")
 	return output_tree_text
 end --function save_tree_to_lua_text(tree)
 
@@ -568,6 +569,67 @@ function addleaf_fromclipboard:action()
 	tree.value=tree.value+1
 end --function addleaf_fromclipboard:action()
 
+--5.1.3.1 add branch to tree by insertbranch
+addbranchbottom = iup.item {title = "Ast darunter hinzufügen"}
+function addbranchbottom:action()
+	tree["insertbranch" .. tree.value] = ""
+	for i=tree.value+1,tree.count-1 do
+		if tree["depth" .. i]==tree["depth" .. tree.value] then
+			tree.value=i
+			renamenode:action()
+			break
+		end --if tree["depth" .. tree.value+1]==tree["depth" .. tree.value] then
+	end --for i=tree.value+1,tree.count-1 do
+end --function addbranchbottom:action()
+
+--5.1.3.2 add leaf to tree by insertleaf
+addleafbottom = iup.item {title = "Blatt darunter hinzufügen"}
+function addleafbottom:action()
+	tree["insertleaf" .. tree.value] = ""
+	for i=tree.value+1,tree.count-1 do
+		if tree["depth" .. i]==tree["depth" .. tree.value] then
+			tree.value=i
+			renamenode:action()
+			break
+		end --if tree["depth" .. tree.value+1]==tree["depth" .. tree.value] then
+	end --for i=tree.value+1,tree.count-1 do
+end --function addleafbottom:action()
+
+--5.1.4.1 add branch to tree by insertbranch from clipboard
+addbranch_fromclipboardbottom = iup.item {title = "Ast darunter aus Zwischenablage"}
+function addbranch_fromclipboardbottom:action()
+	tree["insertbranch" .. tree.value] = clipboard.text
+	for i=tree.value+1,tree.count-1 do
+	if tree["depth" .. i]==tree["depth" .. tree.value] then
+		tree.value=i
+		break
+	end --if tree["depth" .. tree.value+1]==tree["depth" .. tree.value] then
+	end --for i=tree.value+1,tree.count-1 do
+end --function addbranch_fromclipboardbottom:action()
+
+--5.1.4.2 add leaf to tree by insertleaf from clipboard
+addleaf_fromclipboardbottom = iup.item {title = "Blatt darunter aus Zwischenablage"}
+function addleaf_fromclipboardbottom:action()
+	tree["insertleaf" .. tree.value] = clipboard.text
+	for i=tree.value+1,tree.count-1 do
+	if tree["depth" .. i]==tree["depth" .. tree.value] then
+		tree.value=i
+		break
+	end --if tree["depth" .. tree.value+1]==tree["depth" .. tree.value] then
+	end --for i=tree.value+1,tree.count-1 do
+end --function addleaf_fromclipboardbottom:action()
+
+--5.1.11 start the file or repository of the node of tree
+startnode = iup.item {title = "Starten"}
+function startnode:action() 
+	if tree['title']:match("^.:\\.*%.[^\\ ]+$") or tree['title']:match("^.:\\.*[^\\]+$") or tree['title']:match("^.:\\$") or tree['title']:match("^[^ ]*//[^ ]+$") then 
+		os.execute('start "D" "' .. tree['title'] .. '"') 
+	elseif tree['title']:match("sftp .*") then 
+		os.execute(tree['title']) 
+	end --if tree['title']:match("^.:\\.*%.[^\\ ]+$") or tree['title']:match("^.:\\.*[^\\]+$") or tree['title']:match("^.:\\$") or tree['title']:match("^[^ ]*//[^ ]+$") then 
+end --function startnode:action()
+
+
 --5.1.12 put the menu items together in the menu for tree
 menu = iup.menu{
 		startcopy,
@@ -575,8 +637,13 @@ menu = iup.menu{
 		renamenode_calendar, 
 		addbranch, 
 		addbranch_fromclipboard, 
+		addbranchbottom,  
+		addbranch_fromclipboardbottom, 
 		addleaf,
 		addleaf_fromclipboard,
+		addleafbottom,
+		addleaf_fromclipboardbottom,
+		startnode, 
 		}
 --5.1 menu of tree end
 
@@ -655,7 +722,8 @@ function button_save_code_with_datapart:flat_action()
 		if codeFlag=="codeBeforeText" then
 			codeBeforeText=codeBeforeText .. line .. "\n"
 		elseif codeFlag=="dataPartText" then
-			dataPartText=dataPartText .. line .. "\n"
+			--dataPartText=dataPartText .. line .. "\n"
+			dataPartText=dataPartText .. line:gsub("&auml;","ä"):gsub("&Auml;","Ä"):gsub("&ouml;","ö"):gsub("&Ouml;","Ö"):gsub("&uuml;","ü"):gsub("&Uuml;","Ü"):gsub("&szlig;","ß") .. "\n"
 		elseif codeFlag=="codeAfterText" then
 			codeAfterText=codeAfterText .. line .. "\n"
 		end --if codeBeforeFlag=="yes" then
@@ -1174,7 +1242,8 @@ for line in io.lines(textbox1.value) do
 	if codeFlag=="codeBeforeText" then
 		codeBeforeText=codeBeforeText .. line .. "\n"
 	elseif codeFlag=="dataPartText" then
-		dataPartText=dataPartText .. line .. "\n"
+		--dataPartText=dataPartText .. line .. "\n"
+ 		dataPartText=dataPartText .. line:gsub("&auml;","ä"):gsub("&Auml;","Ä"):gsub("&ouml;","ö"):gsub("&Ouml;","Ö"):gsub("&uuml;","ü"):gsub("&Uuml;","Ü"):gsub("&szlig;","ß") .. "\n"
 	elseif codeFlag=="codeAfterText" then
 		codeAfterText=codeAfterText .. line .. "\n"
 	end --if codeBeforeFlag=="yes" then
