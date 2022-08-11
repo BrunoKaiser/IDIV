@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>Convert Trees by Fengari JavaScript</title>
+
+<script src="https://fengari.io/static/js/fengari-web.js" type="text/javascript"></script>
+<script type="application/lua">
+js = require "js" global = js.global document = global.document
+
+--3.1.1 function escaping magic characters
+function string.escape_forbidden_char(insertstring) --this function takes a string and returns the same string with escaped characters
+	return insertstring:gsub("\\", "\\\\"):gsub("\"", "\\\""):gsub("\'", "\\\'"):gsub("\n", "\\n"):gsub("\r", "\\n")
+end --function string.escape_forbidden_char(insertstring)
+
+function global.TabToLua()
+	--test with: global:alert("Test")
+	text=document:getElementById("textarea1").value
+
+	outputText='Tree={branchname="tabulator tree"'
+	pos_prevline=0
+	pos_curline=0
+
+	for line in (text .. "\n"):gmatch("([^\n]*)\n") do
+		if line~="" and line:match('%S')~=nil then
+			pos_prevline=pos_curline --update position
+			pos_curline=0
+			local helpstring='\t' .. line
+			while helpstring:match('^\t')~=nil do -- get position of current line
+				pos_curline=pos_curline+1
+				helpstring=helpstring:gsub('^\t','')
+			end --while helpstring:match('^\t')~=nil do
+			-- modify helpstring in order to get desired results
+			while helpstring:match('^ ')~=nil do
+				helpstring=helpstring:gsub('^ ', '')
+			end --while helpstring:match('^ ')~=nil do
+			while helpstring:match('^ ')~=nil do
+				helpstring=helpstring:gsub('^ ', '')
+			end --while helpstring:match('^ ')~=nil do
+			helpstring=string.escape_forbidden_char(helpstring)
+			--print(pos_curline, pos_prevline)
+			if pos_curline<pos_prevline then
+				for i=1, pos_prevline-pos_curline +1 do
+					outputText=outputText .. '},' 
+				end --for i=1, pos_prevline-pos_curline +1 do
+			elseif pos_curline==pos_prevline and pos_curline~=0 then
+				outputText=outputText .. '},' 
+			elseif pos_curline==pos_prevline+1 then
+				outputText=outputText .. ','
+			elseif pos_curline>pos_prevline then
+				for i=1, pos_curline-pos_prevline-1 do
+					outputText=outputText .. ','
+					outputText=outputText .. '{branchname="missing",'
+				end --for i=1, pos_prevline-pos_curline-1 do
+			end --if pos_curline<pos_prevline then
+
+			--if lines are to long then build leafs with the rest of the lines up to a maximum length beeing lower than 259 for IUP tree
+			local maxLength=math.huge --must be lower than 259 for a IUP tree
+			if #helpstring>maxLength then
+				--collect words from textTable
+				local wordTable={}
+				for textWord in (helpstring .. " "):gmatch(".- ") do 
+					wordTable[#wordTable+1]=textWord 
+				end --for textWord in (helpstring .. " "):gmatch(".- ") do 
+				--put word in lines together with up to 259 characters until maxLength
+				local lineTable={}
+				local lineNumber=1
+				lineTable[lineNumber]=""
+				for i2,k2 in ipairs(wordTable) do 
+					if #(lineTable[lineNumber] .. k2) > maxLength then 
+						lineNumber=lineNumber+1
+						lineTable[lineNumber]=k2
+					else
+						lineTable[lineNumber]=lineTable[lineNumber] .. k2
+					end --if #(lineTable[lineNumber] .. k2) > maxLength then --259
+				end --for i2,k2 in ipairs(wordTable) do 
+				--put lines to the tree
+				outputText=outputText .. '{branchname="' .. lineTable[1]:gsub(" $","") .. '",'
+				for i=2,#lineTable-1 do
+					outputText=outputText .. '"' .. lineTable[i]:gsub(" $","") .. '",'
+				end --for i=2,#lineTable do
+				outputText=outputText .. '"' .. lineTable[#lineTable]:gsub(" $","") .. '"'
+			else
+				outputText=outputText .. '{branchname="' .. helpstring:gsub(" $","") .. '"'
+			end --if #helpstring>maxLength then
+		end --if line~="" and line:match('%S')~=nil then
+	end --for line in (text .. "\n"):gmatch("([^\n]*)\n") do
+	--write end curly brackets
+	for i=1, pos_curline+1 do
+		outputText=outputText .. '}'
+	end --for i=1, pos_curline+1 do
+	outputText=outputText:gsub(",,",",") --correction for '\n{branchname="missing",' when to or more missings
+	--test with: print(outputText:match("%b{}"))
+	--test with: print(outputText)
+	--Lua 5.1 has the function loadstring() - in later versions, this is replaced by load(), hence we detect this here
+	outputText=outputText:gsub('{branchname=("[^"]+")}','%1')
+	outputText=outputText:gsub("\u{00DC}","&Uuml;"):gsub("\u{00FC}","&uuml;"):gsub("\u{00C4}","&Auml;"):gsub("\u{00E4}","&auml;"):gsub("\u{00D6}","&Ouml;"):gsub("\u{00F6}","&ouml;"):gsub("\u{00DF}","&szlig;") --doesnot function because necessary for brakets :gsub("\u{0022}","&quot;")
+	document:getElementById("textarea2").value=outputText
+end --function global.TabToLua()
+
+function global.LuaToTab()
+	--test with: global:alert("Test")
+	textNew=document:getElementById("textarea2").value
+
+	if textNew=="" then
+		Tree={branchname="Es wurde kein Baum eingegeben",
+		"Bitte geben Sie einen Baum in Form einer Lua-Tabelle ein.",
+		}
+	else
+		resultNew=load(textNew)()
+	end --if resultNew==nil then
+
+	function readTreetoTabRecursive(TreeTable,levelStart)
+		level = levelStart or 0
+		textResult = textResult .. string.rep("\t",level) .. tostring(TreeTable.branchname) .. "\n"
+		for k,v in ipairs(TreeTable) do
+			if type(v)=="table" then
+				level = level +1
+				readTreetoTabRecursive(v,level)
+			else
+				textResult = textResult .. string.rep("\t",(level+1)) .. v .. "\n"
+			end --if type(v)=="table" then
+		end --for k, v in ipairs(TreeTable) do
+		level = level - 1
+	end --readTreetoTabRecursive(TreeTable)
+
+	--apply the recursive function
+	textResult=""
+	readTreetoTabRecursive(Tree)
+	textResult=textResult:gsub("&Uuml;","\u{00DC}"):gsub("&uuml;","\u{00FC}"):gsub("&Auml;","\u{00C4}"):gsub("&auml;","\u{00E4}"):gsub("&Ouml;","\u{00D6}"):gsub("&ouml;","\u{00F6}"):gsub("&szlig;","\u{00DF}") --doesnot function because necessary for brakets :gsub("&quot;","\u{0022}")
+	document:getElementById("textarea1").value=textResult
+end --function global.LuaToTab()
+
+
+</script>
+	
+</head>
+<body>
+
+<h1>Konvertieren von Baumansichten</h1>
+<table>
+<tr><td>
+<textarea id="textarea1" style="overflow-y: scroll;height: 400px;width: 400px;resize: none;"></textarea>
+<form name="Formular">
+<input type="button" value="Tabulator-Baum in Lua-Baum umwandeln" onclick='TabToLua()'> <br><br>
+</form>
+
+</td><td>
+<textarea id="textarea2" style="overflow-y: scroll;height: 400px;width: 400px;resize: none;"></textarea>
+<form name="Formular2">
+<input value="Lua-Baumansicht in Tabulator-Baumansicht umwandeln" onclick="LuaToTab()" type="button"><br><br>
+</form>
+
+</td></tr>
+</table>
+
+<div id="tree"></div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+<script src="https://fengari.io/static/js/fengari-web.js" type="text/javascript"></script>
+<script type="application/lua">
+js = require "js" global = js.global document = global.document
+
+
+
+</script>
+
+</body>
+</html>
