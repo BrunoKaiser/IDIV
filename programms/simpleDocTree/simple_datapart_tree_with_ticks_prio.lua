@@ -8,6 +8,7 @@ Datei="C:\\Tree\\html_Tree\\html_fengari\\reflexive_fengari_tree_functional_chec
 --1.1.1 libraries
 require("iuplua")           --require iuplua for GUIs
 require("iuplua_scintilla") --for Scintilla-editor
+require("luacom")           --require for reading Windows COM-Objects, here Outlook
 
 --1.1.2 initalize clipboard
 clipboard=iup.clipboard{}
@@ -703,7 +704,7 @@ function button_save_code_with_datapart:flat_action()
 		if i==math.tointeger(tonumber(textbox0.value)) then
 			outputfile1:write("'" .. save_tree_to_lua_text(tree) .. "'," .. "\n")
 		else
-			outputfile1:write("'" .. v .. "'," .. "\n")
+			outputfile1:write("'" .. v:gsub("\\","\\\\"):gsub("ä","&auml;"):gsub("Ä","&Auml;"):gsub("ö","&ouml;"):gsub("Ö","&Ouml;"):gsub("ü","&uuml;"):gsub("Ü","&Uuml;"):gsub("ß","&szlig;") .. "'," .. "\n")
 		end --if i==math.tointeger(tonumber(textbox0.value)) then
 	end --for i,v in ipairs(DBTable) do
 	outputfile1:write("} --DBTable={")
@@ -754,7 +755,7 @@ function button_save_ticks:flat_action()
 end --function button_save_ticks:flat_action()
 
 --6.3 button for search in tree
-button_search=iup.flatbutton{title="Suchen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_search=iup.flatbutton{title="Suchen", size="35x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_search:flat_action()
 	searchtext.value=tree.title
 	searchtext.SELECTION="ALL"
@@ -762,14 +763,34 @@ function button_search:flat_action()
 end --function button_search:flat_action()
 
 --6.4 button for replacing in tree
-button_replace=iup.flatbutton{title="Suchen und Ersetzen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_replace=iup.flatbutton{title="Suchen und \nErsetzen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_replace:flat_action()
 	searchtext_replace.value=tree.title
 	replacetext_replace.SELECTION="ALL"
 	dlg_search_replace:popup(iup.ANYWHERE, iup.ANYWHERE)
 end --function button_replace:flat_action()
 
---6.5 button for showing calendar and history tree
+--6.5.1 button for getting calendar dates from Outlook
+button_get_outlook_calendar=iup.flatbutton{title="Outlookeinträge \nholen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_get_outlook_calendar:flat_action()
+	outlook=luacom.CreateObject("Outlook.Application") 
+	--see content with: luacom.DumpTypeInfo(outlook) 
+	calendar=outlook:GetNamespace("Mapi") 
+	--get calendar folder
+	calendar:GetDefaultFolder(9) --olFolderCalendar
+	--see number of items: calendar:GetDefaultFolder(9).Items.Count
+	outputfile1=io.open("C:\\Temp\\outlook_calendar.txt","w")
+	outputfile1:write("Start;End;Subject\n")
+	for i=1,calendar:GetDefaultFolder(9).Items.Count do
+		outputfile1:write(calendar:GetDefaultFolder(9).Items(i).Start .. ";" .. tostring(calendar:GetDefaultFolder(9).Items(i).End) .. ";" .. tostring(calendar:GetDefaultFolder(9).Items(i).Subject) .. "\n")
+	end --for i=1,calendar:GetDefaultFolder(9).Items.Count do
+	outputfile1:close()
+	--quit Outlook
+	outlook:Quit()
+	os.execute('start "d" C:\\Lua\\iupluascripter54.exe "C:\\Temp\\outlook_calendar.txt"')
+end --function button_get_outlook_calendar:flat_action()
+
+--6.5.2 button for showing calendar and history tree
 button_calendar_history=iup.flatbutton{title="Kalender und Chronik \nanzeigen", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_calendar_history:flat_action()
 	--table for weekdays in local language
@@ -788,6 +809,30 @@ function button_calendar_history:flat_action()
 	for i=0,textbox0.value do
 	    calendarTable[#calendarTable+1]=os.date("%Y%m%d",os.time{year=os.date("%Y"),month=os.date("%m"),day=os.date("%d")+i}) .. ""
 	end --for i=tonumber(os.date("%Y%m%d")), dateEnd do
+	--get calendar dates from Outlook into the calendar as trees
+	dayTable={}
+	for line in io.lines("C:\\Temp\\outlook_calendar.txt") do
+		line=line:gsub("\u{00DC}","Ü"):gsub("\u{00FC}","ü"):gsub("\u{00C4}","Ä"):gsub("\u{00E4}","ä"):gsub("\u{00D6}","Ö"):gsub("\u{00F6}","ö"):gsub("\u{00DF}","ß"):gsub("\u{0022}",'"')
+		line=string.escape_forbidden_char(line)
+		local dayStart,monthStart,yearStart,hourStart,minuteStart,dateEnd,subjectText=line:match("(%d%d)%.(%d%d)%.(%d%d%d%d) (%d%d):(%d%d)[^;]*;([^;]*):%d%d[^;]*;([^;]*)")
+		if dayStart and monthStart and yearStart and dateEnd and subjectText then
+			--print(line)
+			if dayTable[yearStart..monthStart..dayStart] then
+				if dayTable[yearStart..monthStart..dayStart] < '"' .. dayStart .. "." .. monthStart .. "." .. yearStart .. ": " .. hourStart .. ":" .. minuteStart .. " bis " .. dateEnd .. " " .. subjectText .. '",' then
+					dayTable[yearStart..monthStart..dayStart]=dayTable[yearStart..monthStart..dayStart] ..  '"' .. dayStart .. "." .. monthStart .. "." .. yearStart .. ": " .. hourStart .. ":" .. minuteStart .. " bis " .. dateEnd .. " " .. subjectText .. '",'
+				else
+					dayTable[yearStart..monthStart..dayStart]= '"' .. dayStart .. "." .. monthStart .. "." .. yearStart .. ": " .. hourStart .. ":" .. minuteStart .. " bis " .. dateEnd .. " " .. subjectText .. '",' .. dayTable[yearStart..monthStart..dayStart]
+				end
+			else
+				dayTable[yearStart..monthStart..dayStart]= '"' .. dayStart .. "." .. monthStart .. "." .. yearStart .. ": " .. hourStart .. ":" .. minuteStart .. " bis " .. dateEnd .. " " .. subjectText .. '",'
+				--print(dayStart,dateEnd,subjectText)
+			end --if dayTable[yearStart..monthStart..dayStart] then
+		end --if dayStart and monthStart and yearStart and dateEnd and subjectText then
+	end --for line in io.lines("C:\\Temp\\outlook_calendar.txt") do
+	for k,v in pairs(dayTable) do
+		calendarTable[#calendarTable+1]= k .. "_" .. '{branchname="Outlook",' .. v .. '}'
+	end
+	--get leafs of tree as dates into the calendar
 	for i,v in pairs(DBTable) do
 	    --search for leafs with date
 	    for field in v:gmatch(',("[^"]*")') do
@@ -801,6 +846,7 @@ function button_calendar_history:flat_action()
 		end -- if field:match("%d+%.%d+%.%d+")
 	    end --for field in test:gmatch(',"[^"]*"') do
 	end --for i,v in pairs(DBTable) do
+	--get branches of tree as dates into the calendar
 	for i,v in pairs(DBTable) do
 	    --search for branches with date
 	    m=0
@@ -893,7 +939,7 @@ function button_calendar_history:flat_action()
 end --function button_calendar_history:flat_action()
 
 --6.6 button for replacing in tree
-button_load_tree=iup.flatbutton{title="Baum \nladen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_load_tree=iup.flatbutton{title="Baum \nladen", size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_load_tree:flat_action()
 	print("#DBTable" .. #DBTable)
 	if math.tointeger(tonumber(textbox0.value))<=#DBTable then
@@ -943,7 +989,7 @@ function button_new_tree:flat_action()
 end --function button_new_tree:flat_action()
 
 --6.8 button for organising ticks in tree
-button_ticks_organise=iup.flatbutton{title="Häkchen \nverwalten", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_ticks_organise=iup.flatbutton{title="Häkchen \nverwalten", size="65x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_ticks_organise:flat_action()
 	i=tree.value
 	prioTable={}
@@ -1046,7 +1092,7 @@ function button_ticks_organise:flat_action()
 end --function button_ticks_organise:flat_action()
 
 --6.9 button for deleting tree
-button_delete_tree=iup.flatbutton{title="Baum \nlöschen", size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_delete_tree=iup.flatbutton{title="Baum \nlöschen", size="45x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete_tree:flat_action()
 	LoeschAlarm=iup.Alarm("Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Soll der Baum " .. tonumber(textbox0.value) .. " wirklich gelöscht werden?","Löschen","Nicht Löschen")
 	if LoeschAlarm==1 then
@@ -1251,6 +1297,7 @@ for line in io.lines(textbox1.value) do
 		codeFlag="codeAfterText"
 	end --if line:match("} %-%-DBTable=") then
 end --for line in io.lines(textbox1.value) do
+--test with: print(dataPartText)
 
 --7.3 load tree from file
 if _VERSION=='Lua 5.1' then
@@ -1340,6 +1387,7 @@ maindlg = iup.dialog{
 			button_ticks_organise,
 			button_save_ticks,
 			iup.label{size="5x",},
+			button_get_outlook_calendar,
 			button_delete_tree,
 			button_logo2,
 		},
