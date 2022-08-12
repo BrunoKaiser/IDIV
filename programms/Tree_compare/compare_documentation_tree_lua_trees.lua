@@ -862,7 +862,7 @@ function button_put_in_compare_tree:flat_action()
 	--mark the tree in blue for nodes from tree 1
 	for i=0,tree.totalchildcount0 do
 		if file2existsTable[tree['TITLE' .. i]] then
-			tree["color" .. i]=color_grey_bpc
+			tree["color" .. i]=color_grey
 		else
 			tree["color" .. i]="0 0 250"
 		end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
