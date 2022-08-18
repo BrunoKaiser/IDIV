@@ -1,7 +1,7 @@
 --This script is a simple documentation of a tree in a Lua table
 
-path_documentation_tree="C:\\Tree\\SQLtoCSVforLua\\SQLtoCSVforLua_dependencies_tree.lua"
-
+path_documentation_tree=arg[1] or "C:\\Tree\\SQLtoCSVforLua\\SQLtoCSVforLua_dependencies_tree.lua"
+print(arg[0],arg[1])
 
 --1. basic data
 
@@ -419,11 +419,47 @@ function button_logo:action()
 	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
 end --function button_logo:flat_action()
 
---6.2 button for saving tree
+--6.2.1 button for saving tree
 button_save_lua_table=iup.flatbutton{title="Baum als Text speichern \n(Strg+P)", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_save_lua_table:flat_action()
 		printtree()
 end --function button_save_lua_table:flat_action()
+
+--6.2.2 button for exporting tree to csv
+button_export_tree_to_csv=iup.flatbutton{title="Baum als CSV speichern", size="95x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_export_tree_to_csv:flat_action()
+	numberColumnsTotal=0
+	local pathTable={}
+	for i=1,tree.count-1 do
+		iParent=tree["PARENT" .. i]
+		--print(iParent)
+		pathTable[i]=tree['title' .. iParent] .. ";" .. tree['title' .. i]
+		numberColumns=2
+		while true do
+			if tree['PARENT' .. iParent]==nil then break end
+			numberColumns=numberColumns+1
+			iParent=tree["PARENT" .. iParent]
+			--test with: print(iParent)
+			pathTable[i]=tree['title' .. iParent] .. ";" .. pathTable[i]
+		end --while true do
+		if numberColumns>numberColumnsTotal then numberColumnsTotal=numberColumns end
+	end --for i=0,tree.count-1 do
+	--open a filedialog
+	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
+	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
+	if filedlg2.status=="1" or filedlg2.status=="0" then
+		local outputfile=io.output(filedlg2.value) --setting the outputfile
+			for i=1,numberColumnsTotal-1 do outputfile:write("Field" .. i .. ";") end
+			outputfile:write("Field" .. numberColumnsTotal .. "\n")
+			for k,v in pairs(pathTable) do
+				outputfile:write(v .. "\n")
+			end --for k,v in pairs(pathTable) do
+		outputfile:close() --close the outputfile
+	else --no outputfile was choosen
+		iup.Message("Schließen","Keine Datei ausgewählt")
+		iup.NextField(maindlg)
+	end --if filedlg2.status=="1" or filedlg2.status=="0" then
+end --function button_export_tree_to_csv:flat_action()
 
 --6.3 button for search in tree, tree2 and tree3
 button_search=iup.flatbutton{title="Suchen\n(Strg+F)", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
@@ -527,6 +563,7 @@ maindlg = iup.dialog{
 		iup.hbox{
 			button_logo,
 			button_save_lua_table,
+			button_export_tree_to_csv,
 			button_search,
 			button_expand_collapse_dialog,
 			button_alphabetic_sort,
