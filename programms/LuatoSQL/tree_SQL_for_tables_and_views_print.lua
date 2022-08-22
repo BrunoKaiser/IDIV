@@ -36,9 +36,7 @@ Tree={branchname="Datenbank",
                 },
             },
             {branchname="Ortstatistik",
-
                 {branchname="Adressen",
-
                     "PLZ || Ort AS PLZOrt",
                     "count(*) AS AnzahlAdressen",
                 },
