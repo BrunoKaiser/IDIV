@@ -43,6 +43,7 @@ for i=0,rs1.Count-1 do
 			:gsub("UPDATE","~UPDATE")
 			:gsub("DELETE","~DELETE")
 			:gsub("SET","~SET")
+			:gsub("FROM %(","~FROM ")
 			:gsub("FROM","~FROM")
 			:gsub("INNER JOIN","~INNER JOIN")
 			:gsub("RIGHT JOIN","~RIGHT JOIN")
