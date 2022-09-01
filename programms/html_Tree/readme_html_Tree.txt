@@ -106,3 +106,6 @@ This html file contains a programm with little differences in the functionality 
 
 This html-file converts trees written with tabulators in trees as a Lua table. The input and output is in text areas.
 
+13. tree_html_details_summary.lua
+
+This script produces an output html with details and summary tags to build a tree.
