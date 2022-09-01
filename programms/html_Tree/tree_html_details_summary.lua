@@ -51,11 +51,19 @@ function recursiveReadTree(TreeTable)
     elseif levelNumber==2 then
         print("<h3>" .. TreeTable.branchname .. "</h3>")
     elseif levelNumber>2 then
+        local y=""
+        if TreeTable.branchname=="Excel" then
+            y =";background-color:LimeGreen"
+        elseif TreeTable.branchname=="Access" then
+            y =";background-color:IndianRed"
+        elseif TreeTable.branchname=="Notepad++" then
+            y =";background-color:GreenYellow"
+        end --if TreeTable=="Excel" then
         local x
         if #TreeTable>0 then
-            x='<details><summary style="margin-left: ' .. (levelNumber-2)*2 .. 'em">'
+            x='<details><summary style="margin-left: ' .. (levelNumber-2)*2 .. 'em' .. y .. '">'
         else
-            x='<summary style="margin-left: ' .. (levelNumber-2)*2+1 .. 'em">'
+            x='<summary style="margin-left: ' .. (levelNumber-2)*2+1 .. 'em' .. y .. '">'
         end --if #TreeTable>0 then
         print( x .. TreeTable.branchname .. "</summary>")
     else
@@ -70,10 +78,18 @@ function recursiveReadTree(TreeTable)
             levelNumber=levelNumber+1
             levelTable[nodeNumber]=levelNumber
             --print(nodeNumber,levelNumber,v)
+            local y=""
+            if v=="Excel" then
+                y =";background-color:LimeGreen"
+            elseif v=="Access" then
+                y =";background-color:IndianRed"
+            elseif v=="Notepad++" then
+                y =";background-color:GreenYellow"
+            end --if TreeTable=="Excel" then
             if levelNumber>2 then
-                print('<p style="margin-left: ' .. (levelNumber-2)*2 .. 'em">' .. v .. "</p>")
+                print('<p style="margin-left: ' .. (levelNumber-2)*2 .. 'em' .. y .. '">' .. v .. "</p>")
             else
-                print('<p>' .. v .. "</p>")
+                print('<p style="margin-left: 0em' .. y .. '">' .. v .. "</p>")
             end --if levelNumber>2 then
         end --if type(v)=="table" then
         levelNumber=levelNumber-1
