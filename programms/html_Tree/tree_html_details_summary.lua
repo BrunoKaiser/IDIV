@@ -83,8 +83,10 @@ function recursiveReadTree(TreeTable)
         levelNumber=levelNumber-1
         --test with: print(levelNumber)
     end --for i,v in ipairs(TreeTable) do
-    print("</details><!-- " .. TreeTable.branchname .. "-->")
-    print("")
+    if #TreeTable>0 then
+        print("</details><!-- " .. TreeTable.branchname .. "-->")
+        print("")
+    end --if #TreeTable>0
 end --function recursiveReadTree()
 
 --3. apply the recursive function
