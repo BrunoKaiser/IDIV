@@ -10,4 +10,8 @@ Script for Linux system.
 
 3. CSVtoLua_Windows.lua
 
-Script forWindows system.
+Script for Windows system.
+
+4. csvToTree.lua
+
+This script converts csv parts in a text to tree with tabs
