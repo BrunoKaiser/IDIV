@@ -1017,7 +1017,7 @@ function button_export_tree_to_csv:flat_action()
 	--filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
 	--filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	--if filedlg2.status=="1" or filedlg2.status=="0" then
-		local outputfile=io.output("C:\\Temp\\Sparkassenberatung_Berechtigungen_Tree.txt") --setting the outputfile
+		local outputfile=io.output("C:\\Temp\\CSV_Tree.txt") --setting the outputfile
 			for i=1,numberColumnsTotal-1 do outputfile:write("Field" .. i .. ";") end
 			outputfile:write("Field" .. numberColumnsTotal .. "\n")
 			for k,v in pairs(pathTable) do
