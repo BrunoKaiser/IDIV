@@ -31,7 +31,16 @@ LinkTable["Field1"]=tostring(GoalTable[2]) --Ort
 LinkTable["Field2"]="Strasse"
 LinkTable["Field3"]=tostring(GoalTable[1]) --"Name"
 
---3. treat csv file
+--3. function for treatment of nil values
+function tostringNil(aText)
+    if tostring(aText)=="nil" then
+        return "" --can be "NULL"
+    else
+        return tostring(aText)
+    end --if tostring(aText)=="nil" then
+end --function tostringNil(aText)
+
+--4. treat csv file
 rowNumber=0
 for line in (inputText.."\n"):gmatch("([^\n]*)\n") do
     rowNumber=rowNumber+1
@@ -47,31 +56,31 @@ for line in (inputText.."\n"):gmatch("([^\n]*)\n") do
         if firstLine=="YES" then
             --print titles
             for i=1,#GoalTable-1 do
-                outputText=outputText .. tostring(GoalTable[i]) .. ";"
+                outputText=outputText .. tostringNil(GoalTable[i]) .. ";"
             end --for i=1,#GoalTable-1 do
-            outputText=outputText .. tostring(GoalTable[#GoalTable]) -- .. ";"
+            outputText=outputText .. tostringNil(GoalTable[#GoalTable]) -- .. ";"
             print(outputText)
         elseif ColTable[GoalTable[1]] then
             --print titles
             for i=1,#GoalTable-1 do
-                outputText=outputText .. tostring(GoalTable[i]) .. ";"
+                outputText=outputText .. tostringNil(GoalTable[i]) .. ";"
             end --for i=1,#GoalTable-1 do
-            outputText=outputText .. tostring(GoalTable[#GoalTable]) -- .. ";"
+            outputText=outputText .. tostringNil(GoalTable[#GoalTable]) -- .. ";"
             print(outputText)
             --print first row data
             outputText=""
             for i=1,#GoalTable-1 do
-                outputText=outputText .. tostring(ColTable[GoalTable[i]]) .. ";"
+                outputText=outputText .. tostringNil(ColTable[GoalTable[i]]) .. ";"
             end --for i=1,#GoalTable-1 do
-            outputText=outputText .. tostring(ColTable[GoalTable[#GoalTable]]) -- .. ";"
+            outputText=outputText .. tostringNil(ColTable[GoalTable[#GoalTable]]) -- .. ";"
             print(outputText)
         end --if firstLine=="YES" then
     elseif ColTable[GoalTable[1]] then
         --print data
         for i=1,#GoalTable-1 do
-            outputText=outputText .. tostring(ColTable[GoalTable[i]]) .. ";"
+            outputText=outputText .. tostringNil(ColTable[GoalTable[i]]) .. ";"
         end --for i=1,#GoalTable-1 do
-        outputText=outputText .. tostring(ColTable[GoalTable[#GoalTable]]) -- .. ";"
+        outputText=outputText .. tostringNil(ColTable[GoalTable[#GoalTable]]) -- .. ";"
         print(outputText)
     end --if ColTable["Name"] then
 end --for line in (inputText.."\n"):gmatch("([^\n]*)\n") do
