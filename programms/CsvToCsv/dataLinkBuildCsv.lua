@@ -7,22 +7,29 @@ Hinterobertal;Dorfweg 2;Mustermann
 ]]
 
 --1.1 first line of csv file as titles
+firstLine="No"
 textTitles=inputText:match("([^\n]*)\n")
 FieldTable={} --{"Field1","Field2","Field3"}
+fieldNumber=0
 for field in (textTitles .. ";"):gmatch("([^;]*);") do
-    FieldTable[#FieldTable+1]=field
+    fieldNumber=fieldNumber+1
+    if firstLine=="YES" then
+        FieldTable[#FieldTable+1]=field
+    else
+        FieldTable[#FieldTable+1]="Field" .. fieldNumber
+    end --if firstLine=="YES" then
 end --for field in (textTitles .. ";"):gmatch("([^;]*);") do
 
 --2. goal and link definition
 --2.1 goal definition
-GoalTable={"Name","Ort","Strasse","Test"}
+GoalTable={"Name","Vorname","OE_Schluessel","Test"}
 
 --2.2 link definition
 LinkTable={}
-LinkTable["Feld1"]=tostring(GoalTable[2]) --Ort
+LinkTable["Field1"]=tostring(GoalTable[2]) --Ort
 --LinkTable["Feld2"]=tostring(GoalTable[3]) --"Strasse"
-LinkTable["Feld2"]="Strasse"
-LinkTable["Feld3"]=tostring(GoalTable[1]) --"Name"
+LinkTable["Field2"]="Strasse"
+LinkTable["Field3"]=tostring(GoalTable[1]) --"Name"
 
 --3. treat csv file
 rowNumber=0
@@ -37,12 +44,30 @@ for line in (inputText.."\n"):gmatch("([^\n]*)\n") do
     --print output
     local outputText=""
     if rowNumber==1 then
-        for i=1,#GoalTable-1 do
-            outputText=outputText .. tostring(GoalTable[i]) .. ";"
-        end --for i=1,#GoalTable-1 do
-        outputText=outputText .. tostring(GoalTable[#GoalTable]) -- .. ";"
-        print(outputText)
+        if firstLine=="YES" then
+            --print titles
+            for i=1,#GoalTable-1 do
+                outputText=outputText .. tostring(GoalTable[i]) .. ";"
+            end --for i=1,#GoalTable-1 do
+            outputText=outputText .. tostring(GoalTable[#GoalTable]) -- .. ";"
+            print(outputText)
+        elseif ColTable[GoalTable[1]] then
+            --print titles
+            for i=1,#GoalTable-1 do
+                outputText=outputText .. tostring(GoalTable[i]) .. ";"
+            end --for i=1,#GoalTable-1 do
+            outputText=outputText .. tostring(GoalTable[#GoalTable]) -- .. ";"
+            print(outputText)
+            --print first row data
+            outputText=""
+            for i=1,#GoalTable-1 do
+                outputText=outputText .. tostring(ColTable[GoalTable[i]]) .. ";"
+            end --for i=1,#GoalTable-1 do
+            outputText=outputText .. tostring(ColTable[GoalTable[#GoalTable]]) -- .. ";"
+            print(outputText)
+        end --if firstLine=="YES" then
     elseif ColTable[GoalTable[1]] then
+        --print data
         for i=1,#GoalTable-1 do
             outputText=outputText .. tostring(ColTable[GoalTable[i]]) .. ";"
         end --for i=1,#GoalTable-1 do
