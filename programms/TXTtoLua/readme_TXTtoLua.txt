@@ -30,3 +30,7 @@ This script converts a text with brackets, especially for SQL statements, in a L
 
 This script converts a text with brackets and semicolons, especially for excel formulas, in a Lua tree.
 
+5. TXTTabulatorToLuaWithLeafs.lua
+
+This script converts a tabulator tree in a text file in a Lua tree with leafs.
+
