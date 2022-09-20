@@ -39,19 +39,26 @@ nodeNumber=-1
 levelTable={}
 levelNumber=-1
 
---2. recursive function to read the Lua tree and print SQL statements
+--2.1 function to show results or put them in a file
+printOut=print
+function printOut(a)
+	outputFile:write(a .. "\n")
+end --function printOut(a)
+outputFile=io.open("C:\\Temp\\SQLtoCSVforLua_List.html","w")
+
+--2.2 recursive function to read the Lua tree and printOut SQL statements
 function recursiveReadTree(TreeTable)
     nodeNumber=nodeNumber+1
     levelNumber=levelNumber+1
-    --print(nodeNumber,levelNumber,TreeTable.branchname)
+    --printOut(nodeNumber,levelNumber,TreeTable.branchname)
     levelTable[nodeNumber]=levelNumber
     --write html tags
     if levelNumber==0 then
-        print("<h1>" .. TreeTable.branchname .. "</h1>")
+        printOut("<h1>" .. TreeTable.branchname .. "</h1>")
     elseif levelNumber==1 then
-        print("<h2>" .. TreeTable.branchname .. "</h2>")
+        printOut("<h2>" .. TreeTable.branchname .. "</h2>")
     elseif levelNumber==2 then
-        print("<h3>" .. TreeTable.branchname .. "</h3>")
+        printOut("<h3>" .. TreeTable.branchname .. "</h3>")
     elseif levelNumber>2 then
         local x
         if #TreeTable>0 and TreeTable.state=="COLLAPSED" then
@@ -61,9 +68,9 @@ function recursiveReadTree(TreeTable)
         else
             x='<summary style="margin-left: ' .. (levelNumber-2)*2+1 .. 'em">'
         end --if #TreeTable>0 then
-        print( x .. TreeTable.branchname .. "</summary>")
+        printOut( x .. TreeTable.branchname .. "</summary>")
     else
-        print(TreeTable.branchname)
+        printOut(TreeTable.branchname)
     end --if levelNumber==0 then
     --read table indices
     for i,v in ipairs(TreeTable) do
@@ -73,23 +80,25 @@ function recursiveReadTree(TreeTable)
             nodeNumber=nodeNumber+1
             levelNumber=levelNumber+1
             levelTable[nodeNumber]=levelNumber
-            --print(nodeNumber,levelNumber,v)
+            --printOut(nodeNumber,levelNumber,v)
             if levelNumber>2 then
-                print('<p style="margin-left: ' .. (levelNumber-2)*2 .. 'em">' .. v .. "</p>")
+                printOut('<p style="margin-left: ' .. (levelNumber-2)*2 .. 'em">' .. v .. "</p>")
             else
-                print('<p>' .. v .. "</p>")
+                printOut('<p>' .. v .. "</p>")
             end --if levelNumber>2 then
         end --if type(v)=="table" then
         levelNumber=levelNumber-1
-        --test with: print(levelNumber)
+        --test with: printOut(levelNumber)
     end --for i,v in ipairs(TreeTable) do
-    if #TreeTable>0 then
-        print("</details><!-- " .. TreeTable.branchname .. "-->")
-        print("")
-    end --if #TreeTable>0
+    if levelNumber>2 and #TreeTable>0 then
+        printOut("</details><!-- " .. TreeTable.branchname .. "-->")
+        printOut("")
+    end --if levelNumber>2 and #TreeTable>0 then
+    printOut("")
 end --function recursiveReadTree()
 
 --3. apply the recursive function
 recursiveReadTree(Tree)
 
-
+--4. close output file
+outputFile:close()
