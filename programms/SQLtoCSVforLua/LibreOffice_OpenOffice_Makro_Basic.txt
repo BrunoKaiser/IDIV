@@ -1,0 +1,47 @@
+
+
+REM  *****  BASIC  *****
+
+Sub Main
+'Chr(13) ist ein Zeilenwechsel
+'CASE WHEN 1<1 THEN '' END in SQL
+'Von Calc die markierte Tabelle nach Base mit der Maus ziehen. Dann wird man abgefragt: die Daten anzufügen oder zu überschreiben
+DatabaseAllNames
+End Sub 'Sub Main
+
+function PrintOut(a)
+Open "C:\Temp\test.txt" For Output As #1
+Print #1, a
+Close #1
+End function 'function PrintOut(a)
+
+'Alle Datenbanknamen auflisten
+Sub DatabaseAllNames
+Dim DatabaseContext As Object
+Dim DatabaseNames
+Dim I As Integer
+Dim DatabaseNamesText
+
+DatabaseNamesText="" '"Nur angemeldete Datenbanken"
+'Database connection
+DatabaseContext=CreateUnoService("com.sun.star.sdb.DatabaseContext")
+DatabaseNames=DatabaseContext.getElementNames()
+For I = 0 To UBound(DatabaseNames())
+	If DatabaseNames(I)<>"Bibliography" And _
+		DatabaseNames(I)<>"Test3" Then
+		'DatabaseNamesText = DatabaseNamesText & DatabaseNames(I) & Chr(13)
+		'MsgBox(DatabaseNames(I))
+		DB=DatabaseContext.getByName(DatabaseNames(I))
+		Conn=DB.getConnection("","") 'user name, password, HSQL default blank
+		'DatabaseNamesText=DatabaseNamesText & DB.Name & DB.URL & Chr(13)
+		QueryDefinitions=DB.getQueryDefinitions()
+		For J = 0 To QueryDefinitions.Count() - 1
+			QueryDefinition = QueryDefinitions(J)
+			DatabaseNamesText=DatabaseNamesText & "Name: '" & QueryDefinition.Name & "'" & Chr(13) & Chr(13) & QueryDefinition.Command & ";" & Chr(13) & Chr(13) & Chr(13)
+		Next J 'For I = 0 To QueryDefinitions.Count() - 1
+		Conn.close()
+	End If
+Next I 'For I = 0 To UBound(DatabaseNames())
+MsgBox("Fertig")
+PrintOut(DatabaseNamesText)
+End Sub 'Sub Text
