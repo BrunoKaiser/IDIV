@@ -19,3 +19,7 @@ The script corresponds to the script written for Access part 3. and 4. . Here a 
 4.  SQLtoCSVforLua_SQL_List.txt
 
 Test data for the script SQLtoCSVforLua_SQL_List.lua.
+
+5. LibreOffice_OpenOffice_Makro_Basic.txt
+
+This macro text file contains a macro in LibreOffice or Open Office Basic to write the names of views or queries and SQL statements from all registred databases or a subset of them.
