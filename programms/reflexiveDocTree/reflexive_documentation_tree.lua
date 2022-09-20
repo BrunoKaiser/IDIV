@@ -999,6 +999,8 @@ button_export_tree_to_csv=iup.flatbutton{title="Baum als CSV speichern", size="9
 function button_export_tree_to_csv:flat_action()
 	numberColumnsTotal=0
 	local pathTable={}
+	local pathToLeafTable={}
+	local leafNumber=0
 	for i=1,tree.count-1 do
 		iParent=tree["PARENT" .. i]
 		--print(iParent)
@@ -1011,18 +1013,23 @@ function button_export_tree_to_csv:flat_action()
 			--test with: print(iParent)
 			pathTable[i]=tree['title' .. iParent] .. ";" .. pathTable[i]
 		end --while true do
+		if tree['totalchildcount' .. i]=="0" then
+			leafNumber=leafNumber+1
+			pathToLeafTable[leafNumber]=pathTable[i]
+		end --if tree['totalchildcount']=="0" then
 		if numberColumns>numberColumnsTotal then numberColumnsTotal=numberColumns end
 	end --for i=0,tree.count-1 do
 	--open a filedialog
 	--filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
 	--filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	--if filedlg2.status=="1" or filedlg2.status=="0" then
-		local outputfile=io.output("C:\\Temp\\CSV_Tree.txt") --setting the outputfile
-			for i=1,numberColumnsTotal-1 do outputfile:write("Field" .. i .. ";") end
-			outputfile:write("Field" .. numberColumnsTotal .. "\n")
-			for k,v in pairs(pathTable) do
-				outputfile:write(v .. "\n")
-			end --for k,v in pairs(pathTable) do
+		local outputfile=io.output("C:\\Temp\\CSV_Tree.txt") --setting the outputfile (can be also filedlg2.value)
+		for i=1,numberColumnsTotal-1 do outputfile:write("Field" .. i .. ";") end
+		outputfile:write("Field" .. numberColumnsTotal .. "\n")
+		for k,v in pairs(pathToLeafTable) do --all paths: pathTable
+			local _,numberDelimiter=v:gsub(";","")
+			outputfile:write(v .. string.rep(";",math.max(numberColumnsTotal-numberDelimiter-1,0)) .. "\n")
+		end --for k,v in pairs(pathTable) do
 		outputfile:close() --close the outputfile
 	--else --no outputfile was choosen
 	--	iup.Message("Schließen","Keine Datei ausgewählt")
@@ -1110,6 +1117,9 @@ function tree:k_any(c)
 	end --if c == iup.K_DEL then
 end --function tree:k_any(c)
 
+--7.2 individual frame ----
+--7.2 individual frame end ----
+
 --7.2.1 write locking file if it does not exist
 if file_exists(path .. "\\" .. thisfilename:gsub("%.lua$",".lualock")) then
 	fileLocked="YES"
@@ -1141,6 +1151,7 @@ if fileLocked=="YES" then
 			
 			iup.hbox{
 				iup.frame{title="Manuelle Zuordnung als Baum",tree,},
+				individualFrame,
 				},
 
 		},
@@ -1171,6 +1182,7 @@ else
 			
 			iup.hbox{
 				iup.frame{title="Manuelle Zuordnung als Baum",tree,},
+				individualFrame,
 				},
 
 		},
@@ -1183,7 +1195,7 @@ else
 end --if fileLocked=="YES" then
 
 --7.2.1 show the dialog
-maindlg:show()
+maindlg:showxy(iup.LEFT,iup.CENTER)
 
 --7.3 callback on close of the main dialog for saving and unlocking
 function maindlg:close_cb()
