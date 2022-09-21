@@ -509,10 +509,71 @@ if file_exists(path_documentation_tree) then
 		load('actualtree='..tablename)() --now actualtree is the table.
 	end --if _VERSION=='Lua 5.1' then
 end --if file_exists(path_documentation_tree) then
---build tree
+
+--7.1.1 make leafs when branches to long
+maxLength=259 --must be lower than 259 for a IUP tree
+outputTextLeaf='Tree='
+function makeLeafsLinebreakRecursive(TreeTable,outputTreeTable)
+	outputTreeTable.branchname=TreeTable.branchname
+	--whole line: outputTextLeaf=outputTextLeaf .. '{branchname="' .. TreeTable.branchname .. '",\n'
+	--line with word wrap
+	if #TreeTable.branchname>maxLength then
+		--test with: print(#TreeTable.branchname)
+		--collect words from textTable
+		local wordTable={}
+		for textWord in (TreeTable.branchname .. " "):gmatch(".- ") do 
+			wordTable[#wordTable+1]=textWord 
+		end --for textWord in (helpstring .. " "):gmatch(".- ") do 
+		--put word in lines together with up to 259 characters until maxLength
+		local lineTable={}
+		local lineNumber=1
+		lineTable[lineNumber]=""
+		for i2,k2 in ipairs(wordTable) do 
+			if #(lineTable[lineNumber] .. k2) > maxLength then 
+				lineNumber=lineNumber+1
+				lineTable[lineNumber]=k2
+			else
+				lineTable[lineNumber]=lineTable[lineNumber] .. k2
+			end --if #(lineTable[lineNumber] .. k2) > maxLength then --259
+		end --for i2,k2 in ipairs(wordTable) do 
+		--put lines to the tree
+		outputTextLeaf=outputTextLeaf .. '\n{branchname="' .. string.escape_forbidden_char(lineTable[1]:gsub(" $","")) .. '",'
+		--test with: print(#lineTable)
+		for i=2,#lineTable-1 do
+			outputTextLeaf=outputTextLeaf .. '\n"' .. string.escape_forbidden_char(lineTable[i]:gsub(" $","")) .. '",'
+		end --for i=2,#lineTable do
+		outputTextLeaf=outputTextLeaf .. '\n"' .. string.escape_forbidden_char(lineTable[#lineTable]:gsub(" $","")) .. '",'
+	else
+		outputTextLeaf=outputTextLeaf .. '\n{branchname="' .. string.escape_forbidden_char(TreeTable.branchname:gsub(" $","")) .. '",'
+	end --if #helpstring>maxLength then
+	--test with: print("B " .. outputTreeTable.branchname)
+	for i,v in ipairs(TreeTable) do
+		if type(v)=="table" then
+			--test with: print(v.branchname)
+			outputTreeTable[i]={}
+			makeLeafsLinebreakRecursive(v,outputTreeTable[i])
+		else
+			outputTreeTable[i]=v
+			outputTextLeaf=outputTextLeaf .. '"' .. string.escape_forbidden_char(v) .. '",\n'
+		end --if #TreeTable > 0 then
+	end --for i,v in ipairs(TreeTable) do
+	outputTextLeaf=outputTextLeaf .. '},\n'
+end --function makeLeafsLinebreakRecursive(TreeTable,outputTreeTable)
+outputtree_tabtext_script={}
+makeLeafsLinebreakRecursive(actualtree,outputtree_tabtext_script)
+outputTextLeaf=outputTextLeaf:gsub("},\n$","}\n")
+--test with: print(outputTextLeaf)
+if _VERSION=='Lua 5.1' then
+	loadstring(outputTextLeaf)()
+else
+	load(outputTextLeaf)() --now Tree is the table.
+end --if _VERSION=='Lua 5.1' then
+--7.1.1 make leafs when branches to long end
+
+--7.1.2 build tree
 tree=iup.tree{
 map_cb=function(self)
-self:AddNodes(actualtree)
+self:AddNodes(Tree) --without leaf making: (actualtree)
 end, --function(self)
 SIZE="400x200",
 showrename="YES",--F2 key active
