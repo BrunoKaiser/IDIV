@@ -538,6 +538,7 @@ function makeLeafsLinebreakRecursive(TreeTable,outputTreeTable)
 		end --for i2,k2 in ipairs(wordTable) do 
 		--put lines to the tree
 		outputTextLeaf=outputTextLeaf .. '\n{branchname="' .. string.escape_forbidden_char(lineTable[1]:gsub(" $","")) .. '",'
+		if TreeTable.state then outputTextLeaf=outputTextLeaf .. ' state="' .. TreeTable.state .. '",' end
 		--test with: print(#lineTable)
 		for i=2,#lineTable-1 do
 			outputTextLeaf=outputTextLeaf .. '\n"' .. string.escape_forbidden_char(lineTable[i]:gsub(" $","")) .. '",'
@@ -545,6 +546,7 @@ function makeLeafsLinebreakRecursive(TreeTable,outputTreeTable)
 		outputTextLeaf=outputTextLeaf .. '\n"' .. string.escape_forbidden_char(lineTable[#lineTable]:gsub(" $","")) .. '",'
 	else
 		outputTextLeaf=outputTextLeaf .. '\n{branchname="' .. string.escape_forbidden_char(TreeTable.branchname:gsub(" $","")) .. '",'
+		if TreeTable.state then outputTextLeaf=outputTextLeaf .. ' state="' .. TreeTable.state .. '",' end
 	end --if #helpstring>maxLength then
 	--test with: print("B " .. outputTreeTable.branchname)
 	for i,v in ipairs(TreeTable) do
