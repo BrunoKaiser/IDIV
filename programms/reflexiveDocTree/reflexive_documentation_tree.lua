@@ -1038,6 +1038,76 @@ function button_export_tree_to_csv:flat_action()
 end --function button_export_tree_to_csv:flat_action()
 
 
+--6.2.2 button for exporting tree to html
+button_tree_to_html=iup.flatbutton{title="Baum als Html speichern", size="105x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+function button_tree_to_html:flat_action()
+	--global data
+	nodeNumber=-1
+	levelTable={}
+	levelNumber=-1
+	--function to show results or put them in a file
+	printOut=print
+	local function printOut(a)
+		outputFile:write(a:gsub("ä","&auml;"):gsub("Ä","&Auml;"):gsub("ö","&ouml;"):gsub("Ö","&Ouml;"):gsub("ü","&uuml;"):gsub("Ü","&Uuml;"):gsub("ß","&szlig;") .. "\n")
+	end --function printOut(a)
+	outputFile=io.open("C:\\Temp\\Html_Tree.html","w")
+	--recursive function to read the Lua tree and printOut SQL statements
+	local function recursiveReadTree(TreeTable)
+	    nodeNumber=nodeNumber+1
+	    levelNumber=levelNumber+1
+	    --printOut(nodeNumber,levelNumber,TreeTable.branchname)
+	    levelTable[nodeNumber]=levelNumber
+	    --write html tags
+	    if levelNumber==0 then
+		printOut("<h1>" .. TreeTable.branchname .. "</h1>")
+	    elseif levelNumber==1 then
+		printOut("<h2>" .. TreeTable.branchname .. "</h2>")
+	    elseif levelNumber==2 then
+		printOut("<h3>" .. TreeTable.branchname .. "</h3>")
+	    elseif levelNumber>2 then
+		local x
+		if #TreeTable>0 and TreeTable.state=="COLLAPSED" then
+		    x='<details><summary style="margin-left: ' .. (levelNumber-2)*2 .. 'em">'
+		elseif #TreeTable>0 then
+		    x='<details open><summary style="margin-left: ' .. (levelNumber-2)*2 .. 'em">'
+		else
+		    x='<summary style="margin-left: ' .. (levelNumber-2)*2+1 .. 'em">'
+		end --if #TreeTable>0 then
+		printOut( x .. TreeTable.branchname .. "</summary>")
+	    else
+		printOut(TreeTable.branchname)
+	    end --if levelNumber==0 then
+	    --read table indices
+	    for i,v in ipairs(TreeTable) do
+		if type(v)=="table" then
+		    recursiveReadTree(v)
+		else
+		    nodeNumber=nodeNumber+1
+		    levelNumber=levelNumber+1
+		    levelTable[nodeNumber]=levelNumber
+		    --printOut(nodeNumber,levelNumber,v)
+		    if levelNumber>2 then
+			printOut('<p style="margin-left: ' .. (levelNumber-2)*2 .. 'em">' .. v .. "</p>")
+		    else
+			printOut('<p>' .. v .. "</p>")
+		    end --if levelNumber>2 then
+		end --if type(v)=="table" then
+		levelNumber=levelNumber-1
+		--test with: printOut(levelNumber)
+	    end --for i,v in ipairs(TreeTable) do
+	    if levelNumber>2 and #TreeTable>0 then
+		printOut("</details><!-- " .. TreeTable.branchname .. "-->")
+		printOut("")
+	    end --if levelNumber>2 and #TreeTable>0 then
+	    printOut("")
+	end --function recursiveReadTree()
+	--apply the recursive function
+	recursiveReadTree(lua_tree_output)
+	--close output file
+	outputFile:close()
+end --function button_tree_to_html:flat_action()
+
+
 --6.3 button for search in tree, tree2 and tree3
 button_search=iup.flatbutton{title="Suchen\n(Strg+F)", size="85x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_search:flat_action()
@@ -1169,6 +1239,7 @@ else
 			iup.hbox{
 				button_logo,
 				button_save_lua_table,
+				button_tree_to_html,
 				button_export_tree_to_csv,
 				button_search,
 				button_expand_collapse_dialog,
