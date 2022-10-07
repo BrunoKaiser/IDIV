@@ -27,3 +27,9 @@ This macro text file contains a macro in LibreOffice or Open Office Basic to wri
 6.1 Excel_VBA_SQL_LuaCOM.lua
 
 This script executes a SQL statement with ADODB.Connection with LuaCOM and writes the SQL statement in a text file
+
+6.2 Excel_VBA_SQL_LuaCOM_functional.lua
+
+This script executes SQL statements with ADODB.Connection with LuaCOM and writes the SQL statements in a text file
+
+
