@@ -10,11 +10,17 @@ Dr. Bruno Kaiser
 
 == Beschreibung
 
-interactive dynamic table of contents
+=== interactive dynamic table of contents
 
-Interaktiv-dynamisches Inhaltsverzeichnis
+The interactive dynamic table of contents is a method useful for personal organisation, business intelligence tools and websites as online shop representations. For business intelligence it helps visualise data flows and build dasboards.
 
-table des matières interactive dynamique
+=== Interaktiv-dynamisches Inhaltsverzeichnis
+
+Das Interaktiv-dynamisches Inhaltsverzeichnis ist eine Methode, die für die persönlichen Organisation, für Business Intelligence Werkzeuge und Internetseiten wie Onliine-Shop-Darstellungen nützlich ist. Für Business Intelligence Werkzeuge unterstützt es bei der Visualisierung von Datenflüssen und Herstellung von Dashboards.
+
+=== table des matières interactive dynamique
+
+La table des matières interactive dynamique est une méthode pour aider l'organisation personnelle, les outils de la business intelligence et les sites internet comme les sites de magazin online. Pour la business intelligence elle aide à représenter les flux de données et des dashboards.
 
 == Installation des IUP-Lua-Frameworks
 
