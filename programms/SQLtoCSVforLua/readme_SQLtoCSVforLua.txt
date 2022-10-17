@@ -32,4 +32,6 @@ This script executes a SQL statement with ADODB.Connection with LuaCOM and write
 
 This script executes SQL statements with ADODB.Connection with LuaCOM and writes the SQL statements in a text file
 
+7. Access_Dokumentierer_treatment.lua
 
+Tis script treats the test file with the Access Dokumentierer and builds a tree with it.
