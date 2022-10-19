@@ -761,13 +761,15 @@ function button_tree1_not_in_tree:flat_action()
 			end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
 		end --for i=tree.totalchildcount0,0,-1 do
 		--mark the tree in blue for nodes from tree 1
-		for i=0,tree.totalchildcount0 do
-			if file2existsTable[tree['TITLE' .. i]] then
-				tree["color" .. i]=color_grey
-			else
-				tree["color" .. i]="0 0 250"
-			end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
-		end --for i=tree.totalchildcount0,0,-1 do
+		if tree.totalchildcount0 then
+			for i=0,tree.totalchildcount0 do
+				if file2existsTable[tree['TITLE' .. i]] then
+					tree["color" .. i]=color_grey
+				else
+					tree["color" .. i]="0 0 250"
+				end --if file1existsTable[tree2['TITLE' .. i]]==nil and tree2['totalchildcount' .. i]=="0" then
+			end --for i=0,tree.totalchildcount0 do
+		end --if tree.totalchildcount0 then
 	end --if file_exists(textbox2.value) then
 end --function button_tree1_not_in_tree:flat_action()
 
