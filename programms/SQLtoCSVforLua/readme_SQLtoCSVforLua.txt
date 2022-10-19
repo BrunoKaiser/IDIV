@@ -32,6 +32,11 @@ This script executes a SQL statement with ADODB.Connection with LuaCOM and write
 
 This script executes SQL statements with ADODB.Connection with LuaCOM and writes the SQL statements in a text file
 
+6.3 Excel_VBA_Makro.txt
+
+This macro builds SQL in Excel, execute them and write data in Excel sheets and write documentation as tree in html files
+
 7. Access_Dokumentierer_treatment.lua
 
 Tis script treats the test file with the Access Dokumentierer and builds a tree with it.
+
