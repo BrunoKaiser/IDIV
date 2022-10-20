@@ -20,7 +20,7 @@ End Sub 'Sub Load_Data()
 Function Load_Data_with_filter(TableString As String, sqlText As Variant, strConnection As Variant)
 'delete data before processing
 Set src0 = ThisWorkbook
-src0.Worksheets(TableString).UsedRange.Clear '"a"
+src0.Worksheets(TableString).UsedRange.Clear 'to delete clear, otherwise omit to append
 'Connecting to the data source
 Set cn = CreateObject("ADODB.Connection")
 cn.Provider = "Microsoft.ACE.OLEDB.12.0"
@@ -57,6 +57,8 @@ For counter = 0 To iColumnNumber - 1
 Next 'For counter = 0 To iColumnNumber - 1
 'produce results
 src0.Worksheets(TableString).Range("A2").CopyFromRecordset rs
+'append results with:
+'src0.Worksheets(TableString).Range("A" & src0.Worksheets(TableString).UsedRange.Rows.Count + 1).CopyFromRecordset rs
 'slow loop as alternative
 'Do While Not rs.EOF
 '    rowNumber = rowNumber + 1
