@@ -4,6 +4,7 @@
 Tree={branchname="Gesamt:12345.35",
     {branchname="Halle 1;0.5",},
     {branchname="Halle 2;0.4",},
+    "Ein Erklärtext",
     {branchname="Gebäude 1",
         {branchname="Gebäude 1.1;",
         },
@@ -17,9 +18,9 @@ function sumPartRecursive(TreeTable)
     local sumPart=1
     local iBlank
     for i,v in ipairs(TreeTable) do
-        if v.branchname:match(";(%d+%.?%d*)") then
+        if v.branchname and v.branchname:match(";(%d+%.?%d*)") then
             sumPart=sumPart-tostring(v.branchname:match(";(%d+%.?%d*)"))
-        else
+        elseif v.branchname then
             v.branchname=v.branchname:gsub(";$","")
             iBlank=i
         end --if v.branchname:match(";(%d+%.?%d*)") then
@@ -41,7 +42,7 @@ function distributeRecursive(TreeTable)
         totalNumber=tonumber(TreeTable.branchname:match(":(%d+%.?%d*)"))
     end --if TreeTable.branchname:match(":%d+%.?%d*")
     for i,v in ipairs(TreeTable) do
-        if v.branchname:match(";(%d+%.?%d*)") then
+        if v.branchname and v.branchname:match(";(%d+%.?%d*)") then
             v.branchname=v.branchname .. ":" .. tostring(v.branchname:match(";(%d+%.?%d*)"))*totalNumber
         end --if v.branchname:match(";(%d+%.?%d*)") then
     end --for i,v in ipairs(TreeTable) do
@@ -56,12 +57,12 @@ end --function distributeRecursive(TreeTable)
 sumPartRecursive(Tree)
 
 --print example
-print(Tree[3].branchname)
-print(Tree[3][1].branchname)
+print(Tree[4].branchname)
+print(Tree[4][1].branchname)
 
 --5. applying distribution of value
 distributeRecursive(Tree)
 
 --print example
-print(Tree[3].branchname)
-print(Tree[3][1].branchname)
+print(Tree[4].branchname)
+print(Tree[4][1].branchname)
