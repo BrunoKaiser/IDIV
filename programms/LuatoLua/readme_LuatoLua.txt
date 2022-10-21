@@ -85,3 +85,9 @@ This script is an example for the passive side of the balance.
 8.3 documentation_tree_balance_indicators.lua
 
 This script is an example for the calculation of balance indicators.
+
+8.4 tree_cost_distribution.lua
+
+This script calculates the parts on each branch and distributes the value on the root node into the tree nodes
+
+
