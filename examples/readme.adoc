@@ -23,6 +23,10 @@ This photo shows a IDIV-papier with highest level under root underlined one time
 
 This photo shows a IDIV-papier with highest level under root underlined two time and the second level underlined twice.
 
+== 1.3 IDIV-Papier_3.png
+
+These photos of part of the tree in a book or bullet journal show a IDIV-papier with nodes without underlying and an arrow at the end of the page and an arrow at the beginning of the next page to show that the tree is written on more than one page.
+
 == 2. arborescence avec des comptes
 
 === 2.1 IDIV_analyse_bilan.lua
