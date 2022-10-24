@@ -13,7 +13,7 @@ Ich danke sehr Johannes Krah für die Unterstützung bei der Programmierung und 
 
 === interactive dynamic table of contents
 
-The interactive dynamic table of contents is a method useful for personal organisation, business intelligence tools and websites as online shop representations. For business intelligence it helps visualise data flows and build dasboards.
+The interactive dynamic table of contents is a method useful for personal organisation, business intelligence tools and websites as online shop representations. For business intelligence it helps visualise data flows and build dashboards.
 
 === Interaktiv-dynamisches Inhaltsverzeichnis
 
