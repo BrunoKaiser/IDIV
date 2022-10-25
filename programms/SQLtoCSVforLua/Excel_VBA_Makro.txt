@@ -1,6 +1,7 @@
 'This macro builds SQL in Excel, execute them and write data in Excel sheets and write documentation as tree in html files
 
 Sub Load_Data_Test()
+Call Dokumentation_Handbuch
 Open ThisWorkbook.Path & "\" & Replace(ThisWorkbook.Name, ".", "_") & "_SQL_Dokumentation_Filter_3.html" For Output As #1
 Print #1, "<h1>SQL-Dokumentation</h1>"
 Print #1, "<h2>" & ThisWorkbook.Path & "\" & ThisWorkbook.Name & "</h1>"
@@ -74,4 +75,78 @@ Set cn = Nothing
 Set rs = Nothing
 End Function 'function Load_Data_with_filter()
 
+
+Sub Dokumentation_Handbuch()
+Set src0 = ThisWorkbook
+
+
+Open ThisWorkbook.Path & "\" & Replace(ThisWorkbook.Name, ".", "_") & "_Handbuch.html" For Output As #1
+Print #1, "<html>"
+Print #1, "<h1>Kurz-Handbuch</h1>"
+Print #1, "<h2>" & ThisWorkbook.Path & "\" & ThisWorkbook.Name & "</h1>"
+
+Print #1, "<h3>Einrichtung</h3>"
+Print #1, "Eine Installation im Sinne einer Software-Systemänderung ist nicht nötig. Es handelt sich um eine Excel-Datei mit Makro."
+
+Print #1, "<h3>Ablauf</h3>"
+Print #1, "<details><summary style=""margin-left: 2em"">Schritte bei der Bearbeitung - Wie muss ich vorgehen?</summary>"
+Print #1, "<p style=""margin-left: 4em"">"
+Print #1, "1. Schritt: desctiption manually"
+Print #1, "</p>"
+Print #1, "<p style=""margin-left: 4em"">"
+Print #1, "2. Schritt: use cell contents in excel file sheet Steurung"
+For counter = 6 To src0.Worksheets("Steuerung").UsedRange.Rows.Count
+    Print #1, "<p style=""margin-left: 6em"">"
+    Print #1, ThisWorkbook.Worksheets("Steuerung").Cells(counter, 4).Value
+    Print #1, "</p>"
+Next 'For counter = 6 To src0.Worksheets("Steuerung").UsedRange.Rows.Count
+Print #1, "</p>"
+Print #1, "</details>"
+
+Print #1, "<h3>Schaltflächen</h3>"
+Print #1, "<p style=""margin-left: 2em"">"
+Print #1, "Es gibt insgesamt " & ThisWorkbook.Worksheets("Steuerung").Shapes.Count & " Schaltfl&auml;chen"
+Print #1, "</p>"
+Print #1, "<details><summary style=""margin-left: 2em"">Beschreibung</summary>"
+Debug.Print ThisWorkbook.Worksheets("Steuerung").Shapes.Count
+For counterShapes = 1 To ThisWorkbook.Worksheets("Steuerung").Shapes.Count
+    Set a = ThisWorkbook.Worksheets("Steuerung").Shapes(counterShapes)
+    Debug.Print a.Name
+    Print #1, "<p style=""margin-left: 4em"">"
+    Print #1, ThisWorkbook.Worksheets("Steuerung").Shapes(counterShapes).TextFrame.Characters.Text
+    Print #1, "</p>"
+Next 'For counterShapes = 1 To ThisWorkbook.Worksheets("Steuerung").Shapes.Count
+Print #1, "</details>"
+
+Print #1, "<h3>Reiter</h3>"
+Print #1, "<p style=""margin-left: 2em"">"
+Print #1, "Es gibt insgesamt " & ThisWorkbook.Worksheets.Count & " Reiter"
+Print #1, "</p>"
+Print #1, "<details><summary style=""margin-left: 2em"">Beschreibung</summary>"
+Debug.Print ThisWorkbook.Worksheets.Count
+For counterSheets = 1 To ThisWorkbook.Worksheets.Count
+    Set a = ThisWorkbook.Worksheets(counterSheets)
+    Debug.Print a.Name
+    Print #1, "<p style=""margin-left: 4em"">"
+    Print #1, ThisWorkbook.Worksheets(counterSheets).Name
+    Print #1, "</p>"
+Next 'For counterShapes = 1 To ThisWorkbook.Worksheets("Steuerung").Shapes.Count
+Print #1, "</details>"
+
+Print #1, "<h3>Inputdaten</h3>"
+Print #1, "<details><summary style=""margin-left: 2em"">Die Inputdaten befinden sich in Excel-Dateien</summary>"
+Print #1, "<details><summary style=""margin-left: 4em"">Inputdata 1</summary>"
+Print #1, "<p style=""margin-left: 6em"">"
+Print #1, "take input data from cell"
+Print #1, "</p>"
+Print #1, "</details>"
+Print #1, "<details><summary style=""margin-left: 4em"">Inputdata 2</summary>"
+Print #1, "<p style=""margin-left: 6em"">"
+Print #1, "take input data from cell"
+Print #1, "</p>"
+Print #1, "</details>"
+Print #1, "</details>"
+
+Print #1, "</html>"
+Close #1
 
