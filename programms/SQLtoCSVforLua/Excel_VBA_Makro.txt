@@ -2,7 +2,7 @@
 
 Sub Load_Data_Test()
 Call Dokumentation_Handbuch
-Open ThisWorkbook.Path & "\" & Replace(ThisWorkbook.Name, ".", "_") & "_SQL_Dokumentation_Filter_3.html" For Output As #1
+Open ThisWorkbook.Path & "\" & Replace(ThisWorkbook.Name, ".", "_") & "_SQL_Dokumentation_Load_Data_Test.html" For Output As #1
 Print #1, "<h1>SQL-Dokumentation</h1>"
 Print #1, "<h2>" & ThisWorkbook.Path & "\" & ThisWorkbook.Name & "</h1>"
 Print #1, "<h3>Sub Load_Data</h3>"
@@ -14,11 +14,11 @@ sqlText = "SELECT [" & ThisWorkbook.Worksheets("Steuerung").Cells(2, 3) & "$].[t
             & " FROM [" & ThisWorkbook.Worksheets("Steuerung").Cells(2, 3) & "$] " _
             & " LEFT JOIN (SELECT * FROM [Excel 12.0 Xml;HDR=Yes;Database=" & ThisWorkbook.Worksheets("Steuerung").Cells(3, 2) & "].[" & ThisWorkbook.Worksheets("Steuerung").Cells(3, 3) & "$]) [a$] " _
             & " ON [" & ThisWorkbook.Worksheets("Steuerung").Cells(2, 3) & "$].[test] = [a$].test ; "
-Load_Data_with_filter "Konten_ges", sqlText, strConnection
+Load_Data_with_filter "Test", sqlText, strConnection, "_SQL_Dokumentation_Load_Data_Test"
 '
 End Sub 'Sub Load_Data()
 
-Function Load_Data_with_filter(TableString As String, sqlText As Variant, strConnection As Variant)
+Function Load_Data_with_filter(TableString As String, sqlText As Variant, strConnection As Variant, outputDokuFile As Variant)
 'delete data before processing
 Set src0 = ThisWorkbook
 src0.Worksheets(TableString).UsedRange.Clear 'to delete clear, otherwise omit to append
