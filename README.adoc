@@ -17,7 +17,7 @@ The interactive dynamic table of contents is a method useful for personal organi
 
 === Interaktiv-dynamisches Inhaltsverzeichnis
 
-Das Interaktiv-dynamisches Inhaltsverzeichnis ist eine Methode, die für die persönlichen Organisation, für Business Intelligence Werkzeuge und Internetseiten wie Online-Shop-Darstellungen nützlich ist. Für Business Intelligence Werkzeuge unterstützt es bei der Visualisierung von Datenflüssen und Herstellung von Dashboards.
+Das Interaktiv-dynamische Inhaltsverzeichnis ist eine Methode, die für die persönlichen Organisation, für Business Intelligence Werkzeuge und Internetseiten wie Online-Shop-Darstellungen nützlich ist. Für Business Intelligence Werkzeuge unterstützt es bei der Visualisierung von Datenflüssen und Herstellung von Dashboards.
 
 === table des matières interactive dynamique
 
