@@ -1,4 +1,4 @@
-This repository contains very simple programms to build a tree by do it yourself methods including batch scripts
+This repository contains very simple programms to build a tree by do it yourself methods including batch scripts and links to access external files or repositories in the explorer.
 
 1.1 Tree_cmd.bat
 
