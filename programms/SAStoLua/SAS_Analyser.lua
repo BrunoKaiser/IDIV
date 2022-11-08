@@ -10,16 +10,28 @@ printOut=print
 function printOut(a)
 	outputFile:write(a .. "\n")
 end --function printOut(a)
+printOut2=print
+function printOut2(a)
+	outputFile2:write(a .. "\n")
+end --function printOut2(a)
 
 --2. contenTable to collect data from SAS programms
 contentTable={}
 contentTable["Rekursion"]={}
+contentTable["Rekursionsende"]={}
 contentTable["Rekursion"]["%INCLUDE"]={}
+contentTable["Rekursionsende"]["%INCLUDE"]={}
 contentTable["Datei"]={}
 contentTable["Variable"]={}
 contentTable["Variable"]["nil"]={}
 contentTable["Variable"]["THEN"]={}
+contentTable["Variable"]["%THEN"]={}
+contentTable["Variable"]["THEN WHERE"]={}
+contentTable["Variable"]["%THEN WHERE"]={}
 contentTable["Variable"]["ELSE"]={}
+contentTable["Variable"]["%ELSE"]={}
+contentTable["Variable"]["ELSEIF"]={}
+contentTable["Variable"]["%ELSEIF"]={}
 contentTable["Variablen"]={}
 contentTable["Variablen"]["By"]={}
 contentTable["Variablen"]["nil"]={}
@@ -37,11 +49,17 @@ contentTable["Variablen"]["HISTOGRAM"]={}
 
 --3. recursive function to seek for informations in SAS programms and in sub programms
 function RecursiveTreatSAS(SASFile)
+	print(SASFile)
 	inputfile=io.open(SASFile) --"C:\\Temp\\SAS_Analyser.sas"
-	text=inputfile:read("*all")
+	text=inputfile:read("*a")
 	inputfile:close()
 	--treat the file
 	for semikolon in (text .. "\n")
+								:gsub("\t"," ")
+								:gsub("/%*[^%*/]*%*/"," ")
+								:gsub("%*[^ ][^;]*;"," ")
+								:gsub("\n%*[^;]*;"," ")
+								:gsub("into ?:","into double dot")
 								:gsub("histogram([^/]*)/","HISTOGRAM%1;/")
 								:gsub("HISTOGRAM([^/]*)/","HISTOGRAM%1;/")
 								:gsub("select ",";SELECT ")
@@ -61,23 +79,47 @@ function RecursiveTreatSAS(SASFile)
 								:gsub("/ ?LABEL",";/ LABEL")
 								:gsub("/ ?chisq",";/CHISQ")
 								:gsub("/ ?CHISQ",";/CHISQ")
-								:gsub("/%*[^%*/]*%*/"," ")
 								:gsub(" +;",";")
+								:gsub("%%else %%if"," ; %%ELSEIF")
+								:gsub("%%ELSE %%IF"," ; %%ELSEIF")
+								:gsub(" %%then where"," ; %%THEN WHERE")
+								:gsub(" %%THEN WHERE"," ; %%THEN WHERE")
+								:gsub(" %%then"," ; %%THEN")
+								:gsub(" %%THEN"," ; %%THEN")
+								:gsub(" then"," ; THEN")
+								:gsub(" THEN"," ; THEN")
 								:gmatch("[^;]*;") do
-		semikolon=semikolon:gsub("\n"," "):gsub("^ +",""):gsub("^\t+",""):gsub(","," ,"):gsub(";"," ;"):gsub(" +"," ")
+		--test with: 
+		print("line: " .. semikolon)
+		--for LuaJ :gsub("\r\n"," ")
+		semikolon=semikolon:gsub("\n"," ")
+							:gsub("^ +","")
+							:gsub("^\t+","")
+							:gsub(","," ,")
+							:gsub(";"," ;")
+							:gsub(" +"," ")
 		if semikolon:lower():match("^%%include") then
-			DateiText=semikolon:match('"([^"]*)"')
-			printOut("Rekursion: " .. semikolon:gsub("INCLUDE","INCLUDE: "):gsub("include","INCLUDE: ") .. ": Datei: " .. DateiText)
-			contentTable["Rekursion"]["%INCLUDE"]=semikolon:gsub("%%INCLUDE ",""):gsub("%%include ","")
-			contentTable["Datei"][DateiText]=true
-			if semikolon:match(":\\") then
-				RecursiveTreatSAS(DateiText)
-			else
-				RecursiveTreatSAS("C:\\Temp\\" .. DateiText)
-			end --if semikolon:match(":\\") then
-			printOut("Rekursionsende: " .. semikolon:gsub("INCLUDE","INCLUDE: "):gsub("include","INCLUDE: ") .. ": Datei: " .. DateiText)
-			contentTable["Rekursion"]["%INCLUDE"]=semikolon:gsub("%%INCLUDE ",""):gsub("%%include ","")
-			contentTable["Datei"][DateiText]=true
+			--take all includes separated by blanks
+			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch("([^ ]*) ") do
+				if field:match('"([^"]*)"') then
+					print("include: " .. field)
+					if field:match(":\\") then
+						DateiText=field:match('"([^"]*)"')
+					else
+						DateiText="C:\\Temp" .. field:match('"([^"]*)"'):gsub("%&sascode%.","")
+					end --if field:match(":\\") then
+					--printOut("Rekursion: " .. semikolon:gsub("INCLUDE","INCLUDE: "):gsub("include","INCLUDE: ") .. ": Datei: " .. DateiText)
+					printOut("Rekursion: " .. DateiText)
+					contentTable["Rekursion"]["%INCLUDE"]=semikolon:gsub("%%INCLUDE ",""):gsub("%%include ","")
+					contentTable["Datei"][DateiText]=true
+					--recursion
+					RecursiveTreatSAS(DateiText)
+					--printOut("Rekursionsende: " .. semikolon:gsub("INCLUDE","INCLUDE: "):gsub("include","INCLUDE: ") .. ": Datei: " .. DateiText)
+					printOut("Rekursionsende: " .. DateiText)
+					contentTable["Rekursionsende"]["%INCLUDE"]=semikolon:gsub("%%INCLUDE ",""):gsub("%%include ","")
+					contentTable["Datei"][DateiText]=true
+				end --if field:match('"([^"]*)"') then
+			end --for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch("([^ ]*) ") do
 		elseif semikolon:lower():match("^proc") then
 			--test with: printOut("Prozedur: " .. semikolon)
 		elseif semikolon:lower():match("^data") or 
@@ -154,20 +196,27 @@ function RecursiveTreatSAS(SASFile)
 			for field in variablenText:gsub(" +"," "):gmatch("([^ ]*) ") do
 				if field:match(":$")==nil and field~="," and field~="=" then
 					contentTable["Variablen"][tostring(variablenText:match("([^:]*):"))][field]=true
-				end --if field:match(":$")==nil then
-			end --for field in variablenText:gmatch("([^ ]*) ") do
-		elseif semikolon:match("=") and semikolon:match("=.*=")==nil then
+				end --if field:match(":$")==nil and field~="," and field~="=" then
+			end --for field in variablenText:gsub(" +"," "):gmatch("([^ ]*) ") do
+		elseif (semikolon:match("=") or
+			semikolon:match(" eq ") or
+			semikolon:match(" ne ") or
+			semikolon:match(" le ") or
+			semikolon:match(" lt ") or
+			semikolon:match(" ge ") or
+			semikolon:match(" gt ") 
+			) and (semikolon:match("if") or semikolon:match("=.*=")==nil ) then
 			local variablenText=semikolon:gsub("else ","ELSE: ")
-											:gsub("ELSE ","ELSE: ")
-											:gsub("then ","THEN: ")
-											:gsub("THEN ","THEN: ")
+							:gsub("ELSE ","ELSE: ")
+							:gsub("then ","THEN: ")
+							:gsub("THEN ","THEN: ")
 			printOut("Variable: " .. variablenText)
-			--print("->" .. variablenText)
+			--test with: print("->" .. variablenText .. "-> " .. tostring(variablenText:match("([^:]*):")) .. " -> " .. tostring(variablenText:match(": ?([^:]*)")))
 			if variablenText:match("([^:]*):") then
 				contentTable["Variable"][variablenText:match("([^:]*):")][variablenText:match(": ?([^:]*)")]=true
 			else
 				contentTable["Variable"]["nil"][variablenText]=true
-			end --if (variablenText:gsub(";"," ;")):match("([^:]*):") then
+			end --if variablenText:match("([^:]*):") then
 		elseif semikolon:match("=") and semikolon:match("=.*=") then
 			--test with: printOut("Liste: " .. semikolon)
 		elseif semikolon:lower()~="run;" and 
@@ -176,8 +225,8 @@ function RecursiveTreatSAS(SASFile)
 		semikolon~="quit;" 
 		then
 			--test with: printOut(semikolon)
-		end --if semikolon:lower():match("^proc") then
-	end --for semikolon in text:gsub("/%*[^%*/]*%*/"," "):gmatch("[^;]*;") do
+		end --if semikolon:lower():match("^%%include") then
+	end --for semikolon in (text .. "\n") etc...
 end --function RecursiveTreatSAS(SASFile)
 
 --4. building a result file with categorisations of data
@@ -218,4 +267,7 @@ end --for k,v in pairs(contentTable) do
 treeText=treeText .. '\n},\n}\n'
 
 --5.2 print result tree in the console
-print(treeText)
+outputFile2=io.open("C:\\Temp\\SAS_Analyser_tree.lua","w")
+printOut2(treeText)
+outputFile2:close()
+
