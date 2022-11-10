@@ -363,11 +363,57 @@ function startcopy:action() --copy node
 	 clipboard.text = tree['title']
 end --function startcopy:action()
 
+--5.1.2 copy node of tree
+startexport_level = iup.item {title = "Export der Ebene als Liste nach Farben"}
+function startexport_level:action()
+	local exportTable={}
+	exportTable["found"]={} --"0 0 250"
+	exportTable["anscestor"]={} --"255 0 0"
+	exportTable["descendant"]={} --"90 195 0"
+	exportTable["not found"]={} --"0 0 0"
+	exportTable["rest"]={} --else
+	levelNode=tree['depth' .. tree.value]
+	--test with: print(levelNode)
+	for i=1,tree.count-1 do 
+	--test with: print(tree['color' .. i])
+		if tree["depth" .. i]==levelNode then
+		--test with: print(tree['title' .. i] .. ": " .. tree['color' .. i])
+			if tree['color' .. i]=="255 0 0" then
+				exportTable["anscestor"][#exportTable["anscestor"]+1]=tree['title' .. i]
+			elseif tree['color' .. i]=="0 0 250" then
+				exportTable["found"][#exportTable["found"]+1]=tree['title' .. i]
+			elseif tree['color' .. i]=="90 195 0" then
+				exportTable["descendant"][#exportTable["descendant"]+1]=tree['title' .. i]
+			elseif tree['color' .. i]=="0 0 0" then
+				exportTable["not found"][#exportTable["not found"]+1]=tree['title' .. i]
+			else
+				exportTable["rest"][#exportTable["rest"]+1]=tree['title' .. i]
+			end --if tree['color' .. i]=="255 0 0" then
+		end --if tree["depth" .. tree.value]==levelNode then
+	end --for i=1,tree.count-1 do 
+	table.sort(exportTable["anscestor"],function (a,b) return a<b end)
+	table.sort(exportTable["found"],function (a,b) return a<b end)
+	table.sort(exportTable["descendant"],function (a,b) return a<b end)
+	table.sort(exportTable["not found"],function (a,b) return a<b end)
+	table.sort(exportTable["rest"],function (a,b) return a<b end)
+	--test with: for k,v in pairs(exportTable["anscestor"]) do print(k,v) end
+	local outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua","") .. "_search.html","w")
+	outputfile1:write("<h1>Suchergebnisse der markierten Ebene </h1>\n")
+	outputfile1:write("<h2> von " .. path .. "\\" .. thisfilename .. " </h2>\n")
+	outputfile1:write("<h3> Ebene " .. levelNode .. "  </h3>\n")
+	if #exportTable["found"]>0 then      outputfile1:write('<details><summary style="margin-left: 2em; color:blue">Treffer</summary>\n')        for k,v in pairs(exportTable["found"]) do      outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:blue">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["anscestor"]>0 then  outputfile1:write('<details><summary style="margin-left: 2em; color:red">Oberknoten</summary>\n')     for k,v in pairs(exportTable["anscestor"]) do  outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:red">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["descendant"]>0 then outputfile1:write('<details><summary style="margin-left: 2em; color:greenyellow">Unterknoten</summary>\n')    for k,v in pairs(exportTable["descendant"]) do outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:greeyellow">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["not found"]>0 then  outputfile1:write('<details><summary style="margin-left: 2em">Nicht gefunden</summary>\n') for k,v in pairs(exportTable["not found"]) do  outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["rest"]>0 then       outputfile1:write('<details><summary style="margin-left: 2em">Rest</summary>\n')           for k,v in pairs(exportTable["rest"]) do       outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	outputfile1:close()
+end --function startexport_level:action()
 
 
 --5.1.2 put the menu items together in the menu for tree
 menu = iup.menu{
 		startcopy,
+		startexport_level,
 		}
 --5.1 menu of tree end
 
