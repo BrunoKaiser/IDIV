@@ -21,7 +21,7 @@ Das Interaktiv-dynamische Inhaltsverzeichnis ist eine Methode, die für die pers
 
 === table des matières interactive dynamique
 
-La table des matières interactive dynamique est une méthode pour aider l'organisation personnelle, les outils de la business intelligence et les sites internet comme les sites de magazin online. Pour la business intelligence elle aide à représenter les flux de données et des dashboards.
+La table des matières interactive dynamique est une méthode pour aider l'organisation personnelle, les outils de l'informatique décisionnelle ou business intelligence et les sites internet comme les sites de magazin online. Pour l'informatique décisionnelle elle aide à représenter les flux de données et des tableaux de bord.
 
 == Installation des IUP-Lua-Frameworks
 
