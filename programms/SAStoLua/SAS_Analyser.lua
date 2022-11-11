@@ -88,6 +88,10 @@ function RecursiveTreatSAS(SASFile)
 								:gsub(" %%THEN WHERE"," ; %%THEN WHERE")
 								:gsub(" %%then"," ; %%THEN")
 								:gsub(" %%THEN"," ; %%THEN")
+								:gsub("%( ?keep"," ; KEEP")
+								:gsub("%( ?KEEP"," ; KEEP")
+								:gsub("%( ?drop"," ; DROP")
+								:gsub("%( ?DROP"," ; DROP")
 								:gsub(" then"," ; THEN")
 								:gsub(" THEN"," ; THEN")
 								:gmatch("[^;]*;") do
@@ -101,7 +105,7 @@ function RecursiveTreatSAS(SASFile)
 							:gsub(";"," ;")
 							:gsub(" +"," ")
 		if semikolon:lower():match("^%%include") then
-			--take all includes separated by blanks
+			--take all includes separated by blanks respective in ""
 			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
 				if field:match('"([^"]*)"') then
 					print("include: " .. field)
@@ -121,7 +125,7 @@ function RecursiveTreatSAS(SASFile)
 					contentTable["Rekursionsende"]["%INCLUDE"]=semikolon:gsub("%%INCLUDE ",""):gsub("%%include ","")
 					contentTable["Datei"][DateiText]=true
 				end --if field:match('"([^"]*)"') then
-			end --for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch("([^ ]*) ") do
+			end --for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
 		elseif semikolon:lower():match("^proc") then
 			--test with: printOut("Prozedur: " .. semikolon)
 		elseif semikolon:lower():match("^data") or 
@@ -194,7 +198,7 @@ function RecursiveTreatSAS(SASFile)
 											:gsub("%(","")
 											:gsub("%)","")
 			printOut("Variablen: " .. variablenText)
-			--print(variablenText)
+			--print(variablenText,tostring(variablenText:match("([^:]*):")))
 			for field in variablenText:gsub(" +"," "):gmatch("([^ ]*) ") do
 				if field:match(":$")==nil and field~="," and field~="=" then
 					contentTable["Variablen"][tostring(variablenText:match("([^:]*):"))][field]=true
