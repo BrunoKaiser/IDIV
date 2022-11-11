@@ -56,6 +56,8 @@ function RecursiveTreatSAS(SASFile)
 	--treat the file
 	for semikolon in (text .. "\n")
 								:gsub("\t"," ")
+								:gsub("([^ ])=","%1 =")
+								:gsub("=([^ ])","= %1")
 								:gsub("/%*[^%*/]*%*/"," ")
 								:gsub("%*[^ ][^;]*;"," ")
 								:gsub("\n%*[^;]*;"," ")
