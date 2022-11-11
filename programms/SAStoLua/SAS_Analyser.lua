@@ -100,7 +100,7 @@ function RecursiveTreatSAS(SASFile)
 							:gsub(" +"," ")
 		if semikolon:lower():match("^%%include") then
 			--take all includes separated by blanks
-			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch("([^ ]*) ") do
+			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
 				if field:match('"([^"]*)"') then
 					print("include: " .. field)
 					if field:match(":\\") then
