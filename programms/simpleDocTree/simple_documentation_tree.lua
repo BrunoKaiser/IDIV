@@ -156,6 +156,9 @@ end --function alphabetic_tree_sort(tree)
 
 --4.1 search dialog
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
+search_found_number = iup.text{border="YES",expand="YES",} --textfield for search found number
+searchtext_with = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search with additional criterion
+searchtext_with2 = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search with additional criterion
 
 --search in downward direction
 searchdown    = iup.flatbutton{title = "Abwärts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
@@ -190,6 +193,7 @@ end --function searchdown:flat_action()
 --search to mark without going to the any node
 searchmark    = iup.flatbutton{title = "Markieren",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchmark:flat_action()
+	local numberFound=0
 	--unmark all nodes
 	for i=0, tree.count - 1 do
 			tree["color" .. i]="0 0 0"
@@ -198,13 +202,60 @@ function searchmark:flat_action()
 	--mark all nodes
 	for i=0, tree.count - 1 do
 		if tree["title" .. i]:upper():match(searchtext.value:upper())~= nil then
+			numberFound=numberFound+1
 			iup.TreeSetAncestorsAttributes(tree,i,{color="255 0 0",})
 			iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})
 			iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"})
 		end --if tree["title" .. i]:upper():match(searchtext.value:upper())~= nil then
 	end --for i=0, tree2.count - 1 do
 	--mark all nodes end
+	search_found_number.value="Anzahl Fundstellen: " .. tostring(numberFound)
 end --function searchmark:flat_action()
+
+--search to mark without going to the any node
+searchmark_with    = iup.flatbutton{title = "Markieren mit Zusatzkriterium",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+function searchmark_with:flat_action()
+	local numberFound=0
+	--unmark all nodes
+	for i=0, tree.count - 1 do
+			tree["color" .. i]="0 0 0"
+	end --for i=0, tree.count - 1 do
+	--unmark all nodes end
+	--mark all nodes
+	for i=0, tree.count - 1 do
+		if tree["title" .. i]:upper():match(searchtext.value:upper())~= nil then
+			--find tree parent under root
+			iParentRoot=0
+			for i1=i,1,-1 do
+				if tree["parent" .. i1]=="0" then
+					iParentRoot=i1
+					--test with: searchtext_with.value=searchtext_with.value .. "/" .. tree['title' .. iParentRoot] 
+					break 
+				end --if tree["parent" .. i1]=="0" then
+			end --for i1=i,1,-1 do
+			--set criterion search
+			if checkbox_criterion_with.value=="ON" then criteriumFound="OFF" else criteriumFound="ON" end --for OFF it is ON normally, but with search found it turns to OFF
+			--test with: print("iParentRoot" .. iParentRoot)
+			--test with: print(tree['totalchildcount' .. iParentRoot])
+			for i2=iParentRoot,iParentRoot+tree['totalchildcount' .. iParentRoot] do
+			if tree["title" .. i2]:upper():match(searchtext_with.value:upper()) then
+				--test with: search_found_number.value=search_found_number.value .. tree["title" .. i2]
+				criteriumFound=checkbox_criterion_with.value --"ON" for criteriumFound="OFF" otherwise the contrary
+				break
+			end --if tree["title" .. i2]:upper():match(searchtext_with.value:upper())==nil then
+			end --for i2=iParentRoot,tree['totalchildcount' .. iParentRoot] do
+			--mark with criterion
+			if criteriumFound=="ON" then
+				numberFound=numberFound+1
+				iup.TreeSetAncestorsAttributes(tree,i,{color="255 0 0",})
+				iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})
+				iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"})
+			end --if criteriumFound=="OFF" then
+		end --if tree["title" .. i]:upper():match(searchtext.value:upper())~= nil then
+	end --for i=0, tree2.count - 1 do
+	--mark all nodes end
+	search_found_number.value="Anzahl Fundstellen: " .. tostring(numberFound)
+end --function searchmark_with:flat_action()
 
 --unmark without leaving the search-window
 unmark    = iup.flatbutton{title = "Entmarkieren",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
@@ -244,11 +295,13 @@ function searchup:flat_action()
 		iup.NextField(maindlg)
 		iup.NextField(dlg_search)
 	end --if help==false then
-end --	function searchup:flat_action()
+end --function searchup:flat_action()
 
 checkboxforcasesensitive = iup.toggle{title="Groß-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkbox_criterion_with = iup.toggle{title="Zusatzkriterium trifft zu", value="ON"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
+search_with_label=iup.label{title="Zusatzkriterium:"} --label for textfield
 
 --put above together in a search dialog
 dlg_search =iup.dialog{
@@ -257,6 +310,8 @@ dlg_search =iup.dialog{
 			iup.label{title="Sonderzeichen: %. für ., %- für -, %+ für +, %% für %, %[ für [, %] für ], %( für (, %) für ), %^ für ^, %$ für $, %? für ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,
 			}, 
+			iup.hbox{search_with_label,searchtext_with,},
+			iup.hbox{searchmark_with,checkbox_criterion_with},
 			iup.label{title="rot: übergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
 			iup.label{title="grün: untergeordnete Knoten",fgcolor = "90 195 0", },
@@ -266,10 +321,10 @@ dlg_search =iup.dialog{
 			iup.vbox{
 			checkboxforcasesensitive,},
 			},
-
+			iup.hbox{search_found_number,},
 			}; 
 		title="Suchen",
-		size="420x100",
+		size="420x170",
 		startfocus=searchtext
 		}
 
@@ -410,7 +465,7 @@ function startexport_level:action()
 end --function startexport_level:action()
 
 
---5.1.2 put the menu items together in the menu for tree
+--5.1.3 put the menu items together in the menu for tree
 menu = iup.menu{
 		startcopy,
 		startexport_level,
