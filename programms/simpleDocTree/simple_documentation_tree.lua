@@ -156,7 +156,7 @@ end --function alphabetic_tree_sort(tree)
 
 --4.1 search dialog
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
-search_found_number = iup.text{border="YES",expand="YES",} --textfield for search found number
+search_found_number = iup.multiline{border="YES",expand="YES",} --textfield for search found number
 searchtext_with = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search with additional criterion
 searchtext_with2 = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search with additional criterion
 
@@ -215,7 +215,8 @@ end --function searchmark:flat_action()
 --search to mark without going to the any node
 searchmark_with    = iup.flatbutton{title = "Markieren mit Zusatzkriterium",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchmark_with:flat_action()
-	local numberFound=0
+	local numberFound_withCriterion=0
+	local numberFound_withoutCriterion=0
 	--unmark all nodes
 	for i=0, tree.count - 1 do
 			tree["color" .. i]="0 0 0"
@@ -246,15 +247,21 @@ function searchmark_with:flat_action()
 			end --for i2=iParentRoot,tree['totalchildcount' .. iParentRoot] do
 			--mark with criterion
 			if criteriumFound=="ON" then
-				numberFound=numberFound+1
-				iup.TreeSetAncestorsAttributes(tree,i,{color="255 0 0",})
-				iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})
-				iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"})
+				numberFound_withCriterion=numberFound_withCriterion+1
+				iup.TreeSetAncestorsAttributes(tree,i,{color="255 0 0",})   --red
+				iup.TreeSetNodeAttributes(tree,i,{color="0 0 250",})        --blue
+				iup.TreeSetDescendantsAttributes(tree,i,{color="90 195 0"}) --green
+			else
+				numberFound_withoutCriterion=numberFound_withoutCriterion+1
+				iup.TreeSetAncestorsAttributes(tree,i,{color="243 0 243",})   --lila
+				iup.TreeSetNodeAttributes(tree,i,{color="0 243 243",})        --turquoise
+				iup.TreeSetDescendantsAttributes(tree,i,{color="243 243 0"})  --yellow
 			end --if criteriumFound=="OFF" then
 		end --if tree["title" .. i]:upper():match(searchtext.value:upper())~= nil then
 	end --for i=0, tree2.count - 1 do
 	--mark all nodes end
-	search_found_number.value="Anzahl Fundstellen: " .. tostring(numberFound)
+	search_found_number.value="Anzahl Fundstellen mit Kriterium: " .. tostring(numberFound_withCriterion) .. "\n" ..
+				"Anzahl restliche Fundstellen ohne Kriterium: " .. tostring(numberFound_withoutCriterion)
 end --function searchmark_with:flat_action()
 
 --unmark without leaving the search-window
@@ -422,45 +429,61 @@ end --function startcopy:action()
 startexport_level = iup.item {title = "Export der Ebene als Liste nach Farben"}
 function startexport_level:action()
 	local exportTable={}
-	exportTable["found"]={} --"0 0 250"
-	exportTable["anscestor"]={} --"255 0 0"
-	exportTable["descendant"]={} --"90 195 0"
-	exportTable["not found"]={} --"0 0 0"
+	exportTable["found"]={} --"0 0 250" --blue
+	exportTable["ancestor"]={} --"255 0 0" --red
+	exportTable["descendant"]={} --"90 195 0" --green
+	exportTable["ancestor_rest"]={} --"243 0 243" --lila
+	exportTable["found_rest"]={} --"0 243 243" --turquoise
+	exportTable["descendant_rest"]={} --"243 243 0" --yellow
+	exportTable["not found"]={} --"0 0 0" --black
 	exportTable["rest"]={} --else
 	levelNode=tree['depth' .. tree.value]
 	--test with: print(levelNode)
 	for i=1,tree.count-1 do 
-	--test with: print(tree['color' .. i])
+		--test with: print(tree['color' .. i])
 		if tree["depth" .. i]==levelNode then
 		--test with: print(tree['title' .. i] .. ": " .. tree['color' .. i])
-			if tree['color' .. i]=="255 0 0" then
-				exportTable["anscestor"][#exportTable["anscestor"]+1]=tree['title' .. i]
-			elseif tree['color' .. i]=="0 0 250" then
+			if tree['color' .. i]=="255 0 0" then --red
+				exportTable["ancestor"][#exportTable["ancestor"]+1]=tree['title' .. i]
+			elseif tree['color' .. i]=="243 0 243" then --lila
+				exportTable["ancestor_rest"][#exportTable["ancestor_rest"]+1]=tree['title' .. i]
+			elseif tree['color' .. i]=="0 0 250" then --blue
 				exportTable["found"][#exportTable["found"]+1]=tree['title' .. i]
-			elseif tree['color' .. i]=="90 195 0" then
+			elseif tree['color' .. i]=="0 243 243" then --turquoise
+				exportTable["found_rest"][#exportTable["found_rest"]+1]=tree['title' .. i]
+			elseif tree['color' .. i]=="90 195 0" then --green
 				exportTable["descendant"][#exportTable["descendant"]+1]=tree['title' .. i]
-			elseif tree['color' .. i]=="0 0 0" then
+			elseif tree['color' .. i]=="243 243 0" then --yellow
+				exportTable["descendant_rest"][#exportTable["descendant_rest"]+1]=tree['title' .. i]
+			elseif tree['color' .. i]=="0 0 0" then --black
 				exportTable["not found"][#exportTable["not found"]+1]=tree['title' .. i]
 			else
 				exportTable["rest"][#exportTable["rest"]+1]=tree['title' .. i]
 			end --if tree['color' .. i]=="255 0 0" then
 		end --if tree["depth" .. tree.value]==levelNode then
 	end --for i=1,tree.count-1 do 
-	table.sort(exportTable["anscestor"],function (a,b) return a<b end)
+	table.sort(exportTable["ancestor"],function (a,b) return a<b end)
+	table.sort(exportTable["ancestor_rest"],function (a,b) return a<b end)
 	table.sort(exportTable["found"],function (a,b) return a<b end)
+	table.sort(exportTable["found_rest"],function (a,b) return a<b end)
 	table.sort(exportTable["descendant"],function (a,b) return a<b end)
+	table.sort(exportTable["descendant_rest"],function (a,b) return a<b end)
 	table.sort(exportTable["not found"],function (a,b) return a<b end)
 	table.sort(exportTable["rest"],function (a,b) return a<b end)
-	--test with: for k,v in pairs(exportTable["anscestor"]) do print(k,v) end
+	--test with: for k,v in pairs(exportTable["ancestor"]) do print(k,v) end
 	local outputfile1=io.open(path .. "\\" .. thisfilename:gsub("%.lua","") .. "_search.html","w")
 	outputfile1:write("<h1>Suchergebnisse der markierten Ebene </h1>\n")
 	outputfile1:write("<h2> von " .. path .. "\\" .. thisfilename .. " </h2>\n")
 	outputfile1:write("<h3> Ebene " .. levelNode .. "  </h3>\n")
-	if #exportTable["found"]>0 then      outputfile1:write('<details><summary style="margin-left: 2em; color:blue">Treffer</summary>\n')        for k,v in pairs(exportTable["found"]) do      outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:blue">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
-	if #exportTable["anscestor"]>0 then  outputfile1:write('<details><summary style="margin-left: 2em; color:red">Oberknoten</summary>\n')     for k,v in pairs(exportTable["anscestor"]) do  outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:red">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
-	if #exportTable["descendant"]>0 then outputfile1:write('<details><summary style="margin-left: 2em; color:greenyellow">Unterknoten</summary>\n')    for k,v in pairs(exportTable["descendant"]) do outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:greeyellow">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
-	if #exportTable["not found"]>0 then  outputfile1:write('<details><summary style="margin-left: 2em">Nicht gefunden</summary>\n') for k,v in pairs(exportTable["not found"]) do  outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
-	if #exportTable["rest"]>0 then       outputfile1:write('<details><summary style="margin-left: 2em">Rest</summary>\n')           for k,v in pairs(exportTable["rest"]) do       outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	--https://www.w3schools.com/colors/colors_names.asp
+	if #exportTable["found"]>0 then      outputfile1:write('<details><summary style="margin-left: 2em; color:blue">' .. #exportTable["found"] .. ' Treffer</summary>\n')        for k,v in pairs(exportTable["found"]) do      outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:blue">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["found_rest"]>0 then outputfile1:write('<details><summary style="margin-left: 2em; color:turquoise">' .. #exportTable["found_rest"] .. ' Restliche Treffer ohne Kriterium</summary>\n')        for k,v in pairs(exportTable["found_rest"]) do      outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:turquoise">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["ancestor"]>0 then  outputfile1:write('<details><summary style="margin-left: 2em; color:red">' .. #exportTable["ancestor"] .. ' Oberknoten</summary>\n')     for k,v in pairs(exportTable["ancestor"]) do  outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:red">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["ancestor_rest"]>0 then  outputfile1:write('<details><summary style="margin-left: 2em; color:fuchsia">' .. #exportTable["ancestor_rest"] .. ' Restliche Oberknoten ohne Kriterium</summary>\n')     for k,v in pairs(exportTable["ancestor_rest"]) do  outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:fuchsia">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["descendant"]>0 then outputfile1:write('<details><summary style="margin-left: 2em; color:greenyellow">' .. #exportTable["descendant"] .. ' Unterknoten</summary>\n')    for k,v in pairs(exportTable["descendant"]) do outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:greenyellow">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["descendant_rest"]>0 then outputfile1:write('<details><summary style="margin-left: 2em; color:yellow">' .. #exportTable["descendant_rest"] .. ' Restliche Unterknoten ohne Kriterium</summary>\n')    for k,v in pairs(exportTable["descendant_rest"]) do outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em; color:yellow">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["not found"]>0 then  outputfile1:write('<details><summary style="margin-left: 2em">' .. #exportTable["not found"] .. ' Nicht gefunden</summary>\n') for k,v in pairs(exportTable["not found"]) do  outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
+	if #exportTable["rest"]>0 then       outputfile1:write('<details><summary style="margin-left: 2em">' .. #exportTable["rest"] .. ' Rest</summary>\n')           for k,v in pairs(exportTable["rest"]) do       outputfile1:write('<p style="margin-left: 4em;margin-top: 0em;margin-bottom: 0em">' .. v .. "</p>\n") end outputfile1:write('</details>\n') end
 	outputfile1:close()
 end --function startexport_level:action()
 
