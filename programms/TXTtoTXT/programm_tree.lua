@@ -1,4 +1,4 @@
---This script converts a Lua programm that has no identation in classical identation or analysable tree identation
+--This script converts a Lua programm that has no indentation in classical indentation or analysable tree indentation
 
 --1. example with identation
 text=[[
