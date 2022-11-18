@@ -567,7 +567,7 @@ function button_export_tree_to_csv:flat_action()
 			pathTable[i]=tree['title' .. iParent] .. ";" .. pathTable[i]
 		end --while true do
 		if numberColumns>numberColumnsTotal then numberColumnsTotal=numberColumns end
-	end --for i=0,tree.count-1 do
+	end --for i=1,tree.count-1 do
 	--open a filedialog
 	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel auswählen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
 	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
