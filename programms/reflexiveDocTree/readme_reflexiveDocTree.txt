@@ -6,9 +6,13 @@ A reflexive Documentation Tree means that the script itself is able to save itse
 
 This script shows only a simple tree.
 
-1.2 reflexive_documentation_tree.lua
+1.2 reflexive_documentation_tree_Linux.lua
 
-This script shows only a simple tree in Linux, tested on Ubuntu.
+This script shows only a simple tree in Linux, tested on Ubuntu, Debian and Raspberry Pi.
+
+1.2.1 start_IDIV_Tree_on_RaspberryPi.lua
+
+This script can be used to start a standard IDIV-window setting with pcmanfm, IUP-Lua scripter and Tree.
 
 2. reflexive_html_with_tree.lua
 
@@ -78,6 +82,8 @@ This script contains a tree and a data form. In this data form data correspondin
 12.1 reflexive_documentation_tree_with_statistics_Linux.lua
 
 This script shows only a simple tree in Linux, tested on Raspberry Pi. With this tree it is possible to operate downloads from the statistic page of the Bundesbank as an example for download driven by tree.
+
+Start this script for instance with: cd /home/pi/mylibs/lua5.1/bin && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/pi/mylibs/iup/lib/Linux510 && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/pi/mylibs/iup/lib/Linux510/Lua51 && ./lua51 /home/pi/IUP/reflexive_documentation_tree_with_statistics_Linux.lua &
 
 12.2 Statistik_EUR_Fremdwaehrung_verarbeiten.lua
 
