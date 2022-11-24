@@ -74,3 +74,13 @@ This script is a graphical user interface for Linux, tested on a Raspberry Pi, w
 11 reflexive_documentation_tree_with_dataform.lua
 
 This script contains a tree and a data form. In this data form data corresponding to the tree are stored and shown.
+
+12.1 reflexive_documentation_tree_with_statistics_Linux.lua
+
+This script shows only a simple tree in Linux, tested on Raspberry Pi. With this tree it is possible to operate downloads from the statistic page of the Bundesbank as an example for download driven by tree.
+
+12.2 Statistik_EUR_Fremdwaehrung_verarbeiten.lua
+
+This script shows the time series in the tree as a diagramm. This script is used in reflexive_documentation_tree_with_statistics_Linux.lua.
+
+
