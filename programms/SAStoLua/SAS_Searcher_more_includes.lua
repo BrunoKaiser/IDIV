@@ -1,4 +1,4 @@
---This programm collect data from SAS programms and their sub programms in a recursive manner to show in a tab tree results of a search of standardized lines. There can be more than one include filn in one include statement.
+--This programm collect data from SAS programms and their sub programms in a recursive manner to show in a tab tree results of a search of standardized lines. There can be more than one include file in one include statement.
 
 --1.1 set searched text and files to be analysed
 searchText=" person "
