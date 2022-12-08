@@ -15,10 +15,12 @@ end --function printOut(a)
 
 --2. uniqueTable to write node only once
 uniqueTable={}
+numberProgramm=0
 
 --3. recursive function to seek for informations in SAS programms and in sub programms
 
 function RecursiveTreatSAS(SASFile,numberTabs)
+	numberProgramm=numberProgramm+1
 	print(SASFile,numberTabs)
 	inputfile=io.open(SASFile) --"C:\\Temp\\SAS_Analyser.sas"
 	text=inputfile:read("*all")
@@ -27,6 +29,7 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 	for semikolon in (text .. "\n")
 								:gsub(" ?= ?"," = ")
 								:gsub("%( ?","( ")
+								:gsub("\t ?"," \t ")
 								:gsub(" ?%- ?"," - ")
 								:gsub(" ?%+ ?"," + ")
 								:gsub(" ?%)"," )")
@@ -44,7 +47,7 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 			RecursiveTreatSAS(DateiText,numberTabs+1)
 			printOut(string.rep("\t",numberTabs+2) .. "Rekursionsende: " .. semikolon:gsub("INCLUDE","INCLUDE: "):gsub("include","INCLUDE: ") .. ": Datei: " .. DateiText)
 			uniqueTable={}
-		elseif semikolon:lower():match(searchText:lower()) then
+		elseif (" " .. semikolon):lower():match(searchText:lower()) then
 			if uniqueTable[SASFile]==nil then
 				printOut(string.rep("\t",numberTabs) .. SASFile)
 				os.execute('start "d" "' .. SASFile .. '"')
