@@ -12,3 +12,8 @@ This programm collect data from SAS programms and their sub programms in a recur
 
 This programm collect data from SAS programms and their sub programms in a recursive manner to show in a tab tree results of a search of standardized lines. The difference to SAS_Searcher.lua is that there can be more than one include file in one include statement.
 
+3. SAS_Searcher_more_includes_context.lua
+
+This programm collect data from SAS programms and their sub programms in a recursive manner. There can be more than one include file in one include statement. It shows dependencies of variables and macro variables to build a tree of dependent variables with side effects.
+
+
