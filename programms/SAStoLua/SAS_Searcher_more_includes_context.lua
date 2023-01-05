@@ -244,21 +244,24 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 	end --if line:lower():match("&[^ ]") then
 
 
-	for field in line:gmatch(" ([^ ]*) =") do
-		if field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
+	for field_raw in line:gmatch(" ([^ ]* =[^=]+)") do
+		local field=field_raw:match("([^ ]*) =")
+		local fieldAddition=field_raw:lower():gsub("else","~"):match("(=[^=~]+)")
+		if fieldAddition:match(searchText:lower()) and field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
 			if line:lower():match(searchText:lower()) then
 			outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
 			outputFile:write("\t" .. field .. "\n")
+			outputFile:write("\tFormel: " .. fieldAddition .. "\n")
 			end --if line:lower():match(searchText:lower()) then
-		end --if field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
-	end --for field in line:gmatch(" ([^ ]*) =") do
+		end --if fieldAddition:match(searchText:lower()) and field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
+	end --for field_raw in line:gmatch(" ([^ ]* =[^=]+)") do
 	if line:lower():match("rename") then
 		for field in line:gmatch(" ([^ ]* = [^ ]*)") do
 			if field:lower():match(" rename ")==nil then
-				if line:lower():match(searchText:lower()) then
-				outputFile:write("" .. searchText .. ":->\t" .. field .. "\n")
-				outputFile:write("\t" .. field:match("= ([^ ]*)") .. " (rename) \n")
-				end --if line:lower():match(searchText:lower()) then
+				if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
+					outputFile:write("" .. searchText .. ":->\t" .. field .. "\n")
+					outputFile:write("\t" .. field:match("= ([^ ]*)") .. " (rename) \n")
+				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
 			end --if field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
 		end --for field in line:gmatch(" ([^ ]*) =") do
 	end --if line:lower():match("rename") then
