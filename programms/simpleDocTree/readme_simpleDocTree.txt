@@ -67,3 +67,7 @@ This script is a graphical user interface with which the data part of the code o
 10.4 simple_datapart_tree_with_ticks_prio.lua
 
 This script has also the possibility to set priorities for the nodes in addition to the functionalities of simple_datapart_tree_with_ticks.lua.
+
+11. simple_documentation_tree_with_variables_to_be_filed.lua
+
+--This script contains a Lua tree with variables that can be filled by determining unknown variables.
