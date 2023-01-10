@@ -392,6 +392,8 @@ os.execute('start "d" "C:\\Temp\\SAS_searcher_output.txt"')
 
 --8. write the tabulator tree in a text file with only unique lines for nodes
 uniqueTable={}
+uniqueTable[searchText:gsub(" ",""):lower()]=true
+uniqueTable["\t" .. searchText:gsub(" ",""):lower()]=true
 outputFile4=io.open("C:\\Temp\\SAS_searcher_output_tree.txt","w")
 outputFile4:write("Seiteneffektketten von " .. searchText .. "\n")
 outputFile4:write(searchText:gsub(" ","") .. "\n")
@@ -399,7 +401,7 @@ for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
 	if line:match("^\t") and line:match("^[\t]+Formel:")==nil and line:match("^\t\t[^ ]*")==nil 
 	and line:lower():match(searchText:gsub(" ",""):lower() .. " :\t")==nil and uniqueTable[line:lower()]==nil then
 		uniqueTable[line:lower()]=true
-		if line:match(" if .*;")==nil and line:match("%d+:")==nil and line:match(" do%-end ")==nil then
+		if line:lower():match(" if .*;")==nil and line:match("%d+:")==nil and line:lower():match(" do%-end ")==nil then
 			outputFile4:write(line .. " ...\n")
 		else
 			outputFile4:write(line .. "\n")
@@ -407,7 +409,7 @@ for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
 		if line:match(" [^= ]* =") and uniqueTable["\t" .. line:match(" ([^= ]*) ="):lower()]==nil then
 			outputFile4:write("\t" .. line:match(" ([^= ]*) =") .. " ...\n")
 			--outputFile4:write("\t\t..." .. "\n")
-			uniqueTable["\t" .. line:match(" ([^= ]*) ="):lower()]=true
+			uniqueTable["\t" .. line:lower():match(" ([^= ]*) =")]=true
 		end --if line:match("[^=]=") then
 	end --if line:match("^\t") then 
 end --for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
