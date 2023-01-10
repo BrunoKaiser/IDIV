@@ -69,6 +69,12 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 								:gsub("(include[^;]*)/%*[^%*/]*%*/([^;]*;)","%1 %2")
 								:gsub("(include[^;]*)/%*[^%*/]*%*/([^;]*;)","%1 %2")
 								:gsub(" +;",";")
+								:gsub(" *%) *"," ) ")
+								:gsub(" *%( *"," ( ")
+								:gsub(" *> *"," > ")
+								:gsub(" *< *"," < ")
+								:gsub("(Var [^;]*);([^;]*Output Out)","%1 %2")
+								:gsub(" *%* *"," * ")
 								:gsub(";[^;]*else"," else")
 								:gsub(";[^;]*Else"," else")
 								:gsub(";[^;]*ELSE"," else")
@@ -112,7 +118,7 @@ os.execute('start "d" "C:\\Temp\\SAS_searcher_raw.txt"')
 
 --]====]
 
-ifLevel=0
+doLevel=0
 
 outputFile=io.open("C:\\Temp\\SAS_searcher_raw2.txt","w")
 
@@ -212,21 +218,33 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 						:gsub("If ([^=]-) = ([^=]-) Then","if %1 eq %2 then")
 --]==]
 	if line:lower():match("\\.*.sas") then
-		ifLevel=0
+		doLevel=0
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("%%mend") then
-		ifLevel=0
+		doLevel=0
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("endrsubmit") then
-		ifLevel=0
+		doLevel=0
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
+	elseif line:lower():match("if.* then .* else .*;") and line:lower():match(" do ")==nil then
+		doLevel=doLevel
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("%%end else %%if.*do") then
-		ifLevel=ifLevel
+		doLevel=doLevel
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("%%do i =") then
-		ifLevel=ifLevel+1
-	elseif line:lower():match("if .*do") then
-		ifLevel=ifLevel+1
+		doLevel=doLevel+1
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
+	elseif line:lower():match("if .* do ") then
+		doLevel=doLevel+1
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("end *;") then
-		ifLevel=math.max(ifLevel-1,0)
-	end
-	outputFile:write(ifLevel .. ":" .. line	.. "\n")
+		outputFile:write(doLevel .. ": do-end ;\n")
+		doLevel=math.max(doLevel-1,0)
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
+	else
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
+	end --if line:lower():match("\\.*.sas") then
 	if line:lower():match("&[^ ]") then
 		local lineMacro = line:lower()
 		for k,v in pairs(letTable) do
@@ -242,33 +260,72 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 		end --for k,v in pairs(letTable) do
 		outputFile:write("M:K:" .. lineMacro	.. "\n")
 	end --if line:lower():match("&[^ ]") then
-
-
-	for field_raw in line:gmatch(" ([^ ]* =[^=]+)") do
-		local field=field_raw:match("([^ ]*) =")
-		local fieldAddition=field_raw:lower():gsub("else","~"):match("(=[^=~]+)")
-		if fieldAddition:match(searchText:lower()) and field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
-			if line:lower():match(searchText:lower()) then
-			outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
-			outputFile:write("\t" .. field .. "\n")
-			outputFile:write("\tFormel: " .. fieldAddition .. "\n")
-			end --if line:lower():match(searchText:lower()) then
-		end --if fieldAddition:match(searchText:lower()) and field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
-	end --for field_raw in line:gmatch(" ([^ ]* =[^=]+)") do
-	if line:lower():match("rename") then
-		for field in line:gmatch(" ([^ ]* = [^ ]*)") do
+	
+	if line:lower():match(" on .*" .. searchText:gsub(" ",""):lower() .. "[^=]*=.*;") 
+		or line:lower():match(" on .*=[^=]*" .. searchText:gsub(" ",""):lower() .. ".*;") then
+		outputFile:write("" .. searchText .. ":\tjoin-Variable " .. "\n")
+		outputFile:write("\t" .. "join-Variable \n")
+	elseif line:lower():match("by.*" .. searchText:lower() .. ".*;") then
+		outputFile:write("" .. searchText .. ":\tby-Variable " .. "\n")
+		outputFile:write("\t" .. "by-Variable \n")
+	elseif line:lower():match("select.*" .. searchText:lower() .. ".*into *:") then
+		outputFile:write("" .. searchText .. ":\tinto: " .. line:lower():match("select.*into *: *([^ ]*)") .. "\n")
+		outputFile:write("\t" .. line:lower():match("select.*into *: *([^ ]*)") .. "\n")
+	elseif line:lower():match("rename")==nil then
+		for field_raw in line:gsub("else","~"):gmatch(" ([^ ]* =[^=~]+)") do
+			local field=field_raw:match("([^ ]*) =")
+			local fieldAddition=field_raw:match("=[^=~]+")
+			if fieldAddition:lower():match(searchText:lower()) and field:lower()~=searchText:gsub(" ",""):lower() 
+			and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" 
+			and field:lower()~="where" and field:lower()~="in" and field:lower()~="sum" then
+				if line:lower():match(searchText:lower()) then
+				outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
+				outputFile:write("\t" .. field .. "\n")
+				outputFile:write("\tFormel: " .. fieldAddition .. "\n")
+				end --if line:lower():match(searchText:lower()) then
+			elseif fieldAddition:lower():match(searchText:lower()) then
+				--do nothing
+			elseif (line:lower():gsub("then","~"):match("if " .. searchText:gsub(" ",""):lower() .. "[^~]* ~") or
+				line:lower():gsub("then","~"):match("if [^~]*" .. searchText:lower() .. "[^~]* ~")) 
+				 and field:lower()~=searchText:gsub(" ",""):lower() then
+				outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
+				outputFile:write("\t" .. field .. "\n")
+				outputFile:write("\tFormel2: " .. fieldAddition .. "\n")
+			elseif line:lower():match("when.*%(.*" .. searchText:gsub(" ",""):lower() .. ".*%) .*;") 
+				 and field:lower()~=searchText:gsub(" ",""):lower() then
+				outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
+				outputFile:write("\t" .. field .. "\n")
+				outputFile:write("\tFormel3: " .. fieldAddition .. "\n")
+			end --if fieldAddition:match(searchText:lower()) and field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
+		end --for field_raw in line:gsub("else","~"):gmatch(" ([^ ]* =[^=~]+)") do
+	elseif line:lower():match("rename") then
+		for field in line:gmatch(" ([^ ]* =[ \t]*[^ ]*)") do
 			if field:lower():match(" rename ")==nil then
 				if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
 					outputFile:write("" .. searchText .. ":->\t" .. field .. "\n")
-					outputFile:write("\t" .. field:match("= ([^ ]*)") .. " (rename) \n")
+					outputFile:write("\t" .. field:match("=[ \t]*([^ ]*)") .. " (rename) \n")
 				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
 			end --if field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
 		end --for field in line:gmatch(" ([^ ]*) =") do
 	end --if line:lower():match("rename") then
 
-
+	if line:lower():match(" if .* then.* delete ;") then
+				if line:lower():match(searchText:lower()) then
+					outputFile:write("" .. searchText .. ": delete \t" .. line .. "\n")
+					outputFile:write("\t" .. line:gsub("\t+"," "):gsub(" +"," "):lower():match(" if .* then.* delete ;") .. " (delete) \n")
+				end --if line:lower():match(searchText:lower()) then
+	elseif line:lower():match("then[^o]*output") then
+				if line:lower():match(searchText:lower()) then
+					outputFile:write("" .. searchText .. ": output \t" .. line:match("output (.*);") .. "\n")
+					outputFile:write("\t" .. line:match("output (.*);") .. " (output) \n")
+				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
+	elseif line:lower():match("output[^o]*out") then
+				if line:lower():match(searchText:lower()) then
+					outputFile:write("" .. searchText .. ": output out\t" .. line:lower():match("output[^o]*out(.*);") .. "\n")
+					outputFile:write("\t" .. line:lower():match("output[^o]*out = *([^ ]*)") .. " (output out) \n")
+				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
+	end --if line:lower():match("rename") then
 end --for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
-
 outputFile:close()
 
 --6. open the result file
@@ -276,3 +333,110 @@ os.execute('start "d" "C:\\Temp\\SAS_searcher_raw2.txt"')
 
 --6.1 test the Lua table letTable
 --test with: for k,v in pairs(letTable) do print(k,v) end
+
+--7. write the results in a result tree with tabulators
+writeOutput="no"
+levelSearch="0"
+ifFound="no"
+outputFile3=io.open("C:\\Temp\\SAS_searcher_output.txt","w")
+
+--7.1 write in text file only relevant lines with tabulators
+for line in io.lines("C:\\Temp\\SAS_searcher_raw2.txt") do
+	--initialize for line with 0:
+	if line:match("^0:") then
+		ifFound="no"
+	end --if line:match("^0:") then
+	if line:lower():match(searchText:lower()) then
+		writeOutput="yes"
+		if line:lower():match("[ \t]if.* do ") then
+			ifFound="yes"
+		elseif ifFound=="yes" and levelSearch and levelSearch>"0" and line:lower():match("[ \t]if.* do ")==nil then
+			 --schon ein ifFound=="yes", aber mit levelSearch>"0" ein line:lower():match("[ \t]if.* do ")==nil bleibt yes
+			ifFound="yes"
+		else
+			ifFound="no"
+		end --if line:lower():match("if") then
+		if line:match("^(%d+):") then
+			levelSearch=line:match("^(%d+):")
+		end --if line:match("^(%d+):") then
+	elseif line:match("^0:") then
+		writeOutput="no"
+	elseif line:match("^(%d+):") then
+		local doLevelCurrent=line:match("^(%d+):")
+		if levelSearch and doLevelCurrent<levelSearch then
+			writeOutput="no"
+		elseif levelSearch=="0" then
+			writeOutput="no"
+		elseif ifFound=="no" then
+			writeOutput="no"
+		end --if doLevelCurrent<levelSearch or levelSearch=="0" or ifFound=="no" then
+	end --if line:match(searchText) then
+	if writeOutput=="yes" then
+		--test with: 
+outputFile3:write(ifFound .. "(" .. tostring(levelSearch) .. ")" .. line .. "\n")
+		if levelSearch and levelSearch>"0" and ifFound=="yes" then
+			outputFile3:write("\t" .. line .. "\n")
+		else
+			outputFile3:write(line .. "\n")
+		end --if levelSearch>"0" then
+	end --if writeOutput=="yes" then
+	if line:match("^\t") and line:match("^\tFormel%d*:")==nil then
+		outputFile3:write(line .. "\n")
+		writeOutput="no"
+	end --if line:match("^\t") then
+end --for line in io.lines("C:\\Temp\\SAS_searcher_raw2.txt") do
+outputFile3:close()
+
+--7.2 open the tabulator tree file
+os.execute('start "d" "C:\\Temp\\SAS_searcher_output.txt"')
+
+--8. write the tabulator tree in a text file with only unique lines for nodes
+uniqueTable={}
+outputFile4=io.open("C:\\Temp\\SAS_searcher_output_tree.txt","w")
+outputFile4:write("Seiteneffektketten von " .. searchText .. "\n")
+outputFile4:write(searchText:gsub(" ","") .. "\n")
+for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
+	if line:match("^\t") and line:match("^[\t]+Formel:")==nil and line:match("^\t\t[^ ]*")==nil 
+	and line:lower():match(searchText:gsub(" ",""):lower() .. " :\t")==nil and uniqueTable[line:lower()]==nil then
+		uniqueTable[line:lower()]=true
+		if line:match(" if .*;")==nil and line:match("%d+:")==nil and line:match(" do%-end ")==nil then
+			outputFile4:write(line .. " ...\n")
+		else
+			outputFile4:write(line .. "\n")
+		end --if line:match(" if .*;")==nil and line:match(" do%-end ")==nil then
+		if line:match(" [^= ]* =") and uniqueTable["\t" .. line:match(" ([^= ]*) ="):lower()]==nil then
+			outputFile4:write("\t" .. line:match(" ([^= ]*) =") .. " ...\n")
+			--outputFile4:write("\t\t..." .. "\n")
+			uniqueTable["\t" .. line:match(" ([^= ]*) ="):lower()]=true
+		end --if line:match("[^=]=") then
+	end --if line:match("^\t") then 
+end --for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
+outputFile4:close()
+
+--8.1 start the tabulator tree text file
+os.execute('start "d" "C:\\Temp\\SAS_searcher_output_tree.txt"')
+
+--9. write the corresponding Lua tree from tabulator tree
+outputFile5=io.open("C:\\Temp\\SAS_searcher_output_tree.lua","w")
+for line in io.lines("C:\\Temp\\SAS_searcher_output_tree.txt") do 
+	if line:match("^Seiteneffektketten") then
+		outputFile5:write(line:gsub(" $","="):gsub(" ","_"):upper() .. "\n") 
+	elseif line:match("^\t")==nil then
+		outputFile5:write('{branchname="' .. line:upper() .. '",\n') 
+	elseif line:match("^\t%d+: do%-end") then
+		--do nothing
+	elseif line:match("%-.*%.%.%.") or line:match("&") then
+		outputFile5:write('"' .. line:gsub("by%-Variable +%.%.%.","by-Variable wird benötigt") .. '",\n') 
+	elseif line:match("^\t%d+:\t")==nil and line:lower():match(" %(output out%)") then
+		outputFile5:write('"' .. line:upper() .. '",\n') 
+	elseif line:match("^\t%d+:\t")==nil and line:lower():match(" %(delete%)") then
+		outputFile5:write('"' .. line:upper() .. ' ...",\n') 
+	elseif line:match("^\t%d+:\t")==nil then
+		outputFile5:write(line:upper():gsub("%.%.%.",""):gsub(" %(RENAME%)","") .. ',\n') 
+	end --if line:match("^Seiteneffektketten") then
+end --for line in io.lines("C:\\Temp\\SAS_searcher_output_tree.txt") do
+outputFile5:write('}\n') 
+outputFile5:close()
+
+--9.1 start the Lua tree text file
+os.execute('start "d" "C:\\Program Files (x86)\\Notepad++\\notepad++.exe" "C:\\Temp\\SAS_searcher_output_tree.lua"')
