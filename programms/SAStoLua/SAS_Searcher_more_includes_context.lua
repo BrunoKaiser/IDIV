@@ -73,6 +73,7 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 								:gsub(" *%( *"," ( ")
 								:gsub(" *> *"," > ")
 								:gsub(" *< *"," < ")
+								:gsub(" */ *"," / ")
 								:gsub("(Var [^;]*);([^;]*Output Out)","%1 %2")
 								:gsub(" *%* *"," * ")
 								:gsub(";[^;]*else"," else")
@@ -116,8 +117,54 @@ outputFile:close()
 --5. open the result file
 os.execute('start "d" "C:\\Temp\\SAS_searcher_raw.txt"')
 
+--5.1 show all variables in separate file
+outputFile1=io.open("C:\\Temp\\SAS_searcher_variables.txt","w")
+variableTable={}
+lineNumber=0
+for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
+	lineNumber=lineNumber+1
+	line=line:gsub(" eq "," = ")
+		:gsub(" ge "," = ")
+		:gsub(" gt "," = ")
+		:gsub(" le "," = ")
+		:gsub(" lt "," = ")
+		:gsub(" > *= "," = ")
+		:gsub(" > "," = ")
+		:gsub(" < *= "," = ")
+		:gsub(" < "," = ")
+		:gsub("\t","")
+		:gsub("%*.*;","")
+		:gsub("%%PUT.*;","")
+		:gsub("%%Put.*;","")
+		:gsub("%%put.*;","")
+	if line:match("=") then
+		if line:lower():match("%%let.*=") then
+			variableTable["Macrovariable: " .. line:match("([^= ]*) *=")]=lineNumber
+		elseif line:lower():match("(&[^= ]*) *=") then
+			variableTable["Macrovariable: " .. line:match("([^= ]*) *=")]=lineNumber
+		else
+			for field in line:gmatch("([^= ]*) *=") do
+				variableTable[field:gsub('"','')]=lineNumber
+			end --for field in line:gmatch("[^=]*=") do
+		end --if line:lower():match("%%let.*=") then
+	end --if line:match("=") then
+end --for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
+sortierteVariableTable={}
+for k,v in pairs(variableTable) do
+	sortierteVariableTable[#sortierteVariableTable+1]=k .. ": " .. v
+end --for k,v in pairs(variableTable) do
+table.sort(sortierteVariableTable,function(a,b) aBis=a:gsub("Macrovariable: ","___"):upper() bBis=b:gsub("Macrovariable: ","___"):upper() return aBis<bBis end)
+for k,v in pairs(sortierteVariableTable) do
+	outputFile1:write(v .. "\n")
+end --for k,v in pairs(sortierteVariableTable) do
+outputFile1:close()
+
+--5.1.1 open the result file
+os.execute('start "d" "C:\\Temp\\SAS_searcher_variables.txt"')
+
 --]====]
 
+--5.2 use definition of macros and show dependencies
 doLevel=0
 
 outputFile=io.open("C:\\Temp\\SAS_searcher_raw2.txt","w")
@@ -139,6 +186,14 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 		:gsub("format[^;]*;","")
 		:gsub("Format[^;]*;","")
 		:gsub("FORMAT[^;]*;","")
+		:gsub("%( keep[^%)]*where","where")
+		:gsub("%( Keep[^%)]*where","where")
+		:gsub("%( Keep[^%)]*Where","where")
+		:gsub("%( KEEP[^%)]*WHERE","where")
+		:gsub("%( keep[^%)]*rename","rename")
+		:gsub("%( Keep[^%)]*rename","rename")
+		:gsub("%( Keep[^%)]*Rename","rename")
+		:gsub("%( KEEP[^%)]*RENAME","rename")
 		:gsub("%( keep[^%)]*%)","")
 		:gsub("%( Keep[^%)]*%)","")
 		:gsub("%( KEEP[^%)]*%)","")
@@ -301,10 +356,10 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 	elseif line:lower():match("rename") then
 		for field in line:gmatch(" ([^ ]* =[ \t]*[^ ]*)") do
 			if field:lower():match(" rename ")==nil then
-				if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
+				if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((" " .. searchText:gsub(" ","") .. " *="):lower()) then
 					outputFile:write("" .. searchText .. ":->\t" .. field .. "\n")
 					outputFile:write("\t" .. field:match("=[ \t]*([^ ]*)") .. " (rename) \n")
-				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
+				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((" " .. searchText:gsub(" ","") .. " *="):lower()) then
 			end --if field:lower()~=searchText:gsub(" ",""):lower() and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" and field:lower()~="where" and field:lower()~="in" then
 		end --for field in line:gmatch(" ([^ ]*) =") do
 	end --if line:lower():match("rename") then
