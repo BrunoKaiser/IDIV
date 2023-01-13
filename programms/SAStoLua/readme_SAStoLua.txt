@@ -17,3 +17,6 @@ This programm collect data from SAS programms and their sub programms in a recur
 This programm collect data from SAS programms and their sub programms in a recursive manner. There can be more than one include file in one include statement. It shows dependencies of variables and macro variables to build a tree of dependent variables with side effects.
 
 
+4. SAS_include_proc_Lua.sas
+
+This SAS programm contains a Lua script. This Lua script collects the macro variables as needed for Lua replacement.
