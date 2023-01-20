@@ -139,9 +139,13 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 		:gsub("%%put.*;","")
 	if line:match("=") then
 		if line:lower():match("%%let.*=") then
-			variableTable["Macrovariable: " .. line:match("([^= ]*) *=")]=lineNumber
+			variableTable["Macrovariable: " .. line:upper():match("%%LET.*([^= ]*) *=")]=lineNumber
 		elseif line:lower():match("(&[^= ]*) *=") then
-			variableTable["Macrovariable: " .. line:match("([^= ]*) *=")]=lineNumber
+			variableTable["Macrovariable: " .. line:match("(&[^= ]*) *=")]=lineNumber
+		elseif line:lower():match("%%[^ ]* *%(.*%) *;") or line:lower():match("%%macro +[^ ]* *%(.*%) *;") then
+			for field in line:gmatch("([^= ]*) *=") do
+				variableTable["Macrovariable: " .. field:gsub('"','')]=lineNumber
+			end --for field in line:gmatch("[^=]*=") do
 		else
 			for field in line:gmatch("([^= ]*) *=") do
 				variableTable[field:gsub('"','')]=lineNumber
@@ -154,8 +158,22 @@ for k,v in pairs(variableTable) do
 	sortierteVariableTable[#sortierteVariableTable+1]=k .. ": " .. v
 end --for k,v in pairs(variableTable) do
 table.sort(sortierteVariableTable,function(a,b) aBis=a:gsub("Macrovariable: ","___"):upper() bBis=b:gsub("Macrovariable: ","___"):upper() return aBis<bBis end)
+uniqueCaseInsensitiveTable={}
 for k,v in pairs(sortierteVariableTable) do
-	outputFile1:write(v .. "\n")
+	if uniqueCaseInsensitiveTable[v:gsub("Macrovariable",""):lower():match("([^:]+):")]==nil and
+	v:match("^Macrovariable: :")==nil and
+	v:lower():match("where:")==nil and
+	v:lower():match("rename:")==nil and
+	v:lower():match("keep:")==nil and
+	v:lower():match("drop:")==nil and
+	v:lower():match("out:")==nil and
+	v:lower():match("label:")==nil and
+	v:lower():match("min:")==nil and
+	v:lower():match("max:")==nil and
+	v:lower():match("sum:")==nil then
+		outputFile1:write(v .. "\n")
+		uniqueCaseInsensitiveTable[v:gsub("Macrovariable",""):lower():match("([^:]+):")]=true
+	end ---if v:lower():match("where")==nil 
 end --for k,v in pairs(sortierteVariableTable) do
 outputFile1:close()
 
@@ -238,13 +256,13 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 				outputFile:write("M:L:M: " .. field:lower():match("([^ ]+) *= +[^=,%)]*") .. ": " .. field:match("[^ ]+ *= +([^=,%)]*)") .. "\n")
 			end --if field:match("[^ ]+ *= +([^=,%)]*)"):gsub(" +","")~="" then
 		end --for field in line:gmatch("[^ ]+ *= +[^=,%)]*") do
-	elseif line:lower():match("symputx%( '[^ ]+' , [^%)]+ %)") then
-		if letTable[line:lower():match("symputx%( '([^ ]+)' , [^%)]+ %)")]==nil then
-			letTable[line:lower():match("symputx%( '([^ ]+)' , [^%)]+ %)")]=line:lower():match("symputx%( '[^ ]+' , ([^%)]+)%)")
+	elseif line:lower():match("symputx *%( '[^ ]+' , [^%)]+ %)") then
+		if letTable[line:lower():match("symputx *%( '([^ ]+)' , [^%)]+ %)")]==nil then
+			letTable[line:lower():match("symputx *%( '([^ ]+)' , [^%)]+ %)")]=line:lower():match("symputx *%( '[^ ]+' , ([^%)]+)%)")
 		else
-			letTable[line:lower():match("symputx%( '([^ ]+)' , [^%)]+ %)")]=letTable[line:lower():match("symputx%( '([^ ]+)' , [^%)]+ %)")] .. "/" .. line:lower():match("symputx%( '[^ ]+' , ([^%)]+)%)")
-		end --if letTable[line:lower():match("symputx%( '([^ ]+)' , [^%)]+ %)")]==nil then
-		outputFile:write("M:L:S: " .. line:lower():match("symputx%( '([^ ]+)' , [^%)]+ %)") .. ": " .. letTable[line:lower():match("symputx%( '([^ ]+)' , [^%)]+ %)")] .. "\n")
+			letTable[line:lower():match("symputx *%( '([^ ]+)' , [^%)]+ %)")]=letTable[line:lower():match("symputx *%( '([^ ]+)' , [^%)]+ %)")] .. "/" .. line:lower():match("symputx *%( '[^ ]+' , ([^%)]+)%)")
+		end --if letTable[line:lower():match("symputx *%( '([^ ]+)' , [^%)]+ %)")]==nil then
+		outputFile:write("M:L:S: " .. line:lower():match("symputx *%( '([^ ]+)' , [^%)]+ %)") .. ": " .. letTable[line:lower():match("symputx *%( '([^ ]+)' , [^%)]+ %)")] .. "\n")
 	elseif line:lower():match("%%let [^ ]+ = [^;]+;") then
 		if letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")]==nil then
 			letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")]=line:lower():match("%%let [^ ]+ = ([^;]+);")
@@ -290,6 +308,13 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 	elseif line:lower():match("%%do i =") then
 		doLevel=doLevel+1
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
+	elseif line:lower():match("%%if .* %%do ") then
+		doLevel=doLevel+1
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
+	elseif line:lower():match("%%end *;") then
+		outputFile:write(doLevel .. ": %do-end ;\n")
+		doLevel=math.max(doLevel-1,0)
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("if .* do ") then
 		doLevel=doLevel+1
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
@@ -316,11 +341,11 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 		outputFile:write("M:K:" .. lineMacro	.. "\n")
 	end --if line:lower():match("&[^ ]") then
 	
-	if line:lower():match(" on .*" .. searchText:gsub(" ",""):lower() .. "[^=]*=.*;") 
-		or line:lower():match(" on .*=[^=]*" .. searchText:gsub(" ",""):lower() .. ".*;") then
+	if line:lower():gsub("order by","~"):match(" on [^~]*" .. searchText:gsub(" ",""):lower() .. "[^=~]*=[^~]*;") 
+		or line:lower():gsub("order by","~"):match(" on [^~]*=[^=~]*" .. searchText:gsub(" ",""):lower() .. "[^~]*;") then
 		outputFile:write("" .. searchText .. ":\tjoin-Variable " .. "\n")
 		outputFile:write("\t" .. "join-Variable \n")
-	elseif line:lower():match("by.*" .. searchText:lower() .. ".*;") then
+	elseif line:lower():gsub("mergeby",""):gsub("separated by",""):match("by.*" .. searchText:lower() .. ".*;") then
 		outputFile:write("" .. searchText .. ":\tby-Variable " .. "\n")
 		outputFile:write("\t" .. "by-Variable \n")
 	elseif line:lower():match("select.*" .. searchText:lower() .. ".*into *:") then
@@ -333,10 +358,14 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 			if fieldAddition:lower():match(searchText:lower()) and field:lower()~=searchText:gsub(" ",""):lower() 
 			and field:lower()~="keep" and field:lower()~="drop" and field:lower()~="rename" 
 			and field:lower()~="where" and field:lower()~="in" and field:lower()~="sum" then
-				if line:lower():match(searchText:lower()) then
-				outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
-				outputFile:write("\t" .. field .. "\n")
-				outputFile:write("\tFormel: " .. fieldAddition .. "\n")
+				if searchText:match("&") and line:lower():match(searchText:lower() .. "[%. ]") then
+					outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
+					outputFile:write("\t" .. field .. "\n")
+					outputFile:write("\tFormel: " .. fieldAddition .. "\n")
+				elseif searchText:match("&")==nil and line:lower():match(searchText:lower()) then
+					outputFile:write("" .. searchText .. ":\t" .. field .. "\n")
+					outputFile:write("\t" .. field .. "\n")
+					outputFile:write("\tFormel: " .. fieldAddition .. "\n")
 				end --if line:lower():match(searchText:lower()) then
 			elseif fieldAddition:lower():match(searchText:lower()) then
 				--do nothing
@@ -371,15 +400,19 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 				end --if line:lower():match(searchText:lower()) then
 	elseif line:lower():match("then[^o]*output") then
 				if line:lower():match(searchText:lower()) then
-					outputFile:write("" .. searchText .. ": output \t" .. line:match("output (.*);") .. "\n")
-					outputFile:write("\t" .. line:match("output (.*);") .. " (output) \n")
+					outputFile:write("" .. searchText .. ": output \t" .. line:lower():match("output (.*);") .. "\n")
+					outputFile:write("\t" .. line:lower():match("output (.*);") .. " (output) \n")
 				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
-	elseif line:lower():match("output[^o]*out") then
+	elseif line:lower():match("output[^o]*out = *([^ ]*)") then
 				if line:lower():match(searchText:lower()) then
 					outputFile:write("" .. searchText .. ": output out\t" .. line:lower():match("output[^o]*out(.*);") .. "\n")
 					outputFile:write("\t" .. line:lower():match("output[^o]*out = *([^ ]*)") .. " (output out) \n")
 				end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
 	end --if line:lower():match("rename") then
+	if searchText:match("^&") and line:match("^Suche von:")==nil and line:lower():match(searchText:lower() .. "%.[^ ]+") then
+		outputFile:write("" .. searchText .. ": Macroanwendung\t" .. line .. "\n")
+		outputFile:write("\t" .. line:gsub("\t+","") .. "\n")
+	end --if line:lower():match(searchText:lower()) and (" " .. field .. " "):lower():match((searchText .. "="):lower()) then
 end --for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 outputFile:close()
 
@@ -404,6 +437,11 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw2.txt") do
 	if line:lower():match(searchText:lower()) then
 		writeOutput="yes"
 		if line:lower():match("[ \t]if.* do ") then
+			ifFound="yes"
+		elseif line:lower():match("[ \t]%%if.* %%do ") then
+			ifFound="yes"
+		elseif ifFound=="yes" and levelSearch and levelSearch>"0" and line:lower():match("[ \t]%%if.* %%do ")==nil then
+			 --schon ein ifFound=="yes", aber mit levelSearch>"0" ein line:lower():match("[ \t]%%if.* %%do ")==nil bleibt yes
 			ifFound="yes"
 		elseif ifFound=="yes" and levelSearch and levelSearch>"0" and line:lower():match("[ \t]if.* do ")==nil then
 			 --schon ein ifFound=="yes", aber mit levelSearch>"0" ein line:lower():match("[ \t]if.* do ")==nil bleibt yes
@@ -431,14 +469,20 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw2.txt") do
 outputFile3:write(ifFound .. "(" .. tostring(levelSearch) .. ")" .. line .. "\n")
 		if levelSearch and levelSearch>"0" and ifFound=="yes" then
 			outputFile3:write("\t" .. line .. "\n")
-		else
+		elseif searchText:match("^&") and line:match("^M:L:A:") and line:upper():match(searchText:upper():gsub("&","") .. ":") then
+			outputFile3:write(line .. "\n")
+		elseif not (searchText:match("^&") and line:match("^M:L:A:") ) then
 			outputFile3:write(line .. "\n")
 		end --if levelSearch>"0" then
 	end --if writeOutput=="yes" then
 	if line:match("^\t") and line:match("^\tFormel%d*:")==nil then
 		outputFile3:write(line .. "\n")
 		writeOutput="no"
-	end --if line:match("^\t") then
+	end --if line:match("^\t") and line:match("^\tFormel%d*:")==nil then
+	if searchText:match("^&") and (line:upper():match("^M:L:A: +" .. searchText:upper():gsub("^&","") .. ":" ) or line:upper():match("^M:L:M: +" .. searchText:upper():gsub("^&","") .. ":" )) then
+		outputFile3:write(line .. "\n")
+		writeOutput="no"
+	end --if searchText:match("^&") and (line:upper():match("^M:L:A:.*" .. searchText:upper():gsub("^&","") ) or line:upper():match("^M:L:M:" .. searchText:upper():gsub("^&","") )) then
 end --for line in io.lines("C:\\Temp\\SAS_searcher_raw2.txt") do
 outputFile3:close()
 
@@ -457,16 +501,20 @@ for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
 	and line:lower():match(searchText:gsub(" ",""):lower() .. " :\t")==nil and uniqueTable[line:lower()]==nil then
 		uniqueTable[line:lower()]=true
 		if line:lower():match(" if .*;")==nil and line:match("%d+:")==nil and line:lower():match(" do%-end ")==nil then
-			outputFile4:write(line .. " ...\n")
+			outputFile4:write(line:gsub('\\','\\\\'):gsub('"','\\"') .. " ...\n")
 		else
 			outputFile4:write(line .. "\n")
 		end --if line:match(" if .*;")==nil and line:match(" do%-end ")==nil then
 		if line:match(" [^= ]* =") and uniqueTable["\t" .. line:match(" ([^= ]*) ="):lower()]==nil then
-			outputFile4:write("\t" .. line:match(" ([^= ]*) =") .. " ...\n")
+			outputFile4:write("\t" .. line:match(" ([^= ]*) ="):gsub('"','') .. " ...\n")
 			--outputFile4:write("\t\t..." .. "\n")
-			uniqueTable["\t" .. line:lower():match(" ([^= ]*) =")]=true
+			uniqueTable["\t" .. line:lower():match(" ([^= ]*) ="):gsub('"','')]=true
 		end --if line:match("[^=]=") then
 	end --if line:match("^\t") then 
+	if searchText:match("^&") and uniqueTable[line]==nil and (line:upper():match("^M:L:A:.*" .. searchText:upper():gsub("^&","") ) or line:upper():match("^M:L:M:" .. searchText:upper():gsub("^&","") )) then
+		outputFile4:write('\t' .. line .. '\n')
+		uniqueTable[line]=true
+	end --if searchText:match("^&") and (line:upper():match("^M:L:A:.*" .. searchText:upper():gsub("^&","") ) or line:upper():match("^M:L:M:" .. searchText:upper():gsub("^&","") )) then
 end --for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
 outputFile4:close()
 
@@ -476,12 +524,20 @@ os.execute('start "d" "C:\\Temp\\SAS_searcher_output_tree.txt"')
 --9. write the corresponding Lua tree from tabulator tree
 outputFile5=io.open("C:\\Temp\\SAS_searcher_output_tree.lua","w")
 for line in io.lines("C:\\Temp\\SAS_searcher_output_tree.txt") do 
-	if line:match("^Seiteneffektketten") then
-		outputFile5:write(line:gsub(" $","="):gsub(" ","_"):upper() .. "\n") 
+	if line:match("^Seiteneffektketten") and searchText:match("^&") then
+		outputFile5:write('VariablendefiniertTabelle["&' .. line:gsub("Seiteneffektketten von &","") .. '"]=true\n')
+		outputFile5:write('VariablendefiniertTabelle["&' .. line:gsub("Seiteneffektketten von &","") .. '."]=true\n')
+		outputFile5:write(line:gsub("Seiteneffektketten von &",""):gsub(" *$"," "):gsub(" $","="):gsub(" ","_"):upper() .. "\n") 
+	elseif line:match("^Seiteneffektketten") then
+		outputFile5:write(line:gsub(" *$"," "):gsub(" $","="):gsub(" ","_"):upper() .. "\n") 
 	elseif line:match("^\t")==nil then
 		outputFile5:write('{branchname="' .. line:upper() .. '",\n') 
+	elseif line:match("^\t%d+: %%do%-end") then
+		--do nothing
 	elseif line:match("^\t%d+: do%-end") then
 		--do nothing
+	elseif line:match("^\tM:") then
+		outputFile5:write('"' .. line:gsub("\\","\\\\") .. ' ...",\n') 
 	elseif line:match("%-.*%.%.%.") or line:match("&") then
 		outputFile5:write('"' .. line:gsub("by%-Variable +%.%.%.","by-Variable wird benötigt") .. '",\n') 
 	elseif line:match("^\t%d+:\t")==nil and line:lower():match(" %(output out%)") then
