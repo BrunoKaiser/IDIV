@@ -23,3 +23,7 @@ This is the licence of slpp.
 2.2. slpp_README.txt
 
 This is the readme of the slpp site of the source: https://github.com/SirAnthony/slpp.
+
+3. tree_xml_python.py
+
+This script is only for python 2! It shows a tree with xml as input data and a file browser. Files can be shown in a text box, opened and executes. It is tested for MacOS.
