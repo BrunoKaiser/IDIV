@@ -31,7 +31,7 @@ outputfile1:close()
 --2. choose the input and output statements
 outputfile2=io.open("C:\\Temp\\SAS_programm_logic_input_output.txt","w")
 for line in io.lines("C:\\Temp\\SAS_programm_logic.sas") do
-	line=line:lower():gsub("%(.*%)","")
+	line=line:lower():gsub("%([^%)]*%)",""):gsub("%([^%)]*%)",""):gsub("%([^%)]*%)",""):gsub("%([^%)]*%)","")
 		:gsub("/%*%-%-&","xxx")
 		:gsub("&","xxx")
 		:gsub("%.%.%-%-%*/","yyyz")
