@@ -143,14 +143,14 @@ inputNumber=0
 for k,v in pairs(inputTable) do
 	if v=="input" then
 		inputNumber=inputNumber+1
-		outputfile4:write(k .. '={branchname="' .. k .. '","' .. v .. ' ' .. inputNumber .. '"}\n')
+		outputfile4:write(k .. '={branchname="' .. k:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","' .. v .. ' ' .. inputNumber .. '"}\n')
 	end --if v=="input" then
 end --for k,v in pairs(inputTable) do
 outputfile4:write('Datei={branchname="' .. filename:gsub("\\","\\\\") .. '",\n')
 
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.txt") do 
 	if line:match("^\t")==nil and line:match("^%-%-")==nil then
-		outputfile4:write('}\n' .. line .. '={branchname="' .. line .. '",\n') 
+		outputfile4:write('}\n' .. line .. '={branchname="' .. line:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '",\n') 
 	else
 		outputfile4:write(line .. ',\n') 
 	end --if line:match("^Seiteneffektketten") then
