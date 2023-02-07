@@ -64,8 +64,10 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	local createtablefromline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
 	if dataline and dataline:gsub("[ \t]*","")~=tostring(setline):gsub("[ \t]*","") then
 		outputfile3:write("--dataline\n")
-		for field in dataline:gmatch("[^ \t]+") do 
-			outputfile3:write(field .. "\n")
+		for field in dataline:gmatch("[^ \t]+") do
+			if field~="MERGE" and field~="SET" then
+				outputfile3:write(field .. "\n")
+			end --if field~="MERGE" and field~="SET" then
 			if setline then
 				for fieldset in setline:gmatch("[^ \t]+") do 
 					if fieldset:match("[^ \t]+=[^ \t]+")==nil then
@@ -82,7 +84,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	end --if dataline then
 	if dupoutline then
 		outputfile3:write("--dupoutline\n")
-		dupoutline=dupoutline:upper():gsub("DBMS=EXCEL",""):gsub("REPLACE",""):gsub("\\","\\\\")
+		dupoutline=dupoutline:upper():gsub("DBMS=EXCEL",""):gsub("[ \t]*SORTSIZE[ \t]*=[ \t]*[^ \t;]*",""):gsub("REPLACE",""):gsub("\\","\\\\")
 		for field in dupoutline:gmatch("[^ \t]+") do 
 			outputfile3:write(field .. "\n")
 			if dataequalline then
@@ -96,7 +98,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	end --if dupoutline then
 	if outline then
 		outputfile3:write("--outline\n")
-		outline=outline:upper():gsub("DBMS=EXCEL",""):gsub("REPLACE",""):gsub("\\","\\\\")
+		outline=outline:upper():gsub("DBMS=EXCEL",""):gsub("[ \t]*SORTSIZE[ \t]*=[ \t]*[^ \t;]*",""):gsub("[ \t]*SUM[ \t]*=[ \t]*[^ \t;]*",""):gsub("REPLACE",""):gsub("\\","\\\\")
 		for field in outline:gmatch("[^ \t]+") do 
 			outputfile3:write(field .. "\n")
 			if dataequalline then
