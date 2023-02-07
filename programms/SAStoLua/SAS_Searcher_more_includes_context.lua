@@ -90,9 +90,12 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 								:gsub(";[^;]*merge "," merge ")
 								:gsub(";[^;]*Merge "," merge ")
 								:gsub(";[^;]*MERGE "," merge ")
-								:gsub(";[^;]*else "," else ")
-								:gsub(";[^;]*Else "," else ")
-								:gsub(";[^;]*ELSE "," else ")
+								:gsub(";[^;]*%%else "," %%else ")
+								:gsub(";[^;]*%%Else "," %%else ")
+								:gsub(";[^;]*%%ELSE "," %%else ")
+								:gsub(";[^;]*[^%%]else "," else ")
+								:gsub(";[^;]*[^%%]Else "," else ")
+								:gsub(";[^;]*[^%%]ELSE "," else ")
 								:gmatch("[^;]*;") do
 		semikolon=semikolon:gsub("\n"," "):gsub("^ +",""):gsub("^\t+",""):gsub(","," , "):gsub(";"," ;"):gsub(" +"," ")
 		if semikolon:lower():match("^%%include") then
@@ -100,7 +103,7 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 				print(numberProgramm .. ". include: " .. field)
 				if field:match(":\\") then
 					DateiText=field:match('"([^"]*)"')
-				else
+				else --take the path from the SASFile and the sub path and filename of include
 					DateiText=SASFile:match("(.*)\\[^\\]*") .. field:match('"([^"]*)"'):gsub("%&sascode%.","")
 				end --if field:match(":\\") then
 				--printOut(string.rep("\t",numberTabs+1) .. "Rekursion: " .. DateiText)
@@ -325,7 +328,7 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 			letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")]=line:lower():match("%%let [^ ]+ = ([^;]+);")
 		elseif letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")]==line:lower():match("%%let [^ ]+ = ([^;]+);") then
 			--the content exists already
-		elseif letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")]:match(line:lower():match("%%let [^ ]+ = ([^;]+);")) then
+		elseif letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")]:match(line:gsub("%(","%%("):gsub("%)","%%)"):gsub("%%","%%%%"):gsub("%-","%%-"):lower():match("%%let [^ ]+ = ([^;]+);")) then
 			--the content exists already
 		else
 			letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")]=letTable[line:lower():match("%%let ([^ ]+) = [^;]+;")] .. "/" .. line:lower():match("%%let [^ ]+ = ([^;]+);")
@@ -356,7 +359,10 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 	elseif line:lower():match("endrsubmit") then
 		doLevel=0
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
-	elseif line:lower():match("if.* then .* else .*;") and line:lower():match(" do ")==nil then
+	elseif line:lower():match("if[ \t].* then .* else .*;") and line:lower():match(" do ")==nil then
+		doLevel=doLevel
+		outputFile:write(doLevel .. ":" .. line	.. "\n")
+	elseif line:lower():match("end else if[ \t].*do") then
 		doLevel=doLevel
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("%%end else %%if.*do") then
@@ -365,14 +371,14 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 	elseif line:lower():match("%%do i =") then
 		doLevel=doLevel+1
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
-	elseif line:lower():match("%%if .* %%do ") then
+	elseif line:lower():match("%%if[ \t].* %%do ") then
 		doLevel=doLevel+1
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("%%end *;") then
 		outputFile:write(doLevel .. ": %do-end ;\n")
 		doLevel=math.max(doLevel-1,0)
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
-	elseif line:lower():match("if .* do ") then
+	elseif line:lower():match("if[ \t].* do ") then
 		doLevel=doLevel+1
 		outputFile:write(doLevel .. ":" .. line	.. "\n")
 	elseif line:lower():match("end *;") then
@@ -402,7 +408,7 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 		or line:lower():gsub("order by","~"):match(" on [^~]*=[^=~]*[ %.]" .. searchText:gsub(" ",""):lower() .. "[^~]*;") then
 		outputFile:write("" .. searchText .. ":\tjoin-Variable " .. "\n")
 		outputFile:write("\t" .. "join-Variable \n")
-	elseif line:lower():gsub("mergeby",""):gsub("separated by",""):match("by.*" .. searchText:lower() .. ".*;") then
+	elseif line:lower():gsub("mergeby",""):gsub("separated by",""):match("[ \t]+by[ \t]+.*" .. searchText:lower() .. ".*;") then
 		outputFile:write("" .. searchText .. ":\tby-Variable " .. "\n")
 		outputFile:write("\t" .. "by-Variable \n")
 	elseif line:lower():match("select.*" .. searchText:lower() .. ".*into *:") then
@@ -509,6 +515,15 @@ outputFile:close()
 --6. open the result file
 os.execute('start "d" "C:\\Temp\\SAS_searcher_raw2.txt"')
 
+--6.1 for Power BI analysis
+lineNumber=0
+outputFile7=io.open("C:\\Temp\\SAS_searcher_raw2_withNr.txt","w")
+for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
+	lineNumber=lineNumber+1
+	outputFile7:write(lineNumber .. ": " .. line .. "\n")
+end --for line in io.lines("C:\\Temp\\SAS_searcher_raw2.txt") do
+outputFile7:close()
+
 --6.1 test the Lua table letTable
 --test with: for k,v in pairs(letTable) do print(k,v) end
 
@@ -526,14 +541,14 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw2.txt") do
 	end --if line:match("^0:") then
 	if line:lower():match(searchText:lower()) then
 		writeOutput="yes"
-		if line:lower():match("[ \t]if.* do ") then
+		if line:lower():match("[ \t]if[ \t].* do ") then
 			ifFound="yes"
-		elseif line:lower():match("[ \t]%%if.* %%do ") then
+		elseif line:lower():match("[ \t]%%if[ \t].* %%do ") then
 			ifFound="yes"
-		elseif ifFound=="yes" and levelSearch and levelSearch>"0" and line:lower():match("[ \t]%%if.* %%do ")==nil then
+		elseif ifFound=="yes" and levelSearch and levelSearch>"0" and line:lower():match("[ \t]%%if[ \t].* %%do ")==nil then
 			 --schon ein ifFound=="yes", aber mit levelSearch>"0" ein line:lower():match("[ \t]%%if.* %%do ")==nil bleibt yes
 			ifFound="yes"
-		elseif ifFound=="yes" and levelSearch and levelSearch>"0" and line:lower():match("[ \t]if.* do ")==nil then
+		elseif ifFound=="yes" and levelSearch and levelSearch>"0" and line:lower():match("[ \t]if[ \t].* do ")==nil then
 			 --schon ein ifFound=="yes", aber mit levelSearch>"0" ein line:lower():match("[ \t]if.* do ")==nil bleibt yes
 			ifFound="yes"
 		else
@@ -613,10 +628,14 @@ for line in io.lines("C:\\Temp\\SAS_searcher_output.txt") do
 		outputFile4:write("\t" .. line:upper():match("WHERE.*" ..  searchText:upper() .. ".*;") .. " ...\n")
 		--outputFile4:write("\t\t..." .. "\n")
 		uniqueTable["\t" .. line:lower():match("where.*" ..  searchText:lower() .. ".*;")]=true
-	elseif line:lower():match("then")==nil and line:lower():match("if ?.*" ..  searchText:lower() .. ".*;") and uniqueTable["\t" .. line:lower():match("if ?.*" ..  searchText:lower() .. ".*;")]==nil then
-		outputFile4:write("\t" .. line:upper():match("IF ?.*" ..  searchText:upper() .. ".*;") .. " ...\n")
+	elseif line:lower():match("then")==nil and line:lower():match("if[ \t].*" ..  searchText:lower() .. ".*;") and uniqueTable["\t" .. line:lower():match("if[ \t].*" ..  searchText:lower() .. ".*;")]==nil then
+		outputFile4:write("\t" .. line:upper():match("IF[ \t]?.*" ..  searchText:upper() .. ".*;") .. " ...\n")
 		--outputFile4:write("\t\t..." .. "\n")
-		uniqueTable["\t" .. line:lower():match("if ?.*" ..  searchText:lower() .. ".*;")]=true
+		uniqueTable["\t" .. line:lower():match("if[ \t]?.*" ..  searchText:lower() .. ".*;")]=true
+	elseif line:lower():match("then")==nil and line:lower():match("if" ..  searchText:lower() .. ".*;") and uniqueTable["\t" .. line:lower():match("if" ..  searchText:lower() .. ".*;")]==nil then
+		outputFile4:write("\t" .. line:upper():match("IF" ..  searchText:upper() .. ".*;") .. " ...\n")
+		--outputFile4:write("\t\t..." .. "\n")
+		uniqueTable["\t" .. line:lower():match("if" ..  searchText:lower() .. ".*;")]=true
 	end --line:lower():match("where.*;") and uniqueTable["\t" .. line:lower():match("where.*;")]==nil then
 	if searchText:match("^&") and uniqueTable[line]==nil and (
 		line:upper():match("^M:L:A:.*" .. searchText:upper():gsub("^&","") ) 
@@ -638,9 +657,9 @@ for line in io.lines("C:\\Temp\\SAS_searcher_output_tree.txt") do
 	if line:match("^Seiteneffektketten") and searchText:match("^&") then
 		outputFile5:write('VariablendefiniertTabelle["&' .. line:gsub("Seiteneffektketten von &","") .. '"]=true\n')
 		outputFile5:write('VariablendefiniertTabelle["&' .. line:gsub("Seiteneffektketten von &","") .. '."]=true\n')
-		outputFile5:write(line:gsub("Seiteneffektketten von &",""):gsub(" *$"," "):gsub(" $","="):gsub(" ","_"):upper() .. "\n") 
+		outputFile5:write(line:gsub("Seiteneffektketten von &",""):gsub(" *$"," "):gsub("%.","_"):gsub("&","_"):gsub(" $","="):gsub(" ","_"):upper() .. "\n") 
 	elseif line:match("^Seiteneffektketten") then
-		outputFile5:write(line:gsub(" *$"," "):gsub(" $","="):gsub(" ","_"):upper() .. "\n") 
+		outputFile5:write(line:gsub(" *$"," "):gsub(" $","="):gsub("%.","_"):gsub("&","_"):gsub(" ","_"):upper() .. "\n") 
 	elseif line:match("^\t")==nil then
 		outputFile5:write('{branchname="' .. line:upper() .. '",\n') 
 	elseif line:match("^\t%d+: %%do%-end") then
