@@ -78,13 +78,13 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 				print(numberProgramm .. ". include: " .. field)
 				if field:match(":\\") then
 					DateiText=field:match('"([^"]*)"')
-				else
+				else --take the path from the SASFile and the sub path and filename of include
 					DateiText=SASFile:match("(.*)\\[^\\]*") .. "\\" .. field:match('"([^"]*)"') --C:\\Temp
 				end --if field:match(":\\") then
-				printOut(string.rep("\t",numberTabs+1) .. "Rekursion: " .. DateiText)
+				--printOut(string.rep("\t",numberTabs+1) .. "Rekursion: " .. DateiText)
 				--recursion
 				RecursiveTreatSAS(DateiText,numberTabs+1)
-				printOut(string.rep("\t",numberTabs+2) .. "Rekursionsende: " .. DateiText)
+				--printOut(string.rep("\t",numberTabs+2) .. "Rekursionsende: " .. DateiText)
 				uniqueTable={}
 			end --for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
 		elseif (" " .. semikolon):lower():match(searchText:lower()) then
@@ -100,6 +100,7 @@ end --function RecursiveTreatSAS(SASFile)
 
 --4. building a result file with categorisations of data
 outputFile=io.open("C:\\Temp\\SAS_searcher.txt","w")
+printOut("Suche von: " .. "'" .. searchText .. "'")
 
 --4.1 apply recursive function
 for i,v in pairs(fileTable) do
