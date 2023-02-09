@@ -9,18 +9,15 @@ lineEnd="no"
 lineLogic=""
 lineNumber=0
 for line in io.lines(filename) do
-lineNumber=lineNumber+1
+	lineNumber=lineNumber+1
 	if line:match(";") then
 		lineEnd="yes"
 		lineLogic=lineLogic .. line
 		outputfile1:write(lineLogic:gsub("; *$","~"):gsub(";",";\n"):gsub("~$",";") .. "\n")
 		lineLogic=""
 	elseif line:match("^[ \t]*/%*[^;]*%*/$") then
-		outputfile1:write(lineLogic:gsub("; *$","~"):gsub(";",";\n"):gsub("~$",";") .. "\n")
-		lineEnd="yes"
-		lineLogic=line
-		outputfile1:write(lineLogic:gsub("; *$","~"):gsub(";",";\n"):gsub("~$",";") .. "\n")
-		lineLogic=""
+		--take out comments in one line
+		lineEnd="no"
 	else
 		lineEnd="no"
 		lineLogic=lineLogic .. line
@@ -62,8 +59,8 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ]*)[ \t]*") 
 	local createtablelikeline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*[^ ]*[ \t]*LIKE[ \t]*([^ ;]*)[ \t]*") 
 	local createtablefromline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
-	if dataline and dataline:gsub("[ \t]*","")~=tostring(setline):gsub("[ \t]*","") then
-		outputfile3:write("--dataline\n")
+	if dataline and dataline:gsub("[ \t]*$","")~=tostring(setline:gsub("[ \t]*$","")) then
+		outputfile3:write("--dataline: " .. dataline .. " < " .. tostring(setline):gsub("[ \t]*$","") .. " / " .. tostring(mergeline):gsub("[ \t]*$","") .. "\n")
 		for field in dataline:gmatch("[^ \t]+") do
 			if field~="MERGE" and field~="SET" then
 				outputfile3:write(field .. "\n")
@@ -82,8 +79,8 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 			end --if mergeline then
 		end --for field in dataline:gmatch("[^ \t]+") do 
 	end --if dataline then
-	if dupoutline then
-		outputfile3:write("--dupoutline\n")
+	if dupoutline and dupoutline:gsub("[ \t]","") ~= dataequalline:gsub("[ \t]","") then
+		outputfile3:write("--dupoutline: " .. dupoutline:gsub("[ \t]*$","") .. " < " .. dataequalline:gsub("[ \t]*$","") .. "\n")
 		dupoutline=dupoutline:upper():gsub("DBMS=EXCEL",""):gsub("[ \t]*SORTSIZE[ \t]*=[ \t]*[^ \t;]*",""):gsub("REPLACE",""):gsub("\\","\\\\")
 		for field in dupoutline:gmatch("[^ \t]+") do 
 			outputfile3:write(field .. "\n")
@@ -96,8 +93,8 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 			end --if dataequalline then
 		end --for field in dupoutline:gmatch("[^ \t]+") do 
 	end --if dupoutline then
-	if outline then
-		outputfile3:write("--outline\n")
+	if outline and outline:gsub("[ \t]","") ~= dataequalline:gsub("[ \t]","") then
+		outputfile3:write("--outline: " .. outline:gsub("[ \t]*$","") .. " < " .. dataequalline:gsub("[ \t]*$","") .. "\n")
 		outline=outline:upper():gsub("DBMS=EXCEL",""):gsub("[ \t]*SORTSIZE[ \t]*=[ \t]*[^ \t;]*",""):gsub("[ \t]*SUM[ \t]*=[ \t]*[^ \t;]*",""):gsub("REPLACE",""):gsub("\\","\\\\")
 		for field in outline:gmatch("[^ \t]+") do 
 			outputfile3:write(field .. "\n")
@@ -111,7 +108,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 		end --for field in outline:gmatch("[^ \t]+") do 
 	end --if outline then
 	if createtableline then
-		outputfile3:write("--createtableline\n")
+		outputfile3:write("--createtableline: " .. createtableline .. "<" .. tostring(createtablelikeline) .. " / " .. tostring(createtablefromline) .. "\n")
 		outputfile3:write(createtableline .. "\n")
 		if createtablelikeline then outputfile3:write("\t" .. createtablelikeline .. "\n") end
 		if createtablefromline then outputfile3:write("\t" .. createtablefromline .. "\n") end
@@ -123,8 +120,12 @@ outputfile3:close()
 --9.1 read tabulator tree and collect only input data and only output data
 outputTable={}
 inputTable={}
+_NULL_Number=0
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.txt") do
-	if line:match("^\t")==nil then
+	if line:match("^_NULL_") then
+		_NULL_Number=_NULL_Number+1
+		outputTable[line .. _NULL_Number]="output"
+	elseif line:match("^\t")==nil then
 		outputTable[line]="output"
 	else
 		inputTable[line:match("^\t([^\t]+)")]="input"
@@ -150,8 +151,12 @@ for k,v in pairs(inputTable) do
 end --for k,v in pairs(inputTable) do
 outputfile4:write('Datei={branchname="' .. filename:gsub("\\","\\\\") .. '",\n')
 
+_NULL_Number=0
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.txt") do 
-	if line:match("^\t")==nil and line:match("^%-%-")==nil then
+	if line:match("^_NULL_") then
+		_NULL_Number=_NULL_Number+1
+		outputfile4:write('}\n' .. line .. _NULL_Number .. '={branchname="' .. line:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '",\n') 
+	elseif line:match("^\t")==nil and line:match("^%-%-")==nil then
 		outputfile4:write('}\n' .. line .. '={branchname="' .. line:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '",\n') 
 	else
 		outputfile4:write(line .. ',\n') 
@@ -167,3 +172,17 @@ end --for k,v in pairs(outputTable) do
 outputfile4:write('}\n') 
 outputfile4:close()
 
+--10. check whether there are variables defined twice or more times
+variableTable={}
+for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.lua") do
+	if line:match("[^ ]+=") and variableTable[line]==nil then
+		variableTable[line:match("([^ ]+)=")]=1
+	elseif line:match("[^ ]+=") then
+		variableTable[line:match("([^ ]+)=")]=variableTable[line:match("([^ ]+)=")]+1
+	end --if line:match("^[ \t]")==nil then
+end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.lua") do
+for k,v in pairs(variableTable) do
+	if v>1 then print(k,v) end
+end --for k,v in pairs(variableTable) do
+
+os.execute('start "d" "C:\\Program Files (x86)\\Notepad++\\notepad++.exe" "C:\\Temp\\SAS_programm_logic_input_output_tree.lua"')
