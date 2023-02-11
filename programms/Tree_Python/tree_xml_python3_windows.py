@@ -69,7 +69,17 @@ class DomTreeItem(TreeItem):
             return "openfolder"
 
     def IsEditable(self):
-        return "no"
+        return self.node != ""
+
+    def SetText(self, text):
+        # test with: print(text)
+        node = self.node
+        if node.nodeType == node.ELEMENT_NODE:
+            # test with: print(node.nodeName)
+            node.nodeName = text
+        elif node.nodeType == node.TEXT_NODE:
+            # test with: print(node.nodeValue)
+            node.nodeValue = text
 
 
 # 4. build the graphical user interface
@@ -138,9 +148,121 @@ button2["text"] = "Datei ausfuehren"
 button2.pack(anchor="w")
 button2["command"] = button2_click
 
+
+# 4.3.4 button read tree as text with tabulators
+def button3_click():
+    print(node.item.GetText())
+    # print(node) <idlelib.tree.TreeNode object at 0x0000026159641B20>
+    # print(node.children) [<idlelib.tree.TreeNode object at 0x000001C98C2B2CD0>, <idlelib.tree.TreeNode object at 0x000001C98C2B2D60>, <idlelib.tree.TreeNode object at 0x000001C98C2B2D90>]
+    for treeNode1 in node.children:
+        treeNode1.expand()
+        # print(treeNode1) <idlelib.tree.TreeNode object at 0x000001AA2EE41D90>
+        # <idlelib.tree.TreeNode object at 0x000001AA2EE41E20>
+        # <idlelib.tree.TreeNode object at 0x000001AA2EE41E50>
+        # print(dir(treeNode1)) ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'canvas', 'children', 'collapse', 'deselect', 'deselectall', 'deselecttree', 'destroy', 'draw', 'drawicon', 'drawtext', 'edit', 'edit_cancel', 'edit_finish', 'expand', 'flip', 'geticonimage', 'iconimages', 'image_id', 'item', 'label', 'lastvisiblechild', 'parent', 'select', 'select_or_edit', 'selected', 'state', 'text_id', 'update', 'view', 'x', 'y']
+        # print(treeNode1.item) # <__main__.DomTreeItem object at 0x0000027DB4816160>
+        # print(treeNode1.parent) # <idlelib.tree.TreeNode object at 0x0000027DB3BF0EE0>
+        # print(treeNode1.children) # []
+        print(treeNode1.item.GetText()) # Tree-Programme
+        for treeNode2 in treeNode1.children:
+            treeNode2.expand()
+            print("\t" + treeNode2.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
+            for treeNode3 in treeNode2.children:
+                treeNode3.expand()
+                print("\t\t" + treeNode3.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
+                for treeNode4 in treeNode3.children:
+                    treeNode4.expand()
+                    print("\t\t" + treeNode4.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
+
+
+button3 = Button(labelframe1)
+button3["text"] = "Tree ausklappen und als Text mit Tabulatoren auslesen"
+button3.pack(anchor="w")
+button3["command"] = button3_click
+
+
+# 4.3.5 button read tree as xml
+def button4_click():
+    print("<" + node.item.GetText() + ">")
+    for treeNode1 in node.children:
+        treeNode1.expand()
+        if treeNode1.children:
+            print("\t" + "<" + treeNode1.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+        else:
+            print("\t" + treeNode1.item.GetText()) # Tree-Programme
+        for treeNode2 in treeNode1.children:
+            treeNode2.expand()
+            if treeNode2.children:
+                print("\t\t" + "<" + treeNode2.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+            else:
+                print("\t\t" + treeNode2.item.GetText())
+            for treeNode3 in treeNode2.children:
+                treeNode3.expand()
+                if treeNode3.children:
+                    print("\t\t\t" + "<" + treeNode3.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+                else:
+                    print("\t\t\t" + treeNode3.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
+                for treeNode4 in treeNode3.children:
+                    treeNode4.expand()
+                    print("\t\t\t\t" + treeNode4.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
+                if treeNode3.children:
+                    print("\t\t\t" + "<" + treeNode3.item.GetText() + ">")  # liefert nichts, wenn der Baum eingeklappt ist
+            if treeNode2.children:
+                print("\t\t" + "</" + treeNode2.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+        if treeNode1.children:
+            print("\t" + "</" + treeNode1.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+    print("</" + node.item.GetText() + ">")
+
+
+button4 = Button(labelframe1)
+button4["text"] = "Tree ausklappen und als XML auslesen"
+button4.pack(anchor="w")
+button4["command"] = button4_click
+
+
+# 4.3.6 button read tree as Lua tree
+def button4_click():
+    print('Tree={branchname="' + node.item.GetText() + '",')
+    for treeNode1 in node.children:
+        treeNode1.expand()
+        if treeNode1.children:
+            print("\t" + '{branchname="' + treeNode1.item.GetText() + '",') # liefert nichts, wenn der Baum eingeklappt ist
+        else:
+            print("\t" + '"' + treeNode1.item.GetText() + '",')
+        for treeNode2 in treeNode1.children:
+            treeNode2.expand()
+            if treeNode2.children:
+                print("\t\t" + '{branchname="' + treeNode2.item.GetText() + '",') # liefert nichts, wenn der Baum eingeklappt ist
+            else:
+                print("\t\t" + '"' + treeNode2.item.GetText() + '",')
+            for treeNode3 in treeNode2.children:
+                treeNode3.expand()
+                if treeNode3.children:
+                    print("\t\t\t" + '{branchname="' + treeNode3.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+                else:
+                    print("\t\t\t" + '"' + treeNode3.item.GetText() + '",')
+                for treeNode4 in treeNode3.children:
+                    treeNode4.expand()
+                    print("\t\t\t\t" + '"' + treeNode4.item.GetText() + '",') # liefert nichts, wenn der Baum eingeklappt ist
+                if treeNode3.children:
+                    print("\t\t\t" + "}")  # liefert nichts, wenn der Baum eingeklappt ist
+            if treeNode2.children:
+                print("\t\t" + "}") # liefert nichts, wenn der Baum eingeklappt ist
+        if treeNode1.children:
+            print("\t" + "}") # liefert nichts, wenn der Baum eingeklappt ist
+    print("}")
+
+
+button4 = Button(labelframe1)
+button4["text"] = "Tree ausklappen und als Lua Tabelle auslesen"
+button4.pack(anchor="w")
+button4["command"] = button4_click
+
+
 # 4.3.4 text field
 text2 = Text(labelframe1, width=40, height=50)
 text2.pack(anchor="w")
+
 
 # 5. show the graphical user interface
 root.mainloop()
