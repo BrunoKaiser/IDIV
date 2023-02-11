@@ -16,15 +16,23 @@ end --function printOut(a)
 --2. uniqueTable to write node only once
 uniqueTable={}
 numberProgramm=0
+numberProgrammNotAnalysed=0
 
 --3. recursive function to seek for informations in SAS programms and in sub programms
 
 function RecursiveTreatSAS(SASFile,numberTabs)
+	text=""
 	numberProgramm=numberProgramm+1
 	print(SASFile,numberTabs)
 	inputfile=io.open(SASFile) --"C:\\Temp\\SAS_Analyser.sas"
-	text=inputfile:read("*all")
-	inputfile:close()
+	if inputfile then
+		text=inputfile:read("*all")
+		inputfile:close()
+		print(SASFile .. " untersucht")
+	else
+		print(SASFile .. " nicht analysiert")
+		numberProgrammNotAnalysed=numberProgrammNotAnalysed+1
+	end --if inputfile then
 	--treat the file
 	for semikolon in (text .. "\n")
 								:gsub(" ?= ?"," = ")
@@ -73,13 +81,36 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 								:gsub(" +;",";")
 								:gmatch("[^;]*;") do
 		semikolon=semikolon:gsub("\n"," "):gsub("^ +",""):gsub("^\t+",""):gsub(","," , "):gsub(";"," ;"):gsub(" +"," ")
+		--translate client to local path denomination
+		semikolon=semikolon:gsub("\\\\[cC][lL][iI][eE][nN][tT]\\(.)$\\","%1:\\")
+						:gsub("\\\\[cC][lL][iI][eE][nN][tT]\\(.):\\","%1:\\")
 		if semikolon:lower():match("^%%include") then
 			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
-				print(numberProgramm .. ". include: " .. field)
 				if field:match(":\\") then
+					print(numberProgramm .. ". Pfad include: " .. field)
 					DateiText=field:match('"([^"]*)"')
 				else --take the path from the SASFile and the sub path and filename of include
-					DateiText=SASFile:match("(.*)\\[^\\]*") .. "\\" .. field:match('"([^"]*)"') --C:\\Temp
+					print(numberProgramm .. ". Datei include: " .. field)
+					DateiText=SASFile:match("(.*)\\[^\\]*") .. "\\" .. field:match('"([^"]*)"')
+					--individuell :gsub("&something%.","")
+				end --if field:match(":\\") then
+				--printOut(string.rep("\t",numberTabs+1) .. "Rekursion: " .. DateiText)
+				--recursion
+				RecursiveTreatSAS(DateiText,numberTabs+1)
+				--printOut(string.rep("\t",numberTabs+2) .. "Rekursionsende: " .. DateiText)
+				uniqueTable={}
+			end --for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
+		elseif semikolon:lower():match("include[ ]*=[ ]*.*\\[^,]*") then
+			semikolon=semikolon:match("include[ ]*=([ ]*.*\\[^,]*)")
+			--individuell :gsub("something","something else") 
+			--test with: print("semikolon" .. semikolon)
+			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('[^=;]*') do
+				if field:match(":\\") then
+					print(numberProgramm .. ". Pfad include=: " .. field)
+					DateiText=field:match('.:\\[^=;]*%.sas')
+				elseif field:match('([^=;]*%.sas)') then --take the path from the SASFile and the sub path and filename of include
+					print(numberProgramm .. ". Datei include=: " .. field:match('[^=;]*%.sas'))
+					DateiText=SASFile:match("(.*)\\[^\\]*") .. "\\" ..  field:match('[^=;]*%.sas')
 				end --if field:match(":\\") then
 				--printOut(string.rep("\t",numberTabs+1) .. "Rekursion: " .. DateiText)
 				--recursion
@@ -89,8 +120,10 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 			end --for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
 		elseif (" " .. semikolon):lower():match(searchText:lower()) then
 			if uniqueTable[SASFile]==nil then
-				printOut(string.rep("\t",numberTabs) .. SASFile)
-				os.execute('start "d" "' .. SASFile .. '"')
+				if inputfile then
+					printOut(string.rep("\t",numberTabs) .. SASFile)
+					os.execute('start "d" "' .. SASFile .. '"')
+				end --if inputfile then
 				uniqueTable[SASFile]=true
 			end --if uniqueTable==nil then
 			printOut(string.rep("\t",numberTabs+1) .. semikolon)
@@ -113,3 +146,6 @@ outputFile:close()
 
 --5. open the result file
 os.execute('start "d" "C:\\Temp\\SAS_searcher.txt"')
+
+--6. print how much programms are not analysed
+print("Anzahl nicht analysierter Programme: " .. numberProgrammNotAnalysed .. " von " .. numberProgramm)
