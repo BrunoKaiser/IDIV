@@ -27,3 +27,16 @@ This is the readme of the slpp site of the source: https://github.com/SirAnthony
 3. tree_xml_python.py
 
 This script is only for python 2! It shows a tree with xml as input data and a file browser. Files can be shown in a text box, opened and executes. It is tested for MacOS.
+
+
+3.1 tree_xml_python3_windows.py
+
+This script is only for python 3! It shows a tree with xml as input data and a file browser. Files can be shown in a text box, opened and executes. It is tested for Windows.
+
+3.1.1 Tree_Testdaten.py
+
+This script contains the data for the tree in script tree_xml_python3_windows.py.
+
+3.1.2 config.py
+
+This script contains the configuration for the script tree_xml_python3_windows.py.
