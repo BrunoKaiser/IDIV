@@ -5,11 +5,23 @@ import os   # operating system
 from tkinter import Tk, Text, LabelFrame, Button
 from xml.dom.minidom import parseString
 from idlelib.tree import ScrolledCanvas, TreeItem, FileTreeItem, TreeNode
+import io   # input output utf8 etc.
 
-# 2. data of the tree
+# 2.1 data of the tree
 import Tree_Testdaten
 import config
 
+
+#2.2 functionality to escape forbidden characters
+def string_escape_forbidden_characters(stringInput):
+    stringInput=stringInput.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n").replace("\r", "\\n")
+    return stringInput
+
+
+#2.3 output file or print
+outputfile1 = "global variable"
+def printOut(stringInput):
+    outputfile1.write(str(stringInput) + "\n")
 
 # 3. build a class for the xml tree Strg b auf TreeItem öffnet Definition
 class DomTreeItem(TreeItem):
@@ -150,7 +162,27 @@ button2["command"] = button2_click
 
 
 # 4.3.4 button read tree as text with tabulators
+
+# 4.3.4.1 recursive function to read the tree
+def recursiveNodeText(treeNode1,tabulator):
+    for treeNode2 in treeNode1.children:
+        treeNode2.expand()
+        printOut(tabulator + "\t" + treeNode2.item.GetText())  # liefert nichts, wenn der Baum eingeklappt ist
+        recursiveNodeText(treeNode2,tabulator + "\t")
+
+# 4.3.4.2 button read tree as text with tabulators
 def button3_click():
+    global outputfile1
+    outputfile1 = open("C:\\Temp\\test.txt", "w")
+    printOut(node.item.GetText())
+    for treeNode1 in node.children:
+        treeNode1.expand()
+        printOut("\t" + treeNode1.item.GetText())
+        recursiveNodeText(treeNode1, "\t")
+    outputfile1.close()
+
+# 4.3.4.2a button read tree as text with tabulators
+def button3_click_test_with():
     print(node.item.GetText())
     # print(node) <idlelib.tree.TreeNode object at 0x0000026159641B20>
     # print(node.children) [<idlelib.tree.TreeNode object at 0x000001C98C2B2CD0>, <idlelib.tree.TreeNode object at 0x000001C98C2B2D60>, <idlelib.tree.TreeNode object at 0x000001C98C2B2D90>]
@@ -175,6 +207,7 @@ def button3_click():
                     print("\t\t" + treeNode4.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
 
 
+# 4.3.4.3 define button
 button3 = Button(labelframe1)
 button3["text"] = "Tree ausklappen und als Text mit Tabulatoren auslesen"
 button3.pack(anchor="w")
@@ -182,38 +215,42 @@ button3["command"] = button3_click
 
 
 # 4.3.5 button read tree as xml
+
+# 4.3.5.1 recursive function to read the tree
+def recursiveNodeXML(treeNode1,tabulator):
+    for treeNode2 in treeNode1.children:
+        treeNode2.expand()
+        if treeNode2.children:
+            outputfile1.write(tabulator + "<" + treeNode2.item.GetText() + ">")  # liefert nichts, wenn der Baum eingeklappt ist
+        else:
+            outputfile1.write(tabulator + treeNode2.item.GetText())
+        recursiveNodeXML(treeNode2,tabulator )
+        if treeNode2.children:
+            printOut(tabulator + "</" + treeNode2.item.GetText() + ">")
+
+# 4.3.5.2 button read tree as text with tabulators
 def button4_click():
-    print("<" + node.item.GetText() + ">")
+    global outputfile1
+    outputfile1 = io.open("C:\\Tree\\Tree_Python\\Tree_Testdaten.py", "w", encoding="utf-8")
+    outputfile1.write("# This script contains a tree defined as xml shown in a graphical user interface and a file browser tree\n")
+    outputfile1.write("# 2. data of the tree\n")
+    outputfile1.write("data = r'''\n")
+    outputfile1.write("<" + node.item.GetText() + ">")
     for treeNode1 in node.children:
         treeNode1.expand()
         if treeNode1.children:
-            print("\t" + "<" + treeNode1.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+            outputfile1.write("<" + treeNode1.item.GetText() + ">")
         else:
-            print("\t" + treeNode1.item.GetText()) # Tree-Programme
-        for treeNode2 in treeNode1.children:
-            treeNode2.expand()
-            if treeNode2.children:
-                print("\t\t" + "<" + treeNode2.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
-            else:
-                print("\t\t" + treeNode2.item.GetText())
-            for treeNode3 in treeNode2.children:
-                treeNode3.expand()
-                if treeNode3.children:
-                    print("\t\t\t" + "<" + treeNode3.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
-                else:
-                    print("\t\t\t" + treeNode3.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
-                for treeNode4 in treeNode3.children:
-                    treeNode4.expand()
-                    print("\t\t\t\t" + treeNode4.item.GetText()) # liefert nichts, wenn der Baum eingeklappt ist
-                if treeNode3.children:
-                    print("\t\t\t" + "<" + treeNode3.item.GetText() + ">")  # liefert nichts, wenn der Baum eingeklappt ist
-            if treeNode2.children:
-                print("\t\t" + "</" + treeNode2.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
+            outputfile1.write(treeNode1.item.GetText())
+        recursiveNodeXML(treeNode1, "")
         if treeNode1.children:
-            print("\t" + "</" + treeNode1.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
-    print("</" + node.item.GetText() + ">")
+            printOut("</" + treeNode1.item.GetText() + ">")
+    printOut("</" + node.item.GetText() + ">")
+    outputfile1.write("'''\n")
+    outputfile1.close()
 
 
+# 4.3.5.3 define button
 button4 = Button(labelframe1)
 button4["text"] = "Tree ausklappen und als XML auslesen"
 button4.pack(anchor="w")
@@ -221,45 +258,45 @@ button4["command"] = button4_click
 
 
 # 4.3.6 button read tree as Lua tree
-def button4_click():
-    print('Tree={branchname="' + node.item.GetText() + '",')
+
+# 4.3.6.1 recursive function to read the tree
+def recursiveNodeLua(treeNode1,tabulator):
+    for treeNode2 in treeNode1.children:
+        treeNode2.expand()
+        if treeNode2.children:
+            printOut(tabulator + "\t" + '{branchname="' + string_escape_forbidden_characters(treeNode2.item.GetText()) + '",')  # liefert nichts, wenn der Baum eingeklappt ist
+        else:
+            printOut(tabulator + "\t" + '"' + string_escape_forbidden_characters(treeNode2.item.GetText()) + '",')
+        recursiveNodeLua(treeNode2,tabulator + "\t")
+        if treeNode2.children:
+            printOut(tabulator + "\t" + "} --" + string_escape_forbidden_characters(treeNode2.item.GetText()))
+
+# 4.3.6.2 button read tree as text with tabulators
+def button5_click():
+    global outputfile1
+    outputfile1 = open("C:\\Temp\\test.txt", "w")
+    printOut('Tree={branchname="' + string_escape_forbidden_characters(node.item.GetText()) + '",')
     for treeNode1 in node.children:
         treeNode1.expand()
         if treeNode1.children:
-            print("\t" + '{branchname="' + treeNode1.item.GetText() + '",') # liefert nichts, wenn der Baum eingeklappt ist
+            printOut("\t" + '{branchname="' + string_escape_forbidden_characters(treeNode1.item.GetText()) + '",')
         else:
-            print("\t" + '"' + treeNode1.item.GetText() + '",')
-        for treeNode2 in treeNode1.children:
-            treeNode2.expand()
-            if treeNode2.children:
-                print("\t\t" + '{branchname="' + treeNode2.item.GetText() + '",') # liefert nichts, wenn der Baum eingeklappt ist
-            else:
-                print("\t\t" + '"' + treeNode2.item.GetText() + '",')
-            for treeNode3 in treeNode2.children:
-                treeNode3.expand()
-                if treeNode3.children:
-                    print("\t\t\t" + '{branchname="' + treeNode3.item.GetText() + ">") # liefert nichts, wenn der Baum eingeklappt ist
-                else:
-                    print("\t\t\t" + '"' + treeNode3.item.GetText() + '",')
-                for treeNode4 in treeNode3.children:
-                    treeNode4.expand()
-                    print("\t\t\t\t" + '"' + treeNode4.item.GetText() + '",') # liefert nichts, wenn der Baum eingeklappt ist
-                if treeNode3.children:
-                    print("\t\t\t" + "}")  # liefert nichts, wenn der Baum eingeklappt ist
-            if treeNode2.children:
-                print("\t\t" + "}") # liefert nichts, wenn der Baum eingeklappt ist
+            printOut('"' + string_escape_forbidden_characters(treeNode1.item.GetText()) + '",')
+        recursiveNodeLua(treeNode1, "\t")
         if treeNode1.children:
-            print("\t" + "}") # liefert nichts, wenn der Baum eingeklappt ist
-    print("}")
+            printOut("\t" + "} --" + string_escape_forbidden_characters(treeNode1.item.GetText()))
+    printOut("} --" + string_escape_forbidden_characters(node.item.GetText()))
+    outputfile1.close()
 
 
-button4 = Button(labelframe1)
-button4["text"] = "Tree ausklappen und als Lua Tabelle auslesen"
-button4.pack(anchor="w")
-button4["command"] = button4_click
+# 4.3.6.3 define button
+button5 = Button(labelframe1)
+button5["text"] = "Tree ausklappen und als Lua Tabelle auslesen"
+button5.pack(anchor="w")
+button5["command"] = button5_click
 
 
-# 4.3.4 text field
+# 4.3.7 text field
 text2 = Text(labelframe1, width=40, height=50)
 text2.pack(anchor="w")
 
