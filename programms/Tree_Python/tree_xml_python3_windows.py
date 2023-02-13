@@ -78,7 +78,8 @@ class DomTreeItem(TreeItem):
 
     def GetIconName(self):
         if not self.IsExpandable():
-            return "openfolder"
+            # return "openfolder"
+            return "python"
 
     def IsEditable(self):
         return self.node != ""
