@@ -408,7 +408,7 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 		or line:lower():gsub("order by","~"):match(" on [^~]*=[^=~]*[ %.]" .. searchText:gsub(" ",""):lower() .. "[^~]*;") then
 		outputFile:write("" .. searchText .. ":\tjoin-Variable " .. "\n")
 		outputFile:write("\t" .. "join-Variable \n")
-	elseif line:lower():gsub("mergeby",""):gsub("separated by",""):match("[ \t]+by[ \t]+.*" .. searchText:lower() .. ".*;") then
+	elseif line:lower():gsub("mergeby",""):gsub("separated by",""):match("[ \t]+by.*" .. searchText:lower() .. ".*;") then
 		outputFile:write("" .. searchText .. ":\tby-Variable " .. "\n")
 		outputFile:write("\t" .. "by-Variable \n")
 	elseif line:lower():match("select.*" .. searchText:lower() .. ".*into *:") then
