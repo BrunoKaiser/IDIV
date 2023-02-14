@@ -146,7 +146,7 @@ inputNumber=0
 for k,v in pairs(inputTable) do
 	if v=="input" then
 		inputNumber=inputNumber+1
-		outputfile4:write(k .. '={branchname="' .. k:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","' .. v .. ' ' .. inputNumber .. '"}\n')
+		outputfile4:write(k .. '={branchname="' .. k:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","' .. v .. ' ' .. string.rep(" ",3-#tostring(inputNumber)) .. inputNumber .. '"}\n')
 	end --if v=="input" then
 end --for k,v in pairs(inputTable) do
 outputfile4:write('Datei={branchname="' .. filename:gsub("\\","\\\\") .. '",\n')
@@ -175,11 +175,11 @@ outputfile4:close()
 --10. check whether there are variables defined twice or more times
 variableTable={}
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.lua") do
-	if line:match("[^ ]+=") and variableTable[line]==nil then
-		variableTable[line:match("([^ ]+)=")]=1
-	elseif line:match("[^ ]+=") then
-		variableTable[line:match("([^ ]+)=")]=variableTable[line:match("([^ ]+)=")]+1
-	end --if line:match("^[ \t]")==nil then
+	if line:match("^([^ =]+)=") and variableTable[line:match("^([^ =]+)=")]==nil then
+		variableTable[line:match("^([^ =]+)=")]=1
+	elseif line:match("^([^ =]+)=") then
+		variableTable[line:match("^([^ =]+)=")]=variableTable[line:match("^([^ =]+)=")]+1
+	end --if if line:match("[^ =]+=") and variableTable[line:match("([^ =]+)=")]==nil then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.lua") do
 for k,v in pairs(variableTable) do
 	if v>1 then print(k,v) end
