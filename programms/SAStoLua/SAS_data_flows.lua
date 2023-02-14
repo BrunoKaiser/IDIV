@@ -59,7 +59,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ]*)[ \t]*") 
 	local createtablelikeline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*[^ ]*[ \t]*LIKE[ \t]*([^ ;]*)[ \t]*") 
 	local createtablefromline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
-	if dataline and dataline:gsub("[ \t]*$","")~=tostring(setline:gsub("[ \t]*$","")) then
+	if dataline and dataline:gsub("[ \t]*$","")~=tostring(setline):gsub("[ \t]*$","") then
 		outputfile3:write("--dataline: " .. dataline .. " < " .. tostring(setline):gsub("[ \t]*$","") .. " / " .. tostring(mergeline):gsub("[ \t]*$","") .. "\n")
 		for field in dataline:gmatch("[^ \t]+") do
 			if field~="MERGE" and field~="SET" then
