@@ -47,6 +47,7 @@ end --for line in io.lines("C:\\Temp\\SAS_programm_logic.sas") do
 outputfile2:close()
 
 --3. build output tree with tabs
+_NULL_Number=0
 outputfile3=io.open("C:\\Temp\\SAS_programm_logic_input_output_tree.txt","w")
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	line=line:upper():gsub("[ \t]*=[ \t]*","=")
@@ -61,7 +62,10 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	local createtablefromline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
 	if dataline and dataline:gsub("[ \t]*$","")~=tostring(setline):gsub("[ \t]*$","") then
 		for field in dataline:gmatch("[^ \t]+") do
-			if field~="MERGE" and field~="SET" then
+			if field=="_NULL_" then
+				_NULL_Number=_NULL_Number+1
+				outputfile3:write(field .. _NULL_Number .. "\n")
+			elseif field~="MERGE" and field~="SET" then
 				outputfile3:write(field .. "\n")
 			end --if field~="MERGE" and field~="SET" then
 			if setline then
@@ -156,12 +160,8 @@ outputfile4:close()
 --5. read tabulator tree and collect only input data and only output data
 outputTable={}
 inputTable={}
-_NULL_Number=0
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt") do
-	if line:match("^_NULL_") then
-		_NULL_Number=_NULL_Number+1
-		outputTable[line .. _NULL_Number]="output"
-	elseif line:match("^\t")==nil then
+	if line:match("^\t")==nil then
 		outputTable[line]="output"
 	else
 		inputTable[line:match("^\t([^\t]+)")]="input"
@@ -176,13 +176,18 @@ for k,v in pairs(outputTable) do
 end --for k,v in pairs() do
 --test with: for k,v in pairs(outputTable) do print(k,v) end
 
+
 --6. write the corresponding Lua tree from tabulator tree
 outputfile5=io.open("C:\\Temp\\SAS_programm_logic_input_output_tree.lua","w")
 inputNumber=0
+inputAndoutputNumber=0
 inputOnlySortedTable={}
+inputAndoutputSortedTable={}
 for k,v in pairs(inputTable) do
 	if v=="input" then
 		inputOnlySortedTable[#inputOnlySortedTable+1]= k
+	else
+		inputAndoutputSortedTable[#inputAndoutputSortedTable+1]= k
 	end --if v=="input" then
 end --for k,v in pairs(inputTable) do
 table.sort(inputOnlySortedTable,function(a,b) return a<b end)
@@ -190,14 +195,18 @@ for i,v in pairs(inputOnlySortedTable) do
 	inputNumber=inputNumber+1
 	outputfile5:write(v .. '={branchname="' .. v:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","Input ' .. string.rep(" ",3-#tostring(inputNumber)) .. inputNumber .. '"}\n')
 end --for i,v in pairs(inputOnlySortedTable) do
+table.sort(inputAndoutputSortedTable,function(a,b) return a<b end)
+for i,v in pairs(inputAndoutputSortedTable) do
+print(i,v)
+	inputAndoutputNumber=inputAndoutputNumber+1
+	outputfile5:write(v .. '={branchname="' .. v:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","Input und Output ' .. string.rep(" ",3-#tostring(inputAndoutputNumber)) .. inputAndoutputNumber .. '"}\n')
+end --for i,v in pairs(inputOnlySortedTable) do
+
+
 outputfile5:write('Datei={branchname="' .. filename:gsub("\\","\\\\") .. '",\n')
 
-_NULL_Number=0
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt") do
-	if line:match("^_NULL_") then
-		_NULL_Number=_NULL_Number+1
-		outputfile5:write('}\n' .. line .. _NULL_Number .. '={branchname="' .. line:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '",\n') 
-	elseif line:match("^\t")==nil and line:match("^%-%-")==nil then
+	if line:match("^\t")==nil and line:match("^%-%-")==nil then
 		outputfile5:write('}\n' .. line .. '={branchname="' .. line:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '",\n') 
 	else
 		outputfile5:write(line .. ',\n') 
@@ -210,15 +219,26 @@ for k,v in pairs(outputTable) do
 		outputfile5:write(k .. ',\n')
 	end --if v=="output" and k:match("^%-%-")==nil then
 end --for k,v in pairs(outputTable) do
+--find not defined branches
+definedTable={}
+for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt") do 
+	if line:match("^\t")==nil and line:match("^%-%-")==nil then
+		 definedTable[line]=true
+	elseif line:match("^%-%-")==nil then
+		if definedTable[line:gsub("\t","")]==nil and inputTable[line:gsub("\t","")]~="input" then
+			outputfile5:write(line:gsub("\t","") .. ',\n')
+		end --if definedTable[line:gsub("\t","")]==nil and inputTable[line:gsub("\t","")]~="input" then
+	end --if line:match("^\t")==nil and line:match("^%-%-")==nil then
+end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt") do 
 outputfile5:write('}\n') 
 outputfile5:close()
 
 --7. check whether there are variables defined twice or more times
 variableTable={}
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.lua") do
-	if line:match("^([^ =]+)=") and variableTable[line:match("^([^ =]+)=")]==nil then
+	if line:match("^([^ =]+)=") and line:match("Input")==nil and variableTable[line:match("^([^ =]+)=")]==nil then
 		variableTable[line:match("^([^ =]+)=")]=1
-	elseif line:match("^([^ =]+)=") then
+	elseif line:match("^([^ =]+)=") and line:match("Input")==nil then
 		variableTable[line:match("^([^ =]+)=")]=variableTable[line:match("^([^ =]+)=")]+1
 	end --if if line:match("[^ =]+=") and variableTable[line:match("([^ =]+)=")]==nil then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.lua") do
@@ -303,12 +323,8 @@ outputfile7a:close()
 --11. read tabulator tree and collect only input data and only output data
 inputmirrorTable={}
 outputmirrorTable={}
-_NULL_Number=0
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirror.txt") do
-	if line:match("^_NULL_") then
-		_NULL_Number=_NULL_Number+1
-		inputmirrorTable[line .. _NULL_Number]="inputmirror"
-	elseif line:match("^\t")==nil then
+	if line:match("^\t")==nil then
 		inputmirrorTable[line]="inputmirror"
 	else
 		outputmirrorTable[line:match("^\t([^\t]+)")]="outputmirror"
@@ -326,24 +342,31 @@ end --for k,v in pairs() do
 --12. write the corresponding Lua tree from tabulator tree
 outputfile8=io.open("C:\\Temp\\SAS_programm_logic_input_output_mirror_tree.lua","w")
 outputmirrorNumber=0
-outputvmirrorOnlySortedTable={}
+outputAndinputmirrorNumber=0
+outputmirrorOnlySortedTable={}
+outputAndinputmirrorSortedTable={}
 for k,v in pairs(outputmirrorTable) do
 	if v=="outputmirror" then
-		outputvmirrorOnlySortedTable[#outputvmirrorOnlySortedTable+1]= k
+		outputmirrorOnlySortedTable[#outputmirrorOnlySortedTable+1]= k
+	else
+		outputAndinputmirrorSortedTable[#outputAndinputmirrorSortedTable+1]= k
 	end --if v=="outputmirror" then
 end --for k,v in pairs(outputmirrorTable) do
-table.sort(outputvmirrorOnlySortedTable,function(a,b) return a<b end)
-for i,v in pairs(outputvmirrorOnlySortedTable) do
+table.sort(outputmirrorOnlySortedTable,function(a,b) return a<b end)
+for i,v in pairs(outputmirrorOnlySortedTable) do
 	outputmirrorNumber=outputmirrorNumber+1
 	outputfile8:write(v .. '={branchname="' .. v:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","Output ' .. string.rep(" ",3-#tostring(outputmirrorNumber)) .. outputmirrorNumber .. '"}\n')
-end --for i,v in pairs(outputvmirrorOnlySortedTable) do
+end --for i,v in pairs(outputmirrorOnlySortedTable) do
+table.sort(outputAndinputmirrorSortedTable,function(a,b) return a<b end)
+for i,v in pairs(outputAndinputmirrorSortedTable) do
+print(i,v)
+	outputAndinputmirrorNumber=outputAndinputmirrorNumber+1
+	outputfile8:write(v .. '={branchname="' .. v:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","Output und Input ' .. string.rep(" ",3-#tostring(outputAndinputmirrorNumber)) .. outputAndinputmirrorNumber .. '"}\n')
+end --for i,v in pairs(inputOnlySortedTable) do
+
 outputfile8:write('Datei={branchname="' .. filename:gsub("\\","\\\\") .. '",\n')
-_NULL_Number=0
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirror.txt") do 
-	if line:match("^_NULL_") then
-		_NULL_Number=_NULL_Number+1
-		 outputfile8:write('}\n' .. line .. _NULL_Number .. '={branchname="' .. line:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '",\n') 
-	elseif line:match("^\t")==nil and line:match("^%-%-")==nil then
+	if line:match("^\t")==nil and line:match("^%-%-")==nil then
 		 outputfile8:write('}\n' .. line .. '={branchname="' .. line:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '",\n') 
 	else
 		 outputfile8:write(line .. ',\n') 
@@ -356,15 +379,26 @@ for k,v in pairs(inputmirrorTable) do
 		 outputfile8:write(k .. ',\n')
 	end --if v=="inputmirror" and k:match("^%-%-")==nil then
 end --for k,v in pairs(inputmirrorTable) do
+--find not defined branches
+definedTable={}
+for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirror.txt") do 
+	if line:match("^\t")==nil and line:match("^%-%-")==nil then
+		 definedTable[line]=true
+	elseif line:match("^%-%-")==nil then
+		if definedTable[line:gsub("\t","")]==nil and outputmirrorTable[line:gsub("\t","")]~="outputmirror" then
+			outputfile8:write(line:gsub("\t","") .. ',\n')
+		end --if definedTable[line:gsub("\t","")]==nil and outputmirrorTable[line:gsub("\t","")]~="outputmirror" then
+	end --if line:match("^\t")==nil and line:match("^%-%-")==nil then
+end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirror.txt") do 
 outputfile8:write('}\n') 
 outputfile8:close()
 
 --13. check whether there are variables defined twice or more times
 variableTable={}
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_mirror_tree.lua") do
-	if line:match("^([^ =]+)=") and variableTable[line:match("^([^ =]+)=")]==nil then
+	if line:match("^([^ =]+)=") and line:match("Output")==nil and variableTable[line:match("^([^ =]+)=")]==nil then
 		variableTable[line:match("^([^ =]+)=")]=1
-	elseif line:match("^([^ =]+)=") then
+	elseif line:match("^([^ =]+)=") and line:match("Output")==nil then
 		variableTable[line:match("^([^ =]+)=")]=variableTable[line:match("^([^ =]+)=")]+1
 	end --if if line:match("[^ =]+=") and variableTable[line:match("([^ =]+)=")]==nil then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree.lua") do
