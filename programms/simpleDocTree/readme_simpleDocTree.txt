@@ -70,4 +70,8 @@ This script has also the possibility to set priorities for the nodes in addition
 
 11. simple_documentation_tree_with_variables_to_be_filed.lua
 
---This script contains a Lua tree with variables that can be filled by determining unknown variables.
+This script contains a Lua tree with variables that can be filled by determining unknown variables.
+
+12. simple_documentation_tree_output.lua
+
+This script is a simple documentation of a tree in a Lua table. It produces a tree as a Lua table or the mirror tree in a text field.
