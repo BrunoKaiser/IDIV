@@ -201,18 +201,18 @@ for i,v in pairs(inputAndoutputSortedTable) do
 	inputAndoutputNumber=inputAndoutputNumber+1
 	outputfile5:write(v .. '={branchname="' .. v:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","Input und Output ' .. string.rep(" ",3-#tostring(inputAndoutputNumber)) .. inputAndoutputNumber .. '"}\n')
 end --for i,v in pairs(inputOnlySortedTable) do
-outputmirrorNumber=0
-outputmirrorOnlySortedTable={}
-for k,v in pairs(outputmirrorTable) do
-	if v=="outputmirror" then
-		outputmirrorOnlySortedTable[#outputmirrorOnlySortedTable+1]= k
-	end --if v=="outputmirror" then
-end --for k,v in pairs(outputmirrorTable) do
-table.sort(outputmirrorOnlySortedTable,function(a,b) return a<b end)
-for i,v in pairs(outputmirrorOnlySortedTable) do
-	outputmirrorNumber=outputmirrorNumber+1
-	outputfile5:write(v .. '={branchname="' .. v:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","Output ' .. string.rep(" ",3-#tostring(outputmirrorNumber)) .. outputmirrorNumber .. '"}\n')
-end --for i,v in pairs(outputmirrorOnlySortedTable) do
+outputNumber=0
+outputOnlySortedTable={}
+for k,v in pairs(outputTable) do
+	if v=="output" then
+		outputOnlySortedTable[#outputOnlySortedTable+1]= k
+	end --if v=="output" then
+end --for k,v in pairs(outputTable) do
+table.sort(outputOnlySortedTable,function(a,b) return a<b end)
+for i,v in pairs(outputOnlySortedTable) do
+	outputNumber=outputNumber+1
+	outputfile5:write(v .. '={branchname="' .. v:gsub("XXX","&"):gsub("YYYZ",".."):gsub("YYY",".") .. '","Output ' .. string.rep(" ",3-#tostring(outputNumber)) .. outputNumber .. '"}\n')
+end --for i,v in pairs(outputOnlySortedTable) do
 
 
 outputfile5:write('Datei={branchname="' .. filename:gsub("\\","\\\\") .. '",\n')
@@ -243,7 +243,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt"
 		 definedTable[line]=true
 	elseif line:match("^%-%-")==nil then
 		if definedTable[line:gsub("\t","")]==nil and inputTable[line:gsub("\t","")]~="input" then
-			outputfile5:write(line:gsub("\t","") .. ',\n')
+			outputfile5:write(line:gsub("\t","") .. ', --used but defined after\n')
 		end --if definedTable[line:gsub("\t","")]==nil and inputTable[line:gsub("\t","")]~="input" then
 	end --if line:match("^\t")==nil and line:match("^%-%-")==nil then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt") do 
@@ -420,7 +420,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirr
 		 definedTable[line]=true
 	elseif line:match("^%-%-")==nil then
 		if definedTable[line:gsub("\t","")]==nil and outputmirrorTable[line:gsub("\t","")]~="outputmirror" then
-			outputfile8:write(line:gsub("\t","") .. ',\n')
+			outputfile8:write(line:gsub("\t","") .. ', --used but defined after\n')
 		end --if definedTable[line:gsub("\t","")]==nil and outputmirrorTable[line:gsub("\t","")]~="outputmirror" then
 	end --if line:match("^\t")==nil and line:match("^%-%-")==nil then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirror.txt") do 
