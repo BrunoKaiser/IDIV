@@ -23,7 +23,8 @@ outputfile1 = "global variable"
 def printOut(stringInput):
     outputfile1.write(str(stringInput) + "\n")
 
-# 3. build a class for the xml tree Strg b auf TreeItem öffnet Definition
+
+# 3.1 build a class for the xml tree Strg b auf TreeItem öffnet Definition
 class DomTreeItem(TreeItem):
     def __init__(self, node):
         super().__init__()
@@ -95,6 +96,67 @@ class DomTreeItem(TreeItem):
             node.nodeValue = text
 
 
+# 3.2 build a class for the os tree Strg b auf TreeItem öffnet Definition
+class FileTreeItem1(TreeItem):
+
+    """Example TreeItem subclass -- browse the file system."""
+
+    def __init__(self, path):
+        super().__init__()
+        self.path = path
+        # test with: print(self.path)
+
+    def GetText(self):
+        return os.path.basename(self.path) or self.path
+
+    def IsEditable(self):
+        return os.path.basename(self.path) != ""
+
+    def SetText(self, text):
+        # test with: print(self.path)
+        newpath = os.path.dirname(self.path)
+        newpath = os.path.join(newpath, text)
+        if os.path.dirname(newpath) != os.path.dirname(self.path):
+            return
+        try:
+            os.rename(self.path, newpath)
+            self.path = newpath
+        except OSError:
+            pass
+
+    def GetIconName(self):
+        if not self.IsExpandable():
+            # return "openfolder"
+            return "python" # XXX wish there was a "file" icon
+
+    def IsExpandable(self):
+        return os.path.isdir(self.path)
+
+    def GetSubList(self):
+        try:
+            names = os.listdir(self.path)
+        except OSError:
+            return []
+        names.sort(key = os.path.normcase)
+        sublist = []
+        for name in names:
+            item = FileTreeItem1(os.path.join(self.path, name))
+            sublist.append(item)
+        return sublist
+
+    def OnDoubleClick(self):
+        # print("Klicken auf " + str(dir(self)))
+        print("Klicken auf " + self.path)
+        text1.delete('1.0', "end")
+        text1.insert('1.0', self.path)
+        text2.delete('1.0', "end")
+        inputfile = open(self.GetText(), "r")
+        if inputfile:
+            textInput = inputfile.read()
+            inputfile.close()
+            text2.insert('1.0', textInput)
+
+
 # 4. build the graphical user interface
 root = Tk()
 root.title("Interaktiv-dynamisches Inhaltsverzeichnis (IDIV) mit XML und Python")
@@ -114,7 +176,7 @@ node.expand()
 # 4.2 build the file browser tree
 sc1 = ScrolledCanvas(root, bg="white", highlightthickness=0, takefocus=1)
 sc1.frame.pack(expand=1, fill="both", side="left")
-item1 = FileTreeItem(os.getcwd())
+item1 = FileTreeItem1(os.getcwd())
 node1 = TreeNode(sc1.canvas, None, item1)
 node1.update()
 node1.expand()
