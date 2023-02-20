@@ -161,9 +161,9 @@ outputfile4:close()
 outputTable={}
 inputTable={}
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt") do
-	if line:match("^\t")==nil then
+	if line:match("^\t")==nil and line:match("^%-%-")==nil then
 		outputTable[line]="output"
-	else
+	elseif line:match("^%-%-")==nil then
 		inputTable[line:match("^\t([^\t]+)")]="input"
 	end --if line:match("^\t")==nil then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted.txt") do 
@@ -341,9 +341,9 @@ outputfile7a:close()
 inputmirrorTable={}
 outputmirrorTable={}
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirror.txt") do
-	if line:match("^\t")==nil then
+	if line:match("^\t")==nil and line:match("^%-%-")==nil then
 		inputmirrorTable[line]="inputmirror"
-	else
+	elseif line:match("^%-%-")==nil then
 		outputmirrorTable[line:match("^\t([^\t]+)")]="outputmirror"
 	end --if line:match("^\t")==nil then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output_tree_sorted_mirror.txt") do 
