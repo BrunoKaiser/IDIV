@@ -12,17 +12,28 @@ import Tree_Testdaten
 import config
 
 
-#2.2 functionality to escape forbidden characters
+# 2.2 functionality to escape forbidden characters
 def string_escape_forbidden_characters(stringInput):
     stringInput=stringInput.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n").replace("\r", "\\n")
     return stringInput
 
 
-#2.3 output file or print
+# 2.3 functionality to collapse tree with recursive function
+def recursiveNodeCollapse(treeNode1):
+    for treeNode2 in treeNode1.children:
+        treeNode2.collapse()
+        recursiveNodeCollapse(treeNode2)
+
+
+#2.4 output file or print
 outputfile1 = "global variable"
 def printOut(stringInput):
     outputfile1.write(str(stringInput) + "\n")
 
+
+# 2.5 global dict for nodes
+dictNode={}
+nodeNumber=0
 
 # 3.1 build a class for the xml tree Strg b auf TreeItem öffnet Definition
 class DomTreeItem(TreeItem):
@@ -78,9 +89,19 @@ class DomTreeItem(TreeItem):
             text1.insert('1.0', inputText2)
 
     def GetIconName(self):
+        # if self.IsExpandable() and self.GetText().find("Datei")>=0:
+        #    return "python"
+        #     print(self.GetText())
+        #     print(self.GetText().find("Datei"))
+        # elif self.IsExpandable():
+        #     return "tk"
+        # elif not self.IsExpandable() and self.GetText().find("lua")>0:
+        #    return "idle_16"
         if not self.IsExpandable():
             # return "openfolder"
-            return "python"
+            # return "python"
+            # return "tk"
+            return "idle_16"
 
     def IsEditable(self):
         return self.node != ""
@@ -125,9 +146,15 @@ class FileTreeItem1(TreeItem):
             pass
 
     def GetIconName(self):
+        # C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3568.0_x64__qbz5n2kfra8p0\Lib\idlelib\Icons
         if not self.IsExpandable():
             # return "openfolder"
-            return "python" # XXX wish there was a "file" icon
+            # return "folder"
+            # return "plusnode"
+            # return "minusnode"
+            # return "tk"
+            return "idle_16"
+            # return "python" # XXX wish there was a "file" icon
 
     def IsExpandable(self):
         return os.path.isdir(self.path)
@@ -150,11 +177,15 @@ class FileTreeItem1(TreeItem):
         text1.delete('1.0', "end")
         text1.insert('1.0', self.path)
         text2.delete('1.0', "end")
-        inputfile = open(self.GetText(), "r")
-        if inputfile:
+        try:
+            inputfile = open(self.GetText(), "r")
             textInput = inputfile.read()
             inputfile.close()
             text2.insert('1.0', textInput)
+        except PermissionError:
+            text2.insert('1.0', "Der Inhalt konnte konnte nicht angezeigt werden (Permission denied).")
+        except FileNotFoundError:
+            text2.insert('1.0', "Der Inhalt konnte konnte nicht angezeigt werden (File not found).")
 
 
 # 4. build the graphical user interface
@@ -243,6 +274,7 @@ def button3_click():
         printOut("\t" + treeNode1.item.GetText())
         recursiveNodeText(treeNode1, "\t")
     outputfile1.close()
+    recursiveNodeCollapse(node)
 
 # 4.3.4.2a button read tree as text with tabulators
 def button3_click_test_with():
@@ -285,6 +317,8 @@ def recursiveNodeXML(treeNode1,tabulator):
         treeNode2.expand()
         if treeNode2.children:
             outputfile1.write(tabulator + "<" + treeNode2.item.GetText() + ">")  # liefert nichts, wenn der Baum eingeklappt ist
+        elif treeNode2.item.GetText()=="~":
+            print("delete teeNode2 by not writing anything")
         else:
             outputfile1.write(tabulator + treeNode2.item.GetText())
         recursiveNodeXML(treeNode2,tabulator )
@@ -311,6 +345,7 @@ def button4_click():
     printOut("</" + node.item.GetText() + ">")
     outputfile1.write("'''\n")
     outputfile1.close()
+    recursiveNodeCollapse(node)
 
 
 # 4.3.5.3 define button
@@ -350,6 +385,7 @@ def button5_click():
             printOut("\t" + "} --" + string_escape_forbidden_characters(treeNode1.item.GetText()))
     printOut("} --" + string_escape_forbidden_characters(node.item.GetText()))
     outputfile1.close()
+    recursiveNodeCollapse(node)
 
 
 # 4.3.6.3 define button
@@ -359,7 +395,51 @@ button5.pack(anchor="w")
 button5["command"] = button5_click
 
 
-# 4.3.7 text field
+# 4.3.7 button read tree as Lua tree
+
+# 4.3.7.1 recursive function to read the tree
+def recursiveNodeMark(treeNode1):
+    global nodeNumber
+    global dictNode
+    for treeNode2 in treeNode1.children:
+        treeNode2.expand()
+        nodeNumber=nodeNumber+1
+        dictNode[node.item.GetText()] = nodeNumber
+        if treeNode2.item.GetText().find("lua")>=0:
+            print(treeNode2.item.GetText())
+            print(nodeNumber)
+        recursiveNodeMark(treeNode2)
+
+
+# 4.3.7.2 button read tree as text with tabulators
+def button6_click():
+    global nodeNumber
+    nodeNumber=0
+    global dictNode
+    dictNode[node.item.GetText()] = 0
+    if node.item.GetText().find("lua") >= 0:
+        print(node.item.GetText())
+        print(nodeNumber)
+    for treeNode1 in node.children:
+        treeNode1.expand()
+        nodeNumber=nodeNumber+1
+        dictNode[node.item.GetText()] = nodeNumber
+        if treeNode1.item.GetText().find("lua") >= 0:
+            print(treeNode1.item.GetText())
+            print(nodeNumber)
+        recursiveNodeMark(treeNode1)
+    recursiveNodeCollapse(node)
+    # test with: print(nodeNumber)
+
+
+# 4.3.7.3 define button
+button6 = Button(labelframe1)
+button6["text"] = "Tree ausklappen und markieren"
+button6.pack(anchor="w")
+button6["command"] = button6_click
+
+
+# 4.3.8 text field
 text2 = Text(labelframe1, width=40, height=50)
 text2.pack(anchor="w")
 
