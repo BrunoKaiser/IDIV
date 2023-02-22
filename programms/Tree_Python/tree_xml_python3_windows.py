@@ -25,7 +25,7 @@ def recursiveNodeCollapse(treeNode1):
         recursiveNodeCollapse(treeNode2)
 
 
-#2.4 output file or print
+# 2.4 output file or print
 outputfile1 = "global variable"
 def printOut(stringInput):
     outputfile1.write(str(stringInput) + "\n")
@@ -34,6 +34,8 @@ def printOut(stringInput):
 # 2.5 global dict for nodes
 dictNode={}
 nodeNumber=0
+searchText="_sinnnloseSUCHE_"
+
 
 # 3.1 build a class for the xml tree Strg b auf TreeItem öffnet Definition
 class DomTreeItem(TreeItem):
@@ -89,15 +91,16 @@ class DomTreeItem(TreeItem):
             text1.insert('1.0', inputText2)
 
     def GetIconName(self):
-        # if self.IsExpandable() and self.GetText().find("Datei")>=0:
-        #    return "python"
+        global searchText
+        if self.GetText().find(searchText)>=0:
+            return "tk"
         #     print(self.GetText())
         #     print(self.GetText().find("Datei"))
         # elif self.IsExpandable():
         #     return "tk"
         # elif not self.IsExpandable() and self.GetText().find("lua")>0:
         #    return "idle_16"
-        if not self.IsExpandable():
+        elif not self.IsExpandable():
             # return "openfolder"
             # return "python"
             # return "tk"
@@ -395,7 +398,7 @@ button5.pack(anchor="w")
 button5["command"] = button5_click
 
 
-# 4.3.7 button read tree as Lua tree
+# 4.3.7 button read tree, count nodes and put them in dictionary
 
 # 4.3.7.1 recursive function to read the tree
 def recursiveNodeMark(treeNode1):
@@ -405,41 +408,55 @@ def recursiveNodeMark(treeNode1):
         treeNode2.expand()
         nodeNumber=nodeNumber+1
         dictNode[node.item.GetText()] = nodeNumber
-        if treeNode2.item.GetText().find("lua")>=0:
-            print(treeNode2.item.GetText())
-            print(nodeNumber)
         recursiveNodeMark(treeNode2)
 
 
-# 4.3.7.2 button read tree as text with tabulators
+# 4.3.7.2 button read tree, count nodes and put them in dictionary
 def button6_click():
     global nodeNumber
     nodeNumber=0
     global dictNode
     dictNode[node.item.GetText()] = 0
-    if node.item.GetText().find("lua") >= 0:
-        print(node.item.GetText())
-        print(nodeNumber)
     for treeNode1 in node.children:
         treeNode1.expand()
         nodeNumber=nodeNumber+1
         dictNode[node.item.GetText()] = nodeNumber
-        if treeNode1.item.GetText().find("lua") >= 0:
-            print(treeNode1.item.GetText())
-            print(nodeNumber)
         recursiveNodeMark(treeNode1)
-    recursiveNodeCollapse(node)
-    # test with: print(nodeNumber)
+    print(nodeNumber)
 
 
 # 4.3.7.3 define button
 button6 = Button(labelframe1)
-button6["text"] = "Tree ausklappen und markieren"
+button6["text"] = "Tree Knoten zählen"
 button6.pack(anchor="w")
 button6["command"] = button6_click
 
 
-# 4.3.8 text field
+# 4.3.8 button to rewrite tree
+
+# 4.3.8.2 button read tree and search for text
+def button7_click():
+    global searchText
+    # searchText="test"
+    searchText=text1.get(1.0, 'end-1c')
+    print(searchText)
+    dom = parseString(Tree_Testdaten.data)
+    # test with: print(dom)
+    item = DomTreeItem(dom.documentElement)
+    node = TreeNode(sc.canvas, None, item)
+    node.update()
+    node.expand()
+
+
+
+# 4.3.8.3 define button
+button7 = Button(labelframe1)
+button7["text"] = "Tree neu schreiben und Suchttext markieren"
+button7.pack(anchor="w")
+button7["command"] = button7_click
+
+
+# 4.3.9 text field
 text2 = Text(labelframe1, width=40, height=50)
 text2.pack(anchor="w")
 
