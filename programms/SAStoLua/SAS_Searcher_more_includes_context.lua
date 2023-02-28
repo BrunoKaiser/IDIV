@@ -34,6 +34,7 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 	for semikolon in (text .. "\n")
 								:gsub(" ?= ?"," = ")
 								:gsub("(/%*[^%*/]*%*/)"," ")
+								:gsub("(/%*[^%*]*%*/)"," ")
 								:gsub("%( ?","( ")
 								:gsub("\t ?","\t ")
 								:gsub(" ?%- ?"," - ")
@@ -166,7 +167,15 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 				variableTable["Macrovariable: " .. field:gsub('"','')]=lineNumber
 			end --for field in line:gmatch("[^=]*=") do
 		elseif line:lower():match("rename =") then
-			for field in line:gmatch("=[ \t]*([^= \t]*)") do
+			line_rename=line:lower():match("rename = *%(([^%(%)]*)%)")
+			for field in line_rename:gmatch("=[ \t]*([^= \t]*)") do
+				if field:gsub('"',''):match("^&") then
+					variableTable["Macrovariable: " .. field:gsub('"','')]=lineNumber
+				else
+					variableTable[field:gsub('"','')]=lineNumber
+				end --if field:match("^&") then
+			end --for field in line:gmatch("[^=]*=") do
+			for field in line_rename:gmatch("([^= \t]*)[ \t]*=") do
 				if field:gsub('"',''):match("^&") then
 					variableTable["Macrovariable: " .. field:gsub('"','')]=lineNumber
 				else
