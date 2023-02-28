@@ -157,7 +157,7 @@ for line in io.lines("C:\\Temp\\SAS_searcher_raw.txt") do
 		:gsub("%%put.*;","")
 	if line:match("=") then
 		if line:lower():match("%%let.*=") then
-			variableTable["Macrovariable: " .. line:upper():match("%%LET.*([^= ]*) *="):gsub('"','')]=lineNumber
+			variableTable["Macrovariable: " .. line:upper():match("%%LET[\t ]*([^= ]*) *="):gsub('"','')]=lineNumber
 		elseif line:lower():match(" into *:") then
 			variableTable["Macrovariable: " .. line:upper():match(" INTO *: *([^ ]+) ")]=lineNumber
 		elseif line:lower():match("(&[^= ]*) *=") then
