@@ -345,13 +345,7 @@ end --if fileLocked=="YES" then
 
 --3.1 general lua-functions
 
-									   
-						  
-							
-															   
-								
-
---3.1.2 function escaping magic characters
+--3.1.1 function escaping magic characters
 function string.escape_forbidden_char(insertstring) --this function takes a string and returns the same string with escaped characters
 	return insertstring:gsub("\\", "\\\\"):gsub("\"", "\\\""):gsub("\'", "\\\'"):gsub("\n", "\\n"):gsub("\r", "\\n")
 end --function string.escape_forbidden_char(insertstring)
@@ -1844,30 +1838,15 @@ if fileLocked=="YES" then
 			iup.hbox{
 				button_logo,
 				button_search,
-				 
-				  
 				iup.label{size="10x",},
 				button_compare,
 				iup.label{size="10x",},
 				button_copy_title,
-						  
 				iup.label{size="10x",},
 				button_statisticsupdate,
-							  
 				iup.fill{},
 				button_logo2,
-	
-  
-		   
-														
-													
 			},
-   
-		   
-			   
-			  
-   
-			
 			iup.hbox{
 				iup.frame{title="Manuelle Zuordnung als Baum",tree,},
 				iup.frame{title="Arbeitsvorrat als Baum",tree2,},
@@ -1905,8 +1884,6 @@ else
 				iup.fill{},
 				button_logo2,
 			},
-   
-			
 			iup.hbox{
 				iup.frame{title="Manuelle Zuordnung als Baum",tree,},
 				iup.frame{title="Arbeitsvorrat als Baum",tree2,},
