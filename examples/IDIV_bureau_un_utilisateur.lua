@@ -154,15 +154,15 @@ while true do
 	elseif Datei:lower():match("tree.*%.lua$") then DateiTabelle[Datei]="Lua-Tree-Dateien"
 	elseif Datei:lower():match("tree.*%.iup.*lua.*$") then DateiTabelle[Datei]="Lua-Tree-Dateien"
 	elseif Datei:lower():match("%.lua$") then DateiTabelle[Datei]="Lua-Skripte"
-	elseif Datei:lower():match("%.iup.*lua.*$") then DateiTabelle[Datei]="IUP-Lua Benutzeroberfl‰chen"
-	elseif Datei:lower():match("%.wlua$") then DateiTabelle[Datei]="IUP-Lua Benutzeroberfl‰chen"
+	elseif Datei:lower():match("%.iup.*lua.*$") then DateiTabelle[Datei]="IUP-Lua Benutzeroberfl√§chen"
+	elseif Datei:lower():match("%.wlua$") then DateiTabelle[Datei]="IUP-Lua Benutzeroberfl√§chen"
 	elseif Datei:lower():match("%.bat$") then DateiTabelle[Datei]="Batch-Dateien"
-	elseif Datei:lower():match("%.exe$") then DateiTabelle[Datei]="Ausf¸hrbare Dateien"
+	elseif Datei:lower():match("%.exe$") then DateiTabelle[Datei]="Ausf√ºhrbare Dateien"
 	elseif Datei:lower():match("%.csv$") then DateiTabelle[Datei]="CSV-Dateien"
 	elseif Datei:lower():match("%.je?pg$") then DateiTabelle[Datei]="Bild-Dateien"
 	elseif Datei:lower():match("%.png$") then DateiTabelle[Datei]="Bild-Dateien"
 	elseif Datei:lower():match("%.bmp$") then DateiTabelle[Datei]="Bild-Dateien"
-	elseif Datei:lower():match("%.lnk$") then DateiTabelle[Datei]="Verkn¸pfungen"
+	elseif Datei:lower():match("%.lnk$") then DateiTabelle[Datei]="Verkn√ºpfungen"
 	elseif Datei:lower():match("%.java$") then DateiTabelle[Datei]="Java-Dateien"
 	elseif Datei:lower():match("%.jar$") then DateiTabelle[Datei]="Java-Dateien"
 	elseif Datei:lower():match("%.class$") then DateiTabelle[Datei]="Java-Dateien"
@@ -173,7 +173,7 @@ while true do
 	elseif Datei:lower():match("%.mdb$") then DateiTabelle[Datei]="Access-Dateien"
 	elseif Datei:lower():match("%.accdb$") then DateiTabelle[Datei]="Access-Dateien"
 	elseif Datei:lower():match("%.pdf$") then DateiTabelle[Datei]="Pdf-Dateien"
-	elseif Datei:lower():match("%.pptx?$") then DateiTabelle[Datei]="Pr‰sentationen"
+	elseif Datei:lower():match("%.pptx?$") then DateiTabelle[Datei]="Pr√§sentationen"
 	elseif Datei:lower():match("%.html?$") then DateiTabelle[Datei]="Html-Dateien"
 	elseif Datei:lower():match("%.txt$") then DateiTabelle[Datei]="Text-Dateien"
 	elseif Datei:lower():match("%.sas$") then DateiTabelle[Datei]="SAS-Skripte"
@@ -187,7 +187,7 @@ for k,v in pairs(DateiTabelle) do KategorieOhneDublikateTabelle[v]=v end
 KategorieTabelle={}
 for k,v in pairs(KategorieOhneDublikateTabelle) do KategorieTabelle[#KategorieTabelle+1]=v end
 table.sort(KategorieTabelle,function (a,b) return a<b end)
---Dateien sammeln und an Kategorie pro Kategorie anh‰ngen
+--Dateien sammeln und an Kategorie pro Kategorie anh√§ngen
 for ka,va in pairs(KategorieTabelle) do
 ---Testen mit: iup.Message(ka,va)
 for k,v in pairs(DateiTabelle) do
@@ -211,7 +211,7 @@ end --for ka,va in pairs(KategorieTabelle) do
 
 
 Chronik={branchname="Chronik",state="COLLAPSED",}
-Aktivitaeten={branchname="Aktivit‰ten",}
+Aktivitaeten={branchname="Aktivit√§ten",}
 for k,v in ipairs(Taskslist) do
 local DatumTag,DatumMonat,DatumJahr=v:match("(%d%d).(%d%d).(%d%d%d%d)")
 local DatumText
@@ -246,7 +246,7 @@ Anzahl=0 p=io.popen('dir "]] .. path:gsub("\\","\\\\") .. [[\\*.*" /b/o') for Da
 Anzahl=0 p=io.popen('dir "]] .. path:gsub("\\","\\\\") .. [[\\Archiv\\*.*" /b/o') for Datei in p:lines() do if Datei:match("%.[^\\]+") then Anzahl=Anzahl+1 end end OrdnerTabelle["]] .. path:gsub("\\","\\\\") .. [[\\Archiv"]=Anzahl
 
 --Wertebaum auf der untersten Stufe mit Werten
-WerteTree={branchname="Ordner¸bersicht mit Anzahl Dateien", state="COLLAPSED",
+WerteTree={branchname="Ordner√ºbersicht mit Anzahl Dateien", state="COLLAPSED",
 {branchname="Standard-Verzeichnisse",
 {branchname="]] .. path:gsub("\\","\\\\") .. [[",OrdnerTabelle["]] .. path:gsub("\\","\\\\") .. [["] or 0,},
 {branchname="]] .. path:gsub("\\","\\\\") .. [[\\Archiv",OrdnerTabelle["]] .. path:gsub("\\","\\\\") .. [[\\Archiv"] or 0,},
@@ -264,7 +264,7 @@ RemoveRecursion(WerteTreeAnsicht)
 WerteTreeAnteile={}
 AnteilRecursion(WerteTree,WerteTree,WerteTreeAnteile)
 RemoveRecursion(WerteTreeAnteile)
-WerteTreeAnteile.branchname="Ordner¸bersicht mit Anteil Dateien"
+WerteTreeAnteile.branchname="Ordner√ºbersicht mit Anteil Dateien"
 
 --Fertiger Wertebaum
 tree_statistics={branchname="Ordnerstatistik" ,
@@ -511,7 +511,7 @@ end --function compare_files(file1,file2)
 --3.3.1 function for writing tree in a text file (function for printing tree)
 function printtree()
 	--open a filedialog
-	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel ausw‰hlen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
+	filedlg2=iup.filedlg{dialogtype="SAVE",title="Ziel ausw√§hlen",filter="*.txt",filterinfo="Text Files", directory="c:\\temp"}
 	filedlg2:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg2.status=="1" or filedlg2.status=="0" then
 		local outputfile=io.output(filedlg2.value) --setting the outputfile
@@ -524,7 +524,7 @@ function printtree()
 		end --for i=0,tree.totalchildcount0 do
 		outputfile:close() --close the outputfile
 	else --no outputfile was choosen
-		iup.Message("Schlieﬂen","Keine Datei ausgew‰hlt")
+		iup.Message("Schlie√üen","Keine Datei ausgew√§hlt")
 		iup.NextField(maindlg)
 	end --if filedlg2.status=="1" or filedlg2.status=="0" then
 end --function printtree()
@@ -533,7 +533,7 @@ end --function printtree()
 --3.3.2 function for printing dependencies in a csv file
 function printdependencies()
 	--open a filedialog
-	filedlg3=iup.filedlg{dialogtype="SAVE",title="Ziel ausw‰hlen",filter="*.csv",filterinfo="csv Files", directory="c:\\temp"}
+	filedlg3=iup.filedlg{dialogtype="SAVE",title="Ziel ausw√§hlen",filter="*.csv",filterinfo="csv Files", directory="c:\\temp"}
 	filedlg3:popup(iup.ANYWHERE,iup.ANYWHERE)
 	if filedlg3.status=="1" or filedlg3.status=="0" then
 		local outputfile=io.output(filedlg3.value)--setting the outputfile
@@ -550,7 +550,7 @@ function printdependencies()
 		end --for i=0, tree.count - 1 do
 		outputfile:close()--close the outputfile
 	else --no file was choosen
-		iup.Message("Schlieﬂen","Keine Datei ausgew‰hlt")
+		iup.Message("Schlie√üen","Keine Datei ausgew√§hlt")
 		iup.NextField(maindlg)
 	end --if filedlg3.status=="1" or filedlg3.status=="0" then
 end --function printdependencies()
@@ -670,7 +670,7 @@ dlg_rename = iup.dialog{
 searchtext = iup.multiline{border="YES",expand="YES", SELECTION="ALL",wordwrap="YES"} --textfield for search
 
 --search in downward direction
-searchdown    = iup.flatbutton{title = "Abw‰rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchdown    = iup.flatbutton{title = "Abw√§rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchdown:flat_action()
 	local help=false
 	--downward search
@@ -798,7 +798,7 @@ end --for i=0, tree3.count - 1 do
 end --function unmark:flat_action()
 
 --search in upward direction
-searchup   = iup.flatbutton{title = "Aufw‰rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
+searchup   = iup.flatbutton{title = "Aufw√§rts",size="EIGHTH", BGCOLOR=color_buttons, FGCOLOR=color_button_text} 
 function searchup:flat_action()
 	local help=false
 	--upward search
@@ -827,7 +827,7 @@ function searchup:flat_action()
 	end --if help==false then
 end --	function searchup:flat_action()
 
-checkboxforcasesensitive = iup.toggle{title="Groﬂ-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
+checkboxforcasesensitive = iup.toggle{title="Gro√ü-/Kleinschreibung", value="OFF"} --checkbox for casesensitiv search
 checkboxforsearchinfiles = iup.toggle{title="Suche in den Textdateien", value="OFF"} --checkbox for searcg in text files
 search_label=iup.label{title="Suchfeld:"} --label for textfield
 
@@ -851,11 +851,11 @@ end --	function search_in_textfield1:flat_action()
 dlg_search =iup.dialog{
 			iup.vbox{iup.hbox{search_label,searchtext,}, 
 
-			iup.label{title="Sonderzeichen: %. f¸r ., %- f¸r -, %+ f¸r +, %% f¸r %, %[ f¸r [, %] f¸r ], %( f¸r (, %) f¸r ), %^ f¸r ^, %$ f¸r $, %? f¸r ?",},
+			iup.label{title="Sonderzeichen: %. f√ºr ., %- f√ºr -, %+ f√ºr +, %% f√ºr %, %[ f√ºr [, %] f√ºr ], %( f√ºr (, %) f√ºr ), %^ f√ºr ^, %$ f√ºr $, %? f√ºr ?",},
 			iup.hbox{searchmark,unmark,checkboxforsearchinfiles,}, 
-			iup.label{title="rot: ¸bergeordnete Knoten",fgcolor = "255 0 0", },
+			iup.label{title="rot: √ºbergeordnete Knoten",fgcolor = "255 0 0", },
 			iup.label{title="blau: gleicher Knoten",fgcolor = "0 0 255", },
-			iup.label{title="gr¸n: untergeordnete Knoten",fgcolor = "90 195 0", },
+			iup.label{title="gr√ºn: untergeordnete Knoten",fgcolor = "90 195 0", },
 			iup.hbox{searchdown, searchup,checkboxforcasesensitive,},
 			iup.hbox{search_in_textfield1,},
 
@@ -906,7 +906,7 @@ dlg_search_replace =iup.dialog{
 					iup.hbox{search_label_replace,searchtext_replace},
 					iup.hbox{replace_label_replace,replacetext_replace},
 					iup.hbox{search_replace, cancel_replace,},
-					iup.label{title="Sonderzeichen: %. f¸r ., %- f¸r -, %+ f¸r +, %% f¸r %, %[ f¸r [, %] f¸r ], %( f¸r (, %) f¸r ), %^ f¸r ^, %$ f¸r $, %? f¸r ?",},
+					iup.label{title="Sonderzeichen: %. f√ºr ., %- f√ºr -, %+ f√ºr +, %% f√ºr %, %[ f√ºr [, %] f√ºr ], %( f√ºr (, %) f√ºr ), %^ f√ºr ^, %$ f√ºr $, %? f√ºr ?",},
 				}; 
 				title="Suchen und Ersetzen",
 				size="420x100",
@@ -1024,7 +1024,7 @@ function renamenode:action()
 end --function renamenode:action()
 
 --5.1.3 add branch to tree
-addbranch = iup.item {title = "Ast hinzuf¸gen"}
+addbranch = iup.item {title = "Ast hinzuf√ºgen"}
 function addbranch:action()
 	tree.addbranch = ""
 	tree.value=tree.value+1
@@ -1039,7 +1039,7 @@ function addbranch_fromclipboard:action()
 end --function addbranch_fromclipboard:action()
 
 --5.1.5 add leaf of tree
-addleaf = iup.item {title = "Blatt hinzuf¸gen"}
+addleaf = iup.item {title = "Blatt hinzuf√ºgen"}
 function addleaf:action()
 	tree.addleaf = ""
 	tree.value=tree.value+1
@@ -1080,19 +1080,19 @@ function startastree:action()
 	if file_exists(tree['title'] .. '\\' .. thisfilename ) then
 	--g:match(".:\\[^\\]+")
 		os.execute('copy "' .. path .. '\\' .. thisfilename .. '" "' .. tree['title'] .. '\\' .. thisfilename .. '"')
-		--test with: iup.Message("Benutzeroberfl‰che kopiert",tree['title'] .. '\\' .. thisfilename)
+		--test with: iup.Message("Benutzeroberfl√§che kopiert",tree['title'] .. '\\' .. thisfilename)
 		os.execute('start "D" "' .. tree['title'] .. '\\' .. thisfilename .. '"')
 	elseif tree['title']:lower():match("\\archiv")==nil and tree['title']:match("\\[^\\%.]+$") then
 		BenutzeroberflaechenText=""
 		p=io.popen('dir "' .. tree['title']:match(".:\\[^\\]+") .. '\\' .. thisfilename .. '" /b/o/s')
 		for Ordner in p:lines() do BenutzeroberflaechenText=BenutzeroberflaechenText .. Ordner .. "\n" end
 		--tree GUI only if user want it
-		AnlegeAlarm=iup.Alarm("Benutzeroberfl‰che angelegen?","Es gibt folgende Benutzeroberfl‰chen:\n" .. BenutzeroberflaechenText .. "\nWas mˆchten Sie f¸r das Verzeichnis mit der neuen Benutzeroberfl‰che tun??","Anlegen","Nicht anlegen")
+		AnlegeAlarm=iup.Alarm("Benutzeroberfl√§che angelegen?","Es gibt folgende Benutzeroberfl√§chen:\n" .. BenutzeroberflaechenText .. "\nWas m√∂chten Sie f√ºr das Verzeichnis mit der neuen Benutzeroberfl√§che tun??","Anlegen","Nicht anlegen")
 		if AnlegeAlarm==1 then 
 			os.execute('copy "' .. path .. '\\' .. thisfilename .. '" "' .. tree['title'] .. '\\' .. thisfilename .. '"')
-			iup.Message("Benutzeroberfl‰che angelegt",tree['title'] .. '\\' .. thisfilename)
+			iup.Message("Benutzeroberfl√§che angelegt",tree['title'] .. '\\' .. thisfilename)
 		elseif AnlegeAlarm==2 then
-			iup.Message("Benutzeroberfl‰che wird nicht angelegt","Danke, nicht zu viele Benutzeroberfl‰chen anzulegen.")
+			iup.Message("Benutzeroberfl√§che wird nicht angelegt","Danke, nicht zu viele Benutzeroberfl√§chen anzulegen.")
 		end --if AnlegeAlarm==1 then 
 	elseif tree['title']:lower():match("\\archiv") then
 		iup.Message("Kein Tree bei einem Archiv","Bei einem Archiv (" .. tree['title'] .. ") wird kein Tree angelegt.")
@@ -1158,7 +1158,7 @@ function starteditor:action() --start preview
 		p=io.popen('dir "' .. tree['title'] .. '"')
 		Verzeichnisliste=""
 		for Datei in p:lines() do
-			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("ˇ",".") .. "\n"
+			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("√ø",".") .. "\n"
 		end --for Datei in p:lines() do
 		textfield1.value=Verzeichnisliste
 	else --substitute line break in preview
@@ -1406,7 +1406,7 @@ function starteditor2:action()
 		p=io.popen('dir "' .. tree2.title0:match(".:\\.*") .. tree2['title'] .. '"')
 		Verzeichnisliste=""
 		for Datei in p:lines() do
-			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("ˇ",".") .. "\n"
+			Verzeichnisliste=Verzeichnisliste .. Datei:gsub("√ø",".") .. "\n"
 		end --for Datei in p:lines() do
 		textfield1.value=Verzeichnisliste
 	else --substitute line break in preview
