@@ -68,7 +68,11 @@ This script contains the IDIV-Bibliothek (IDIV-bibliothèque).
 
 This script contains the IDIV-Arbeitsplatz (IDIV-bureau).
 
-=== 4.2.1 IDIV_bureau_simplifie.lua
+=== 4.2.1 IDIV_bureau_un_utilisateur.lua
+
+This script contains the IDIV-Arbeitsplatz for one user (IDIV-bureau un utilisateur).
+
+=== 4.2.2 IDIV_bureau_simplifie.lua
 
 This script contains a simplified version of the IDIV-Arbeitsplatz (IDIV-bureau simplifié).
 
