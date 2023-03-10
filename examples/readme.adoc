@@ -27,6 +27,15 @@ This photo shows a IDIV-papier with highest level under root underlined two time
 
 These photos of part of the tree in a book or bullet journal show a IDIV-papier with nodes without underlying and an arrow at the end of the page and an arrow at the beginning of the next page to show that the tree is written on more than one page.
 
+== 1.4 IDIV-papier_points_ouverts.png
+
+This photo shows a IDIV-papier-points-ouverts with nodes with open points and sub points.
+
+== 1.5 IDIV-papier_calcul_cumul.png
+
+This photo shows a IDIV-papier-calcul-cumul with nodes with values and the cumulative result by manual calculation.
+
+
 == 2. arborescence avec des comptes
 
 === 2.1 IDIV_analyse_bilan.lua
