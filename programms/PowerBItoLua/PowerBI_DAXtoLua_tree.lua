@@ -31,5 +31,56 @@ for line in inputText:gmatch("([^\n]*)\n") do
 	end --if line:match("^[^ =%[]* *=") and line:match("^VAR ")== nil then
 end --for line in inputText:gmatch("([^\n]*)\n") do
 outputFile:write('},\n')
+
+--4. execute the tree in a Lua table
+dofile(FileName:gsub(".txt","_logic_tree.lua"))
+
+--5. read recursive the tree as Lua table and build dependencies of formulae to dataset
+formulaeTable={}
+function searchDAXTableRecursive(TreeTable)
+	for i,v in ipairs(TreeTable) do
+		if type(v)=="table" then
+			searchDAXTableRecursive(v)
+		else
+			if v:match("'[^']*'") then
+				--test with: print(i,v:match("'([^']*)'"))
+				if formulaeTable[v:match("'([^']*)'")] then
+					formulaeTable[v:match("'([^']*)'")][TreeTable.branchname]=true
+				else
+					formulaeTable[v:match("'([^']*)'")] = {[TreeTable.branchname]=true}
+				end --if formulaeTable[v:match("'([^']*)'")] then
+				--test with: print(TreeTable.branchname)
+			end --if v:match("'[^']*'") then
+		end --if type(v)=="table" then
+	end --for i,v in ipairs(TreeTable) do
+end --function searchDAXTableRecursive(TreeTable)
+searchDAXTableRecursive(tree_DAX)
+
+--6. build sorted table of formulae
+formulaeSortedTable={}
+for k,v in pairs(formulaeTable) do
+	--test with: print(k,v)
+	formulaeSortedTable[k]={}
+	for k1,v1 in pairs(v) do
+		--test with: print(k1,v1)
+		table.insert(formulaeSortedTable[k],k1)
+		table.sort(formulaeSortedTable[k],function (a,b) return a<b end)
+	end --for k1,v1 in pairs(v) do
+end --for k,v in pairs(formulaeTable) do
+
+--7. build tree for dependencies of formulae from datasets
+	outputFile:write('{branchname="Datasets und abhängige berechnete Spalten und Measures",\n')
+for k,v in pairs(formulaeSortedTable) do
+	--test with: print(k,v)
+	outputFile:write('{branchname="' .. k .. '",\n')
+	for k1,v1 in pairs(v) do
+		--test with: print(k1,v1)
+		outputFile:write('"' .. v1 .. '",\n')
+	end --for k1,v1 in pairs(v) do
+	outputFile:write(',},\n')
+end --for k,v in pairs(formulaeTable) do
+outputFile:write('},\n')
+
+--8. close output file
 outputFile:write('}\n')
 outputFile:close()
