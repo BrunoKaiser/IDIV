@@ -77,7 +77,7 @@ for k,v in pairs(formulaeSortedTable) do
 		--test with: print(k1,v1)
 		outputFile:write('"' .. v1 .. '",\n')
 	end --for k1,v1 in pairs(v) do
-	outputFile:write(',},\n')
+	outputFile:write('},\n')
 end --for k,v in pairs(formulaeTable) do
 outputFile:write('},\n')
 
