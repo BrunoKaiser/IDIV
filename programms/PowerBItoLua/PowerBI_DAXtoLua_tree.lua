@@ -17,9 +17,15 @@ inputFile:close()
 --3. treat lines as logical lines
 outputFile=io.open(FileName:gsub(".txt","_logic_tree.lua"),"w")
 outputFile:write('tree_DAX={branchname="' .. string.escape_forbidden_char(FileName) .. '",\n{branchname="DAX-Formeln",')
+variableLineNumber=0
 for line in inputText:gmatch("([^\n]*)\n") do
 	if line:match("^[^ =%[]* *=") and line:match("^VAR ")== nil then
-		outputFile:write('},\n')
+		variableLineNumber=variableLineNumber+1
+		if variableLineNumber==1 then
+			outputFile:write('\n')
+		else
+			outputFile:write('},\n')
+		end --if variableLineNumber>1 then 
 		outputFile:write('{branchname="' .. line:match("^([^ =%[]*) *=") .. '",\n')
 		if line:match("^[^ =%[]* *=(.*)"):gsub(" *","")~="" then
 			outputFile:write('"' .. string.escape_forbidden_char(line:match("^[^ =%[]* *=(.*)")) .. '",')
@@ -30,6 +36,7 @@ for line in inputText:gmatch("([^\n]*)\n") do
 		end --if line:gsub(" *","")~="" then
 	end --if line:match("^[^ =%[]* *=") and line:match("^VAR ")== nil then
 end --for line in inputText:gmatch("([^\n]*)\n") do
+outputFile:write('},\n')
 outputFile:write('},\n')
 
 --4. execute the tree in a Lua table
