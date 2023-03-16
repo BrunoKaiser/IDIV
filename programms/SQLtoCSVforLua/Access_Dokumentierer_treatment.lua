@@ -16,7 +16,7 @@ end --function printOut(a)
 
 --2.2 output file
 outputFile=io.open("C:\\Temp\\Access_Dokumentierer_Tree.lua","w")
-printOut('Tree={branchname="Access-Dokumentierer",{branchname="Übersicht Datenbank",{branchname="Dr. Bruno Kaiser",{branchname="Alle Objekte",')
+printOut('Tree={branchname="Access-Dokumentierer",{branchname="Ãœbersicht Datenbank",{branchname="Dr. Bruno Kaiser",{branchname="Alle Objekte",')
 
 --3. treat the Access Dokumentierer
 for line in io.lines("C:\\Temp\\Access_Dokumentierer.txt") do 
@@ -63,7 +63,7 @@ for line in io.lines("C:\\Temp\\Access_Dokumentierer.txt") do
 		printOut('},\n{branchname="' .. string.escape_forbidden_char(line:gsub("Seite: %d+","")):gsub(" +"," ") .. '",state="COLLAPSED",')
 		TabellenAbfragenTable[line:gsub("Seite: %d+",""):gsub(" +"," ")]=true
 	end --if line:match(":")==nil then
-end --for line in io.lines("C:\\Users\\RK\\Beckmann & Partner Consult GmbH\\Team_Test_IDIV - 
+end --for line in io.lines("C:\\Temp\\Access_Dokumentierer.txt") do 
 printOut('}\n}\n}\n}')
 
 --5. close output file
