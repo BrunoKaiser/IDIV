@@ -33,7 +33,13 @@ outputFile=io.open(FileName:gsub(".txt","_tree.lua"),"w")
 InputTable={}
 for line in inputText:gmatch("([^\n]*)\n") do
 	line=line:gsub(", %[CreateNavigationProperties=true%]","")
-	if line:match(" *= *.*File.Contents") then
+	if line:match(" *= *.*Pdf.Tables%(File.Contents") then
+		if InputTable[string.escape_forbidden_char(line:match('Pdf.Tables%(File.Contents%("([^%)]*)"%)'))] then
+			table.insert(InputTable[string.escape_forbidden_char(line:match('Pdf.Tables%(File.Contents%("([^%)]*)"%)'))], line:match('Id="([^"]*)"'))
+		else
+			InputTable[string.escape_forbidden_char(line:match('Pdf.Tables%(File.Contents%("([^%)]*)"%)'))]={line:match('Id="([^"]*)"')}
+		end --if InputTable[string.escape_forbidden_char(line:match('Pdf.Tables%(File.Contents%("([^%)]*)"%)'))] then
+	elseif line:match(" *= *.*File.Contents") then
 		--test with: print('{branchname="' .. string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)')) .. '",')
 		--test with: print(line:match('Item="([^"]*)"'))
 		if InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))] then
@@ -41,6 +47,18 @@ for line in inputText:gmatch("([^\n]*)\n") do
 		else
 			InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))]={line:match('Item="([^"]*)"')}
 		end --if InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))] then
+	elseif line:match(" *= *.*Web.Contents") then
+		if InputTable[string.escape_forbidden_char(line:match('Web.Contents%("([^%)]*)"%)'))] then
+			table.insert(InputTable[string.escape_forbidden_char(line:match('Web.Contents%("([^%)]*)"%)'))], line:match('Item="([^"]*)"'))
+		else
+			InputTable[string.escape_forbidden_char(line:match('Web.Contents%("([^%)]*)"%)'))]={line:match('Item="([^"]*)"')}
+		end --if InputTable[string.escape_forbidden_char(line:match('Web.Contents%("([^%)]*)"%)'))] then
+	elseif line:match(" *= *.*Web.BrowserContents") then
+		if InputTable[string.escape_forbidden_char(line:match('Web.BrowserContents%("([^%)]*)"%)'))] then
+			table.insert(InputTable[string.escape_forbidden_char(line:match('Web.BrowserContents%("([^%)]*)"%)'))], line:match('Item="([^"]*)"'))
+		else
+			InputTable[string.escape_forbidden_char(line:match('Web.BrowserContents%("([^%)]*)"%)'))]={line:match('Item="([^"]*)"')}
+		end --if InputTable[string.escape_forbidden_char(line:match('File.BrowserContents%("([^%)]*)"%)'))] then
 	elseif line:match("let") then
 		local textContent=string.escape_forbidden_char(line:match("let(.*)")):gsub("^ ",""):gsub(" $",""):gsub(" in$","")
 		if InputTable[string.escape_forbidden_char(line:match("(.*) *= *let")):gsub(" $","")] then
