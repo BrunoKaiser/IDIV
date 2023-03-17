@@ -38,11 +38,16 @@ for line in inputText:gmatch("([^\n]*)\n") do
 end --for line in inputText:gmatch("([^\n]*)\n") do
 outputFile:write('},\n')
 outputFile:write('},\n')
+outputFile:write('}\n')
+outputFile:close()
 
 --4. execute the tree in a Lua table
 dofile(FileName:gsub(".txt","_logic_tree.lua"))
 
 --5. read recursive the tree as Lua table and build dependencies of formulae to dataset
+outputFile=io.open(FileName:gsub(".txt","_logic_tree.lua"),"a")
+outputFile:write('tree_DAX_datasets_measures={branchname="Datasets und abhängige berechnete Spalten und Measures",\n')
+
 formulaeTable={}
 function searchDAXTableRecursive(TreeTable)
 	for i,v in ipairs(TreeTable) do
@@ -76,7 +81,6 @@ for k,v in pairs(formulaeTable) do
 end --for k,v in pairs(formulaeTable) do
 
 --7. build tree for dependencies of formulae from datasets
-	outputFile:write('{branchname="Datasets und abhängige berechnete Spalten und Measures",\n')
 for k,v in pairs(formulaeSortedTable) do
 	--test with: print(k,v)
 	outputFile:write('{branchname="' .. k .. '",\n')
@@ -86,7 +90,6 @@ for k,v in pairs(formulaeSortedTable) do
 	end --for k1,v1 in pairs(v) do
 	outputFile:write('},\n')
 end --for k,v in pairs(formulaeTable) do
-outputFile:write('},\n')
 
 --8. close output file
 outputFile:write('}\n')
