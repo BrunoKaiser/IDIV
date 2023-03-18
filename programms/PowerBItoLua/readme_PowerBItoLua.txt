@@ -11,3 +11,8 @@ This script builds a tree from the infos of a power BI file
 3. PowerBI_DAXtoLua_tree.lua
 
 This script writes the informations of new tables, new columns and measures in DAX in power bi in a tree.
+
+4. IDIV_Bericht_PBI_Info.txt
+
+This text files contains an example for C:\Temp\IDIV_Bericht.csv for data structure to be shown in an interactive dynamic table of contents in power bi with visuals and the extraction of the info (file > about > copy) for the m script to import the data in power bi.
+
