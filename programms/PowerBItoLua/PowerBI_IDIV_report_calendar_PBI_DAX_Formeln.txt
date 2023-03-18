@@ -1,0 +1,10 @@
+Calendar = CALENDARAUTO()
+
+Month = FORMAT('Calendar'[Date], "mmm", "en")
+
+MonthNr = FORMAT('Calendar'[Date], "mm", "en")
+
+Month sortieren nach MonthNr
+
+Calendar als Kalendertabelle markieren mit Date
+
