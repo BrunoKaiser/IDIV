@@ -20,6 +20,10 @@ This text files contains an example for C:\Temp\IDIV_Bericht.csv for data struct
 
 This is the power bi template for the IDIV_Bericht.
 
-4.2 IDIV_report_calendar.pbit
+4.3 IDIV_report_calendar.pbit
 
 This is the power bi template for the IDIV_Bericht with calendar functionality to show month in different formats and languages.
+
+4.4 PowerBI_IDIV_report_calendar_PBI_DAX_Formeln.txt
+
+This text file contains the DAX formulae of IDIV_report_calendar.pbit with a description.
