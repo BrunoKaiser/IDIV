@@ -4,7 +4,10 @@ Month = FORMAT('Calendar'[Date], "mmm", "en")
 
 MonthNr = FORMAT('Calendar'[Date], "mm", "en")
 
+Year = FORMAT('Calendar'[Date],"yyyy","en")
+
 Month sortieren nach MonthNr
 
 Calendar als Kalendertabelle markieren mit Date
 
+Beziehung im Datenmodell von Datum nach Date Kardinalität n:1 Kreuzfilterrichtung einfach von Calendar nach IDIV_Bericht	
