@@ -86,13 +86,13 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 						:gsub("\\\\[cC][lL][iI][eE][nN][tT]\\(.):\\","%1:\\")
 		if semikolon:lower():match("^%%include") then
 			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
+				field=field --individuell :gsub("&something%.","")
 				if field:match(":\\") then
 					print(numberProgramm .. ". Pfad include: " .. field)
 					DateiText=field:match('"([^"]*)"')
 				else --take the path from the SASFile and the sub path and filename of include
 					print(numberProgramm .. ". Datei include: " .. field)
 					DateiText=SASFile:match("(.*)\\[^\\]*") .. "\\" .. field:match('"([^"]*)"')
-					--individuell :gsub("&something%.","")
 				end --if field:match(":\\") then
 				--printOut(string.rep("\t",numberTabs+1) .. "Rekursion: " .. DateiText)
 				--recursion
