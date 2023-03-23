@@ -12,6 +12,10 @@ Test database for SQLtoCSVforLua_Access.lua
 
 This text file contains a modul for building a TreeView in Access, editing and writing the output. This can be used in test.accdb for Formular2. The tree can have 12 levels.
 
+2.3 Modul_SplitTree.txt
+
+This test file contains a modul to convert a tree in a Lua table format in a reference table in Access. It can have 12 levels.
+
 3. SQLtoCSVforLua_SQL_List.lua
 
 The script corresponds to the script written for Access part 3. and 4. . Here a textfile with names of views or queries and SQL statements is treated. Another convention as Name: query can be used.
