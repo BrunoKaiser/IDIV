@@ -1,0 +1,108 @@
+Option Compare Database
+
+
+Public Function SplitTree()
+Dim Db As DAO.Database
+Dim rs As DAO.Recordset
+Dim strSQL As String
+Dim strSQL_output As String
+Dim arrayTree As Variant
+Dim x As Integer
+Dim levelNumber As Integer
+Dim isLeaf As String
+Dim arrayNode(-2 To 12) As Variant
+
+DoCmd.SetWarnings False
+Set Db = CurrentDb
+strSQL = "SELECT Tree.Tree FROM Tree;"
+Set rs = Db.OpenRecordset(strSQL, dbOpenDynaset, dbSeeChanges)
+
+DoCmd.RunSQL "DELETE * FROM testDaten_Tree;"
+levelNumber = 0
+isLeaf = "no"
+Do While Not rs.EOF
+    Debug.Print rs!Tree
+    arrayTree = Split(Replace(Replace(Replace(rs!Tree, Chr(13) & Chr(10), ""), """,""", """,{leaf"""), "}", """}"""), """")
+    For x = 0 To UBound(arrayTree)
+        If arrayTree(x) = ",{branchname=" Then
+            levelNumber = levelNumber + 1
+        ElseIf arrayTree(x) = "}" And isLeaf = "yes" Then
+            levelNumber = levelNumber - 2
+            isLeaf = "no"
+        ElseIf arrayTree(x) = "}" Then
+            levelNumber = levelNumber - 1
+            isLeaf = "no"
+        ElseIf arrayTree(x) = ",{leaf" And isLeaf = "no" Then
+            levelNumber = levelNumber + 1
+            isLeaf = "yes"
+        End If
+        Debug.Print levelNumber
+        If Not arrayTree(x) = "}" Then
+            arrayNode(levelNumber) = arrayTree(x)
+        End If
+        If levelNumber = 0 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt ) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 1 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 2 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 3 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 4 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 5 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 6 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5, Level6) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """, """ & arrayNode(6) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 7 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5, Level6, Level7) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """, """ & arrayNode(6) & """, """ & arrayNode(7) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 8 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """, """ & arrayNode(6) & """, """ & arrayNode(7) & """, """ & arrayNode(8) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 9 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """, """ & arrayNode(6) & """, """ & arrayNode(7) & """, """ & arrayNode(8) & """, """ & arrayNode(9) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 10 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9, Level10) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """, """ & arrayNode(6) & """, """ & arrayNode(7) & """, """ & arrayNode(8) & """, """ & arrayNode(9) & """, """ & arrayNode(10) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 11 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9, Level10, Level11) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """, """ & arrayNode(6) & """, """ & arrayNode(7) & """, """ & arrayNode(8) & """, """ & arrayNode(9) & """, """ & arrayNode(10) & """, """ & arrayNode(11) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        ElseIf levelNumber = 12 Then
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt , Level0, Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9, Level10, Level11, Level12) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """, """ & arrayNode(0) & """, """ & arrayNode(1) & """, """ & arrayNode(2) & """, """ & arrayNode(3) & """, """ & arrayNode(4) & """, """ & arrayNode(5) & """, """ & arrayNode(6) & """, """ & arrayNode(7) & """, """ & arrayNode(8) & """, """ & arrayNode(9) & """, """ & arrayNode(10) & """, """ & arrayNode(11) & """, """ & arrayNode(12) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        Else
+            strSQL_output = "INSERT INTO testDaten_Tree ( ID, Art, Produkt ) VALUES(1, """ & levelNumber & """, """ & arrayTree(x) & """);"
+            Debug.Print strSQL_output
+            DoCmd.RunSQL strSQL_output
+        End If
+    Next
+    rs.MoveNext
+Loop 'Do While Not rs.EOF
+
+DoCmd.SetWarnings True
+End Function
+
+
+
