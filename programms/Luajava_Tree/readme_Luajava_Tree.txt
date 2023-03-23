@@ -20,7 +20,7 @@ Input and output file for Tree_Luajava_Windows.lua and Tree_Luajava_Linux.lua.
 
 This is the output file for the paths of the tree of Tree_Luajava_Windows.lua and Tree_Luajava_Linux.lua. It is written at the load of the tree and after changes of it.
 
-4.1 Tree_Luajava_start.bat
+4. Tree_Luajava_start.bat
 
 This batch file is the launcher for the Lua script Tree_Luajava_Windows.lua.
 
