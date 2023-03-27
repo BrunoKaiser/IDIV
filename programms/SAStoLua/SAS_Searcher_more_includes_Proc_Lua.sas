@@ -88,7 +88,7 @@ function RecursiveTreatSAS(SASFile,numberTabs)
 		--semikolon=semikolon:gsub("\\\\[cC][lL][iI][eE][nN][tT]\\(.)$\\","%1:\\")
 		--				:gsub("\\\\[cC][lL][iI][eE][nN][tT]\\(.):\\","%1:\\")
 		if semikolon:lower():match("^%%include") then
-			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gmatch('"[^"]*"') do
+			for field in semikolon:gsub(";"," ;"):gsub(" +"," "):gsub("'",'"'):gmatch('"[^"]*"') do
 				field=field:gsub(":\\","$\\") --individuell :gsub("&something%.","")
 				if field:match("$\\") then
 					print(numberProgramm .. ". Pfad include: " .. field)
