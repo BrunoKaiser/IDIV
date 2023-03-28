@@ -13,7 +13,7 @@ for line in io.lines(filename) do
 	if line:match(";") then
 		lineEnd="yes"
 		lineLogic=lineLogic .. line
-		outputfile1:write(lineLogic:gsub("; *$","~"):gsub(";",";\n"):gsub("~$",";") .. "\n")
+		outputfile1:write(lineLogic:gsub("; *$","~"):gsub(";",";\n"):gsub("~$",";\n") .. "")
 		lineLogic=""
 	elseif line:match("^[ \t]*/%*[^;]*%*/[ \t]*$") then
 		--take out comments in one line
@@ -28,14 +28,19 @@ outputfile1:close()
 --2. choose the input and output statements
 outputfile2=io.open("C:\\Temp\\SAS_programm_logic_input_output.txt","w")
 for line in io.lines("C:\\Temp\\SAS_programm_logic.sas") do
-	line=line:lower():gsub("%([^%(%)]*%)",""):gsub("%([^%(%)]*%)",""):gsub("%([^%(%)]*%)",""):gsub("%([^%(%)]*%)",""):gsub("%([^%(%)]*%)","")
-		:gsub("/%*%-%-&","xxx")
-		:gsub("&","xxx")
-		:gsub("%.%.%-%-%*/","yyyz")
-		:gsub("%.","yyy")
-		:gsub("[ \t]*end[ \t]*=[ \t]*anzahl ;",";")
-		:gsub("nodupkey","")
-		:gsub("proc sort data[ \t]*=[ \t]*[^ ]+[ \t]*;",";")
+	line=line:lower():gsub("%(select[^%)]*from([^%)]*)%)","SUB_FROM%1 SUB_FROM_END~")
+			:gsub("%([^%(%)]*%)","")
+			:gsub("%([^%(%)]*%)","")
+			:gsub("%([^%(%)]*%)","")
+			:gsub("%([^%(%)]*%)","")
+			:gsub("%([^%(%)]*%)","")
+			:gsub("/%*%-%-&","xxx")
+			:gsub("&","xxx")
+			:gsub("%.%.%-%-%*/","yyyz")
+			:gsub("%.","yyy")
+			:gsub("[ \t]*end[ \t]*=[ \t]*anzahl ;",";")
+			:gsub("nodupkey","")
+			:gsub("proc sort data[ \t]*=[ \t]*[^ ]+[ \t]*;",";")
 	if line:lower():match("^[ \t]*data ") then outputfile2:write(line)
 	elseif line:lower():match("^[ \t]*class") then --omit
 	elseif line:lower():match("^[ \t]*var") then --omit
@@ -74,8 +79,12 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	local outline=line:upper():gsub("DUPOUT=.*;",";"):gsub("FILE","~"):match("[ \t]*OUT[~]?=([^;]*);") 
 	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ;\t]*)[ \t]*") 
 	local createtablelikeline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*[^ ]*[ \t]*LIKE[ \t]*([^ ;]*)[ \t]*") 
-	local createtablefromline=line:upper():gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
-	local createtablejoinline=line:upper():gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*JOIN[ \t]*([^ ;]*)[ \t]*") 
+	local createtablefromline=line:upper():gsub("SUB_FROM[^~]*SUB_FROM_END~",""):gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
+	local createtablesubfromline=tostring(line:upper():match("SUB_FROM[ \t]*([^ ;]*)[ \t]*SUB_FROM_END~")):gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*","") 
+	if createtablesubfromline=="nil" then createtablesubfromline=nil end
+	local createtablejoinline=line:upper():gsub("SUB_FROM[^~]*SUB_FROM_END~",""):gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*JOIN[ \t]*([^ ;]*)[ \t]*") 
+	local createtablesubjoinline=tostring(line:upper():match("SUB_FROM[^%)]*JOIN[ \t]*([^ ;]*)[ \t]*SUB_FROM_END~")):gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*","") 
+	if createtablesubjoinline=="nil" then createtablesubjoinline=nil end
 	if dataline and dataline:gsub("[ \t]*$","")~=tostring(setline):gsub("[ \t]*$","") then
 		for field in dataline:gmatch("[^ \t]+") do
 			if field=="_NULL_" then
@@ -131,8 +140,16 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 		outputfile3:write(createtableline .. "\n")
 		if createtablelikeline then outputfile3:write("\t" .. createtablelikeline .. "\n") end
 		if createtablefromline then outputfile3:write("\t" .. createtablefromline .. "\n") end
+		if createtablesubfromline then outputfile3:write("\t" .. createtablesubfromline .. "\n") end
 		if createtablejoinline then outputfile3:write("\t" .. createtablejoinline .. "\n") end
-		outputfile3:write("--createtableline: " .. createtableline .. "<" .. tostring(createtablelikeline) .. " / " .. tostring(createtablefromline) .. " / " .. tostring(createtablejoinline) .. "\n")
+		if createtablesubjoinline then outputfile3:write("\t" .. createtablesubjoinline .. "\n") end
+		outputfile3:write("--createtableline: " .. createtableline .. "<" .. 
+				tostring(createtablelikeline) .. " / " .. 
+				tostring(createtablefromline) .. " / " .. 
+				tostring(createtablesubfromline) .. " / " .. 
+				tostring(createtablejoinline) .. " / " .. 
+				tostring(createtablesubjoinline) .. 
+				"\n")
 	end --if createtableline then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 outputfile3:close()
