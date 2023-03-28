@@ -50,11 +50,11 @@ outputfile2:close()
 _NULL_Number=0
 outputfile3=io.open("C:\\Temp\\SAS_programm_logic_input_output_tree.txt","w")
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
-	line=line:upper():gsub("[ \t]*=[ \t]*","=")
+	line=line:upper():gsub("[ \t]*=[ \t]*","="):gsub("PREFIX= *[^ ;]+","")
 	local dataline=line:upper():match("^[ \t]*DATA([^;]*);") 
 	local setline=line:upper():match("[ \t]*SET([^;]*);") 
 	local mergeline=line:upper():match("[ \t]*MERGE([^;]*);") 
-	local dataequalline=line:upper():gsub("FILE","~"):match(" DATA=([^;]*)[ \t]+OUT[~]?=") 
+	local dataequalline=line:upper():gsub("FILE","~"):gsub("DUPOUT","OUT"):match("[ \t]DATA[ \t]*=([^;]*)[ \t]+OUT[~]?=") 
 	local dupoutline=line:upper():gsub("OUT=.*DUPOUT","DUPOUT"):match("[ \t]*DUPOUT[ \t]*=([^;]*);") 
 	local outline=line:upper():gsub("DUPOUT=.*;",";"):gsub("FILE","~"):match("[ \t]*OUT[~]?=([^;]*);") 
 	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ]*)[ \t]*") 
@@ -83,7 +83,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 		end --for field in dataline:gmatch("[^ \t]+") do 
 		outputfile3:write("--dataline: " .. dataline .. " < " .. tostring(setline):gsub("[ \t]*$","") .. " / " .. tostring(mergeline):gsub("[ \t]*$","") .. "\n")
 	end --if dataline then
-	if dupoutline and dupoutline:gsub("[ \t]","") ~= dataequalline:gsub("[ \t]","") then
+	if dupoutline and dupoutline:gsub("[ \t]","") ~= tostring(dataequalline):gsub("[ \t]","") then
 		dupoutline=dupoutline:upper():gsub("DBMS=EXCEL",""):gsub("[ \t]*SORTSIZE[ \t]*=[ \t]*[^ \t;]*",""):gsub("REPLACE",""):gsub("\\","\\\\")
 		for field in dupoutline:gmatch("[^ \t]+") do 
 			outputfile3:write(field .. "\n")
@@ -95,8 +95,8 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 				end --for fielddataequal in dataequalline:gmatch("[^ \t]+") do 
 			end --if dataequalline then
 		end --for field in dupoutline:gmatch("[^ \t]+") do 
-		outputfile3:write("--dupoutline: " .. dupoutline:gsub("[ \t]*$","") .. " < " .. dataequalline:gsub("[ \t]*$","") .. "\n")
-	end --if dupoutline then
+		outputfile3:write("--dupoutline: " .. dupoutline:gsub("[ \t]*$","") .. " < " .. tostring(dataequalline):gsub("[ \t]*$","") .. "\n")
+	end --if dupoutline and dupoutline:gsub("[ \t]","") ~= tostring(dataequalline):gsub("[ \t]","") then
 	if outline and outline:gsub("[ \t]","") ~= dataequalline:gsub("[ \t]","") then
 		outline=outline:upper():gsub("DBMS=EXCEL",""):gsub("[ \t]*SORTSIZE[ \t]*=[ \t]*[^ \t;]*",""):gsub("[ \t]*SUM[ \t]*=[ \t]*[^ \t;]*",""):gsub("REPLACE",""):gsub("\\","\\\\")
 		for field in outline:gmatch("[^ \t]+") do 
