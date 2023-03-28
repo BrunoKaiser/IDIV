@@ -41,6 +41,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic.sas") do
 	elseif line:lower():match("^[ \t]*var") then --omit
 	elseif line:lower():match("^[ \t]*proc means[ \t]*data[ \t]*=") then outputfile2:write(line)
 	elseif line:lower():match(" data[ \t]*=") then outputfile2:write(line .. "\n")
+	elseif line:lower():match("[ \t]*run[ \t]*;") then outputfile2:write("\n")
 	elseif line:lower():match("[ \t]*create table[ \t]*") then outputfile2:write(line .. "\n")
 	elseif line:lower():match("output[ \t]+out[ \t]*=") then outputfile2:write(line .. "\n")
 	elseif line:lower():match("[ \t]+out[ \t]*=") then outputfile2:write(line .. "\n")
@@ -71,7 +72,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	local dataequalline=line:upper():gsub("FILE","~"):gsub(";[ \t]*OUTPUT[ \t]+OUT"," OUT"):gsub("DUPOUT"," OUT"):match("[ \t]DATA[ \t]*=([^;]*)[ \t]+OUT[~]?=") 
 	local dupoutline=line:upper():gsub("OUT=.*DUPOUT","DUPOUT"):match("[ \t]*DUPOUT[ \t]*=([^;]*);") 
 	local outline=line:upper():gsub("DUPOUT=.*;",";"):gsub("FILE","~"):match("[ \t]*OUT[~]?=([^;]*);") 
-	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ]*)[ \t]*") 
+	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ;\t]*)[ \t]*") 
 	local createtablelikeline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*[^ ]*[ \t]*LIKE[ \t]*([^ ;]*)[ \t]*") 
 	local createtablefromline=line:upper():gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
 	local createtablejoinline=line:upper():gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*JOIN[ \t]*([^ ;]*)[ \t]*") 
