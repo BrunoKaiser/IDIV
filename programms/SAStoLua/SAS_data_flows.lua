@@ -37,9 +37,11 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic.sas") do
 		:gsub("nodupkey","")
 		:gsub("proc sort data[ \t]*=[ \t]*[^ ]+[ \t]*;",";")
 	if line:lower():match("^[ \t]*data ") then outputfile2:write(line)
+	elseif line:lower():match("^[ \t]*proc means[ \t]*data[ \t]*=") then outputfile2:write(line)
 	elseif line:lower():match(" data[ \t]*=") then outputfile2:write(line .. "\n")
 	elseif line:lower():match("[ \t]*create table[ \t]*") then outputfile2:write(line .. "\n")
-	elseif line:lower():match(" out[ \t]*=") then outputfile2:write(line .. "\n")
+	elseif line:lower():match("output[ \t]+out[ \t]*=") then outputfile2:write(line .. "\n")
+	elseif line:lower():match("[ \t]+out[ \t]*=") then outputfile2:write(line .. "\n")
 	elseif line:lower():match("dupout[ \t]*=") then outputfile2:write(line .. "\n")
 	elseif line:lower():match("^[ \t]*set[ \t]*") then outputfile2:write(line .. "\n") 
 	elseif line:lower():match("^[ \t]*merge[ \t]*") then outputfile2:write(line .. "\n") end
@@ -50,16 +52,23 @@ outputfile2:close()
 _NULL_Number=0
 outputfile3=io.open("C:\\Temp\\SAS_programm_logic_input_output_tree.txt","w")
 for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
-	line=line:upper():gsub("[ \t]*=[ \t]*","="):gsub("PREFIX= *[^ ;]+","")
+	line=line:upper():gsub("[ \t]*=[ \t]*","=")
+			:gsub("PREFIX= *[^ ;]+","")
+			:gsub("NOPRINT"," ")
+			:gsub("NWAY"," ")
+			:gsub("SUM= *[^ ;]+","")
+			:gsub("MAX= *[^ ;]+","")
+			:gsub("MIN= *[^ ;]+","")
 	local dataline=line:upper():match("^[ \t]*DATA([^;]*);") 
 	local setline=line:upper():match("[ \t]*SET([^;]*);") 
 	local mergeline=line:upper():match("[ \t]*MERGE([^;]*);") 
-	local dataequalline=line:upper():gsub("FILE","~"):gsub("DUPOUT","OUT"):match("[ \t]DATA[ \t]*=([^;]*)[ \t]+OUT[~]?=") 
+	local dataequalline=line:upper():gsub("FILE","~"):gsub(";[ \t]*OUTPUT[ \t]+OUT"," OUT"):gsub("DUPOUT"," OUT"):match("[ \t]DATA[ \t]*=([^;]*)[ \t]+OUT[~]?=") 
 	local dupoutline=line:upper():gsub("OUT=.*DUPOUT","DUPOUT"):match("[ \t]*DUPOUT[ \t]*=([^;]*);") 
 	local outline=line:upper():gsub("DUPOUT=.*;",";"):gsub("FILE","~"):match("[ \t]*OUT[~]?=([^;]*);") 
 	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ]*)[ \t]*") 
 	local createtablelikeline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*[^ ]*[ \t]*LIKE[ \t]*([^ ;]*)[ \t]*") 
-	local createtablefromline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
+	local createtablefromline=line:upper():gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
+	local createtablejoinline=line:upper():gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*JOIN[ \t]*([^ ;]*)[ \t]*") 
 	if dataline and dataline:gsub("[ \t]*$","")~=tostring(setline):gsub("[ \t]*$","") then
 		for field in dataline:gmatch("[^ \t]+") do
 			if field=="_NULL_" then
@@ -97,7 +106,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 		end --for field in dupoutline:gmatch("[^ \t]+") do 
 		outputfile3:write("--dupoutline: " .. dupoutline:gsub("[ \t]*$","") .. " < " .. tostring(dataequalline):gsub("[ \t]*$","") .. "\n")
 	end --if dupoutline and dupoutline:gsub("[ \t]","") ~= tostring(dataequalline):gsub("[ \t]","") then
-	if outline and outline:gsub("[ \t]","") ~= dataequalline:gsub("[ \t]","") then
+	if outline and outline:gsub("[ \t]","") ~= tostring(dataequalline):gsub("[ \t]","") then
 		outline=outline:upper():gsub("DBMS=EXCEL",""):gsub("[ \t]*SORTSIZE[ \t]*=[ \t]*[^ \t;]*",""):gsub("[ \t]*SUM[ \t]*=[ \t]*[^ \t;]*",""):gsub("REPLACE",""):gsub("\\","\\\\")
 		for field in outline:gmatch("[^ \t]+") do 
 			outputfile3:write(field .. "\n")
@@ -109,13 +118,14 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 				end --for fielddataequal in dataequalline:gmatch("[^ \t]+") do 
 			end --if dataequalline then
 		end --for field in outline:gmatch("[^ \t]+") do 
-		outputfile3:write("--outline: " .. outline:gsub("[ \t]*$","") .. " < " .. dataequalline:gsub("[ \t]*$","") .. "\n")
+		outputfile3:write("--outline: " .. outline:gsub("[ \t]*$","") .. " < " .. tostring(dataequalline):gsub("[ \t]*$","") .. "\n")
 	end --if outline then
 	if createtableline then
 		outputfile3:write(createtableline .. "\n")
 		if createtablelikeline then outputfile3:write("\t" .. createtablelikeline .. "\n") end
 		if createtablefromline then outputfile3:write("\t" .. createtablefromline .. "\n") end
-		outputfile3:write("--createtableline: " .. createtableline .. "<" .. tostring(createtablelikeline) .. " / " .. tostring(createtablefromline) .. "\n")
+		if createtablejoinline then outputfile3:write("\t" .. createtablejoinline .. "\n") end
+		outputfile3:write("--createtableline: " .. createtableline .. "<" .. tostring(createtablelikeline) .. " / " .. tostring(createtablefromline) .. " / " .. tostring(createtablejoinline) .. "\n")
 	end --if createtableline then
 end --for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 outputfile3:close()
