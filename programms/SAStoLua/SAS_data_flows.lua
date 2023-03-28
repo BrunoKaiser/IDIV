@@ -37,6 +37,8 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic.sas") do
 		:gsub("nodupkey","")
 		:gsub("proc sort data[ \t]*=[ \t]*[^ ]+[ \t]*;",";")
 	if line:lower():match("^[ \t]*data ") then outputfile2:write(line)
+	elseif line:lower():match("^[ \t]*class") then --omit
+	elseif line:lower():match("^[ \t]*var") then --omit
 	elseif line:lower():match("^[ \t]*proc means[ \t]*data[ \t]*=") then outputfile2:write(line)
 	elseif line:lower():match(" data[ \t]*=") then outputfile2:write(line .. "\n")
 	elseif line:lower():match("[ \t]*create table[ \t]*") then outputfile2:write(line .. "\n")
@@ -59,6 +61,9 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 			:gsub("SUM= *[^ ;]+","")
 			:gsub("MAX= *[^ ;]+","")
 			:gsub("MIN= *[^ ;]+","")
+			:gsub("SUM= *;",";")
+			:gsub("MAX= *;",";")
+			:gsub("MIN= *,",";")
 	local dataline=line:upper():match("^[ \t]*DATA([^;]*);") 
 	local setline=line:upper():match("[ \t]*SET([^;]*);") 
 	local mergeline=line:upper():match("[ \t]*MERGE([^;]*);") 
