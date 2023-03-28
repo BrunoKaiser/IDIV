@@ -15,7 +15,7 @@ for line in io.lines(filename) do
 		lineLogic=lineLogic .. line
 		outputfile1:write(lineLogic:gsub("; *$","~"):gsub(";",";\n"):gsub("~$",";") .. "\n")
 		lineLogic=""
-	elseif line:match("^[ \t]*/%*[^;]*%*/$") then
+	elseif line:match("^[ \t]*/%*[^;]*%*/[ \t]*$") then
 		--take out comments in one line
 		lineEnd="no"
 	else
@@ -58,6 +58,7 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 			:gsub("PREFIX= *[^ ;]+","")
 			:gsub("NOPRINT"," ")
 			:gsub("NWAY"," ")
+			:gsub("TAGSORT"," ")
 			:gsub("SUM= *[^ ;]+","")
 			:gsub("MAX= *[^ ;]+","")
 			:gsub("MIN= *[^ ;]+","")
