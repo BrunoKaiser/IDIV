@@ -74,8 +74,8 @@ for line in io.lines("C:\\Temp\\SAS_programm_logic_input_output.txt") do
 	local outline=line:upper():gsub("DUPOUT=.*;",";"):gsub("FILE","~"):match("[ \t]*OUT[~]?=([^;]*);") 
 	local createtableline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*([^ ;\t]*)[ \t]*") 
 	local createtablelikeline=line:upper():match("^[ \t]*CREATE TABLE[ \t]*[^ ]*[ \t]*LIKE[ \t]*([^ ;]*)[ \t]*") 
-	local createtablefromline=line:upper():gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
-	local createtablejoinline=line:upper():gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*JOIN[ \t]*([^ ;]*)[ \t]*") 
+	local createtablefromline=line:upper():gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*FROM[ \t]*([^ ;]*)[ \t]*") 
+	local createtablejoinline=line:upper():gsub("ORDER BY.*",""):gsub("GROUP BY.*",""):gsub("WHERE.*",""):match("^[ \t]*CREATE TABLE[ \t]*.*[ \t]*JOIN[ \t]*([^ ;]*)[ \t]*") 
 	if dataline and dataline:gsub("[ \t]*$","")~=tostring(setline):gsub("[ \t]*$","") then
 		for field in dataline:gmatch("[^ \t]+") do
 			if field=="_NULL_" then
