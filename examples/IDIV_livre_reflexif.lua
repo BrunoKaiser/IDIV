@@ -14,11 +14,11 @@ TextHTMLTabelle={
 Dieses Buch wird als Seiten hergestellt.
 <br>
 <br><h2>2. Herstellung</h2>
-Die Seiten werden links uns rechts angeordnet und so mit einem WYSIAWYG-Prinzip gefüllt, das im nächsten Abschnitt definiert wird.</body></html>]====],
+Die Seiten werden links uns rechts angeordnet und so mit einem WYSIAWYG-Prinzip gefÃ¼llt, das im nÃ¤chsten Abschnitt definiert wird.</body></html>]====],
 [====[<!DOCTYPE html> <head></head><html><body><h2>3. Das WYSIAWYG-Prinzip</h2>
 WYSIAWYG bedeutet what you see is analogous to what you get.</body></html>]====],
 [====[<!DOCTYPE html> <head></head><html><body><h2>4. Fazit</h2>
-Das Inhaltsverzeichnis wird immer automatisch aktuell gehalten. Das ist sehr praktisch. Das Wiederfinden der Seiten ist dank der Suchfunktionalität etwas einfacher als ohne.
+Das Inhaltsverzeichnis wird immer automatisch aktuell gehalten. Das ist sehr praktisch. Das Wiederfinden der Seiten ist dank der SuchfunktionalitÃ¤t etwas einfacher als ohne.
 <br> </body></html>]====],
 }--TextHTMLTabelle<!--
 
@@ -274,7 +274,7 @@ img_logo = iup.image{
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nidiv.kaiser@t-online.de")
 end --function button_logo:flat_action()
 
 --6.2 button for saving TextHTMLtable and the programm of the graphical user interface
@@ -293,7 +293,7 @@ function button_go_to_first_page:flat_action()
 end --function button_go_to_first_page:flat_action()
 
 --6.4 button for going one page back
-button_go_back = iup.flatbutton{title = "Eine Seite zurück",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_go_back = iup.flatbutton{title = "Eine Seite zurÃ¼ck",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_go_back:flat_action()
 	aktuelleSeite=math.tointeger(tonumber(textbox1.value)) or aktuelleSeite
 	if math.floor(aktuelleSeite/2)*2==aktuelleSeite and aktuelleSeite>1 then
@@ -357,9 +357,9 @@ function button_go_to_page:flat_action()
 end --function button_go_to_page:flat_action()
 
 --6.7 button for deleting the page
-button_delete = iup.flatbutton{title = "Löschen der Seite",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
+button_delete = iup.flatbutton{title = "LÃ¶schen der Seite",size="75x20", BGCOLOR=color_buttons, FGCOLOR=color_button_text}
 function button_delete:flat_action()
-	LoeschAlarm=iup.Alarm("Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelöscht werden?","Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelöscht werden?","Löschen","Nicht Löschen")
+	LoeschAlarm=iup.Alarm("Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelÃ¶scht werden?","Soll die Seite " .. tonumber(textbox1.value) .. " wirklich gelÃ¶scht werden?","LÃ¶schen","Nicht LÃ¶schen")
 	if LoeschAlarm==1 then 
 		if tonumber(textbox1.value) and tonumber(textbox1.value)<=#TextHTMLTabelle then
 			aktuelleSeite=math.tointeger(tonumber(textbox1.value))
@@ -367,12 +367,12 @@ function button_delete:flat_action()
 			TextHTMLTabelle[#TextHTMLTabelle]=nil --delete last element
 			--test with: iup.Message(aktuelleSeite, tostring(math.floor(aktuelleSeite/2)*2==aktuelleSeite))
 			if math.floor(aktuelleSeite/2)*2==aktuelleSeite and aktuelleSeite>1 then
-				webbrowser2.HTML="Seite gelöscht"
+				webbrowser2.HTML="Seite gelÃ¶scht"
 			else
-				webbrowser1.HTML="Seite gelöscht"
+				webbrowser1.HTML="Seite gelÃ¶scht"
 			end --if math.floor(aktuelleSeite/2)*2==aktuelleSeite and aktuelleSeite>1 then
 		else
-			iup.Message("Keine Seite zum Löschen","Keine Seite zum Löschen")
+			iup.Message("Keine Seite zum LÃ¶schen","Keine Seite zum LÃ¶schen")
 		end --if tonumber(textbox1.value) and tonumber(textbox1.value)<=#TextHTMLTabelle then
 	end --if LoeschAlarm==1 then 
 end --function button_delete:flat_action()
@@ -452,7 +452,7 @@ end --function button_new_page:flat_action()
 --6.12 button with second logo
 button_logo2=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo2:action()
-	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nidiv.kaiser@t-online.de")
 end --function button_logo:flat_action()
 
 --7 Main Dialog
