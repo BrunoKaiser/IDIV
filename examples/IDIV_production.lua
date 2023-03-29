@@ -79,7 +79,7 @@ img_logo = iup.image{
 }
 button_logo=iup.button{image=img_logo,title="", size="23x20"}
 function button_logo:action()
-	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nb.kaiser@beckmann-partner.de")
+	iup.Message("Dr. Bruno Kaiser","Lizenz Open Source\nidiv.kaiser@t-online.de")
 end --function button_logo:flat_action()
 
 --6.2 button to produce power bi info tree
@@ -89,16 +89,18 @@ function button_powerbiinfo_tree:flat_action()
 		--This script builds a tree from the infos of a power BI file
 		--2. read input file and put lines together to standardize it 
 		inputText=textfield2.value
-		inputText=inputText:gsub(",\n",", ")
+		inputText=inputText:gsub(",[ \t]*\n",", ")
 					:gsub("let *\n","let ")
 					:gsub("%( *\n","( ")
 					:gsub("%) *\n",") ")
 					:gsub("{ *\n","{ ")
+					:gsub("\n *}"," }")
 					:gsub("} *\n","} ")
 					:gsub("= *\n","= ")
 					:gsub(" +"," ")
 					:gsub("\n ","\n")
 					:gsub(" \n","\n")
+					:gsub("\n *else"," else")
 					:gsub("shared ","shared\n")
 
 		--test with: outputFile=io.open("C:\\Temp\\logic.txt","w") outputFile:write(inputText) outputFile:close()
@@ -117,14 +119,21 @@ function button_powerbiinfo_tree:flat_action()
 					InputTable[string.escape_forbidden_char(line:match('Pdf.Tables%(File.Contents%("([^%)]*)"%)'))]={line:match('Id="([^"]*)"')}
 				end --if InputTable[string.escape_forbidden_char(line:match('Pdf.Tables%(File.Contents%("([^%)]*)"%)'))] then
 			elseif line:match(" *= *.*File.Contents") then
-				--print(line:match("[^=]*="))
+				--test with: print(line)
+				--test with: print(line:match("[^=]*="))
 				if line:match('Item="([^"]*)"') then infoTable=line:match('Item="([^"]*)"') else infoTable="" end
+				if line:match("Table.Combine%(([^%)]*)%)") then
+					--test with: print(line:match("Table.Combine%(([^%)]*)%)"):gsub('{[^,]*,','{branchname="' .. line:match("([^=]*)=") .. ',' ):gsub(', *','", "'):gsub('}','",},'))
+					addTables=line:match("Table.Combine%(([^%)]*)%)"):gsub('{[^,]*,',' mit: ' ):gsub(',','~' )
+				else
+					addTables=""
+				end --if line:match("Table.Combine%([^%)]*%)") then
 				--test with: print('{branchname="' .. string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)')) .. '",')
 				--test with: print(line:match('Item="([^"]*)"'))
 				if InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))] then
-					table.insert(InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))], line:match("[^=]*=") .. infoTable )
+					table.insert(InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))], line:match("[^=]*=") .. infoTable .. addTables)
 				else
-					InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))]={ line:match("[^=]*=") .. infoTable }
+					InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))]={ line:match("[^=]*=") .. infoTable .. addTables}
 				end --if InputTable[string.escape_forbidden_char(line:match('File.Contents%("([^%)]*)"%)'))] then
 			elseif line:match(" *= *.*Web.Contents") then
 				if InputTable[string.escape_forbidden_char(line:match('Web.Contents%("([^%)]*)"%)'))] then
@@ -161,6 +170,7 @@ function button_powerbiinfo_tree:flat_action()
 			outputFile:write('{branchname="' .. v .. '",\n')
 			table.sort(InputTable[v], function(a,b) return tostring(a)<tostring(b) end)
 			for k1,v1 in pairs(InputTable[v]) do
+				v1 = string.escape_forbidden_char(v1):gsub("mit:",'",{branchname="mit:", "'):gsub('}', '"},"'):gsub('~', '","')
 				outputFile:write('"' .. v1 .. '",\n') 
 			end --for k1,v1 in pairs(InputTable) do
 			outputFile:write('},\n')
@@ -215,7 +225,7 @@ function button_powerbidaxformulae_tree:flat_action()
 
 		--5. read recursive the tree as Lua table and build dependencies of formulae to dataset
 		outputFile=io.open("C:\\Temp\\test.lua","a")
-		outputFile:write('tree_DAX_datasets_measures={branchname="Datasets und abhängige berechnete Spalten und Measures",\n')
+		outputFile:write('tree_DAX_datasets_measures={branchname="Datasets und abhÃ¤ngige berechnete Spalten und Measures",\n')
 
 		formulaeTable={}
 		function searchDAXTableRecursive(TreeTable)
