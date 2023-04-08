@@ -34,6 +34,7 @@ do --sandboxing
 		a:lower():match("^title") or
 		a:lower():match("^md ") or
 		a:lower():match("^copy ") or
+		a:lower():match("^attrib ") or
 		a:lower():match("^color ") or
 		a:lower():match("^start ") 
 		then
@@ -1133,10 +1134,17 @@ function startversion:action()
 			if Datei:match("_Version(%d+)") then Version_alt=Version Version=tonumber(Datei:match("_Version(%d+)")) if Version<Version_alt then Version=Version_alt end end
 			--test with: iup.Message("Version",Version) 
 		end --for Datei in p:lines() do 
+		p=io.popen('dir "' .. tree['title']:gsub("(%.+)","_Version*%1") .. '" /b/o/AH')
+		for Datei in p:lines() do 
+			--test with: iup.Message("Version",Datei) 
+			if Datei:match("_Version(%d+)") then Version_alt=Version Version=tonumber(Datei:match("_Version(%d+)")) if Version<Version_alt then Version=Version_alt end end
+			--test with: iup.Message("Version",Version) 
+		end --for Datei in p:lines() do 
 		--test with: iup.Message(Version,Version+1)
 		Version=Version+1
 		iup.Message("Archivieren der Version:",tree['title']:gsub("(%.+)","_Version" .. Version .. "%1"))
 		os.execute('copy "' .. tree['title'] .. '" "' .. tree['title']:gsub("(%.+)","_Version" .. Version .. "%1") .. '"')
+		os.execute('attrib +H "' .. tree['title']:gsub("(%.+)","_Version" .. Version .. "%1") .. '"')
 	end --if tree['title']:match(".:\\.*%.[^\\]+") then
 end --function startversion:action()
 
