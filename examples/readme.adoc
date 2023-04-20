@@ -42,7 +42,7 @@ This photo shows a IDIV-papier-calcul-cumul with nodes with values and the cumul
 
 === 2.1 IDIV_analyse_bilan.lua
 
-This script contains the IDIV-Bilanzanalysewerkzeug (IDIV-outil d'analyse du bilan).
+This script contains the IDIV-Bilanzanalysewerkzeug (IDIV-outil d'analyse du bilan). This script is only for analyses. WARNING: with complex programming instable results can be generated. NO WARRANTY for right results is given.
 
 === 2.2 IDIV_analyse_comptes.lua
 
